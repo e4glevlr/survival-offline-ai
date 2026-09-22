@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WILDERNESS SURVIVAL AI — Comprehensive Bushcraft & Survival Pitch Deck</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Motion (motion.dev) -->
+  <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --bg-surface: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #16a34a;
+      --border-subtle: #f1f5f9;
+      
+      --text-main: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      
+      --forest: #15803d;
+      --forest-light: #f0fdf4;
+      --forest-glow: rgba(21, 128, 61, 0.2);
+      
+      --fire: #ea580c;
+      --fire-light: #fff7ed;
+      --fire-glow: rgba(234, 88, 12, 0.2);
+      
+      --water: #0284c7;
+      --water-light: #f0f9ff;
+      
+      --earth: #854d0e;
+      --earth-light: #fefce8;
+
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 16px 36px -4px rgba(15, 23, 42, 0.09), 0 6px 16px -4px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 20px 40px -4px rgba(15, 23, 42, 0.13);
+
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-display);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(at 0% 0%, #ecfdf5 0px, transparent 50%),
+        radial-gradient(at 100% 100%, #f0f9ff 0px, transparent 50%),
+        radial-gradient(at 50% 50%, #fefce8 0px, transparent 75%);
+    }
+
+    /* Top Progress Bar */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #e2e8f0;
+      z-index: 100;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--forest), var(--fire), var(--water));
+      box-shadow: 0 0 10px rgba(21, 128, 61, 0.5);
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Header Bar */
+    header {
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 50;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-badge {
+      background: var(--forest);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px var(--forest-glow);
+    }
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border);
+      padding-left: 12px;
+      margin-left: 4px;
+    }
+    .status-hud {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+    .hud-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--forest);
+      box-shadow: 0 0 6px rgba(21, 128, 61, 0.6);
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Deck Viewport */
+    #deck-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 40px 84px 40px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1300px;
+      height: 100%;
+      max-height: 730px;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+    }
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Typography */
+    .slide-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--forest);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .slide-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--forest);
+    }
+    .slide-title {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+    .slide-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      max-width: 900px;
+    }
+
+    /* Layout Grids */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .split-layout.reverse {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: #cbd5e1;
+      transform: translateY(-2px);
+    }
+    .card.highlight {
+      border: 1.5px solid rgba(21, 128, 61, 0.35);
+      background: linear-gradient(180deg, #fafffc 0%, #ffffff 100%);
+      box-shadow: 0 8px 24px -4px rgba(21, 128, 61, 0.1);
+    }
+    .card-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* Module Icon Badges */
+    .module-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .module-card:hover {
+      border-color: var(--forest);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .module-icon-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .module-emoji {
+      font-size: 24px;
+    }
+
+    /* Visual Media Frame */
+    .media-frame {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      background: #ffffff;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .media-frame:hover img {
+      transform: scale(1.015);
+    }
+    .media-caption {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      padding: 8px 14px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      font-size: 11.5px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-forest { background: var(--forest-light); color: var(--forest); border: 1px solid rgba(21, 128, 61, 0.25); }
+    .badge-fire { background: var(--fire-light); color: var(--fire); border: 1px solid rgba(234, 88, 12, 0.25); }
+    .badge-water { background: var(--water-light); color: var(--water); border: 1px solid rgba(2, 132, 199, 0.25); }
+    .badge-danger { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(220, 38, 38, 0.25); }
+
+    /* Buttons */
+    .btn {
+      background: var(--forest);
+      color: #ffffff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: var(--font-display);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px var(--forest-glow);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn:hover {
+      background: #166534;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(21, 128, 61, 0.35);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border-color: #cbd5e1;
+    }
+    .btn-secondary.active {
+      background: var(--forest-light);
+      border-color: var(--forest);
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    /* Bottom Control Dock */
+    #dock {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      padding: 8px 20px;
+      border-radius: 999px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-lg);
+      z-index: 100;
+    }
+    .dock-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13.5px;
+      transition: all 0.2s;
+    }
+    .dock-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      padding: 0 8px;
+    }
+    .keyboard-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border-left: 1px solid var(--border);
+      padding-left: 12px;
+      margin-left: 4px;
+    }
+    kbd {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-secondary);
+    }
+
+    /* Tables */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    .spec-table th {
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+    }
+    .spec-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    /* Overview Modal */
+    #overview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(20px);
+      z-index: 200;
+      display: none;
+      padding: 40px;
+      overflow-y: auto;
+    }
+    #overview-modal.open {
+      display: block;
+    }
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .overview-thumb {
+      background: #ffffff;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: all 0.2s ease;
+    }
+    .overview-thumb:hover {
+      border-color: var(--forest);
+      transform: translateY(-2px);
+    }
+    .overview-thumb.active {
+      border-color: var(--forest);
+      box-shadow: 0 0 0 4px var(--forest-light);
+    }
+
+    /* Interactive Checkboxes on Slide 9 */
+    .gate-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+    .gate-item:hover {
+      border-color: #cbd5e1;
+      background: #fafafa;
+    }
+    .gate-item.checked {
+      border-color: rgba(21, 128, 61, 0.4);
+      background: var(--forest-light);
+    }
+    .gate-checkbox {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: transparent;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .gate-item.checked .gate-checkbox {
+      background: var(--forest);
+      border-color: var(--forest);
+      color: #ffffff;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Header HUD -->
+  <header>
+    <div class="brand">
+      <span class="brand-badge">WILDERNESS AI</span>
+      <span class="brand-title">Cẩm Nang Sinh Tồn Hoang Dã & Kỹ Năng Rừng Rậm</span>
+      <span class="brand-sub">Offline Bushcraft & Survival Engine</span>
+    </div>
+    <div class="status-hud">
+      <div class="hud-tag"><span class="dot"></span> 100% OFFLINE BUSHCRAFT</div>
+      <div class="hud-tag">A17 PRO / LOCAL LLM</div>
+      <div class="hud-tag">ZERO CLOUD DEPENDENCY</div>
+    </div>
+  </header>
+
+  <!-- Viewport for Presentation Slides -->
+  <main id="deck-viewport">
+
+    <!-- SLIDE 1: Cover / True Wilderness Survival -->
+    <section class="slide active" data-slide="1">
+      <div class="split-layout">
+        <div>
+          <div class="slide-eyebrow">Trợ Lý Kỹ Năng Sinh Tồn Hoang Dã Ngoại Tuyến</div>
+          <h1 class="slide-title">Bách Khoa Toàn Thư Sinh Tồn Thực Chiến & AI Cục Bộ</h1>
+          <p class="slide-subtitle">
+            Khi bạn bước vào rừng sâu, leo núi, vượt sông suối hay đối mặt thiên tai ngắt toàn bộ sóng di động: Ứng dụng mang đến kho tri thức sinh tồn khổng lồ từ <strong>tạo lửa, lọc nước, bẫy cá kiếm ăn, dựng trú ẩn đến định hướng và sơ cứu ngẫu chế</strong>.
+          </p>
+
+          <div class="grid-2" style="margin-bottom: 20px;">
+            <div class="card highlight">
+              <div class="card-title"><span class="badge badge-forest">THỰC CHIẾN</span> 500+ Kỹ năng Bushcraft</div>
+              <div class="card-desc">Hướng dẫn từng bước kèm hình vẽ minh họa chi tiết: Đánh lửa cọ xát gỗ, làm bẫy thú, nhận diện nấm ăn được.</div>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="badge badge-fire">AI ỨNG BIẾN</span> Hỏi - Đáp Ngẫu Chế</div>
+              <div class="card-desc">AI cục bộ phân tích nguyên liệu bạn đang có trong ba-lô để chỉ dẫn cách chế tạo công cụ sinh tồn ngay tại chỗ.</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 24px; font-weight: 900; color: var(--forest);">6 LĨNH VỰC</div>
+              <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase;">Lửa • Nước • Thức Ăn • Lều • Hướng • Y Tế</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 24px; font-weight: 900; color: var(--fire);">100% NỘI BỘ</div>
+              <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase;">Không cần 4G / Wi-Fi</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 24px; font-weight: 900; color: var(--water);">A17 PRO</div>
+              <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase;">Chạy mát & giữ pin tối đa</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="media-frame" style="height: 480px;">
+          <img src="./assets/bushcraft_hero.jpg" alt="Wilderness Survival AI app on camp table in forest" />
+          <div class="media-caption">
+            <span>IPHONE 15 PRO • LUSH FOREST CAMPGROUND</span>
+            <span>OFFLINE BUSHCRAFT OS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: 6 Core Survival Pillars -->
+    <section class="slide" data-slide="2">
+      <div class="slide-eyebrow">Hệ Thống Tri Thức Hoang Dã Toàn Diện</div>
+      <h2 class="slide-title">6 Trụ Cột Kỹ Năng Sống Còn Trong Tự Nhiên</h2>
+      <p class="slide-subtitle">
+        Không chỉ dừng lại ở sơ cứu, ứng dụng trang bị đầy đủ bộ cẩm nang sinh tồn theo chuẩn biệt động quân đội và hội sinh tồn quốc tế:
+      </p>
+
+      <div class="grid-6">
+        <div class="module-card">
+          <div class="module-icon-row">
+            <span class="module-emoji">🔥</span>
+            <span class="badge badge-fire">FIRECRAFT</span>
+          </div>
+          <strong style="font-size: 14px; color: var(--text-main);">1. Tạo Lửa & Giữ Nhiệt</strong>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">Khoan cung (Bow drill), đá lửa, cạo phoi nhựa thông khô trong rừng mưa, bếp hầm Dakota chống khói.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-icon-row">
+            <span class="module-emoji">💧</span>
+            <span class="badge badge-water">WATER</span>
+          </div>
+          <strong style="font-size: 14px; color: var(--text-main);">2. Tìm & Lọc Nước Sạch</strong>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">Chế lọc nước đa tầng bằng chai nhựa + cát + than củi, bẫy ngưng tụ sương, lấy nước từ tre nứa.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-icon-row">
+            <span class="module-emoji">🐟</span>
+            <span class="badge badge-forest">FOOD & FORAGING</span>
+          </div>
+          <strong style="font-size: 14px; color: var(--text-main);">3. Bẫy Cá & Kiếm Ăn</strong>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">Bẫy cá chai nhựa 1 chiều ở suối, bẫy cò sập Figure-4, bài test độc tố phân biệt cây dại ăn được.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-icon-row">
+            <span class="module-emoji">🏕️</span>
+            <span class="badge badge-forest">SHELTER</span>
+          </div>
+          <strong style="font-size: 14px; color: var(--text-main);">4. Dựng Lán Trú Ẩn</strong>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">Lán chữ A (A-frame), lán dựa vách đá hứng nhiệt (Lean-to), nệm lá khô cách nhiệt chống lạnh 5°C.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-icon-row">
+            <span class="module-emoji">🧭</span>
+            <span class="badge badge-water">NAVIGATION</span>
+          </div>
+          <strong style="font-size: 14px; color: var(--text-main);">5. Định Hướng Tự Nhiên</strong>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">Bóng gậy mặt trời, chòm sao Bắc Đẩu, hướng rêu mọc trên thân cây, quy tắc men theo hạ lưu sông suối.</p>
+        </div>
+
+        <div class="module-card">
+          <div class="module-icon-row">
+            <span class="module-emoji">🩹</span>
+            <span class="badge badge-danger">WILD FIRST AID</span>
+          </div>
+          <strong style="font-size: 14px; color: var(--text-main);">6. Sơ Cứu Bằng Đồ Có Sẵn</strong>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">Nẹp cành cây cố định gãy xương, băng ép vải xô cầm máu, bất động chi khi bị rắn độc cắn.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: In the Field / Real Bushcraft Scene -->
+    <section class="slide" data-slide="3">
+      <div class="split-layout reverse">
+        <div class="media-frame" style="height: 480px;">
+          <img src="./assets/bushcraft_scene.jpg" alt="Adventurer by river stream using survival app next to bushcraft shelter and DIY water filter" />
+          <div class="media-caption">
+            <span>THỰC ĐỊA BỜ SUỐI • LÁN TRÚ ẨN VÀ BÌNH LỌC NƯỚC THAN HOẠT TÍNH</span>
+            <span>100% THỰC CHIẾN</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="slide-eyebrow">Tình Huống Thực Tế Nơi Rừng Rậm & Suối Núi</div>
+          <h2 class="slide-title">Khi Bạn Kẹt Giữa Đại Ngàn Cùng Một Con Dao</h2>
+          <p class="slide-subtitle">
+            Khi rơi vào tình cảnh bất trắc bên bờ suối lúc trời chuyển tối: Bạn cần biết ngay lập tức làm sao có nước uống mà không bị tiêu chảy, và làm sao có ngọn lửa sưởi ấm trước khi đêm lạnh ập xuống.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="card" style="border-left: 4px solid var(--water); padding: 16px;">
+              <div style="font-weight: 800; font-size: 14px; color: var(--water); margin-bottom: 4px;">
+                💧 Nước suối có vi khuẩn e.Coli & ký sinh trùng:
+              </div>
+              <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                App hướng dẫn từng lớp lọc: Cắt chai nhựa ➔ lót vải xô ➔ đập dập than củi bếp lửa thành than hoạt tính khử mùi độc ➔ đổ cát mịn lọc cặn ➔ sỏi giữ dòng chảy ➔ đun sôi diệt khuẩn.
+              </div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--fire); padding: 16px;">
+              <div style="font-weight: 800; font-size: 14px; color: var(--fire); margin-bottom: 4px;">
+                🔥 Củi rừng ướt sũng sau cơn mưa dầm:
+              </div>
+              <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+                App chỉ cách tìm gốc cây thông già đã chết để lấy <strong>lõi thông chứa nhựa (Fatwood)</strong> — dù ngâm dưới nước vẫn bén lửa ngay khi chém ra phoi mỏng!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Illustrated Technical Guides -->
+    <section class="slide" data-slide="4">
+      <div class="split-layout">
+        <div>
+          <div class="slide-eyebrow">Giao Diện Minh Họa Trực Quan Chi Tiết</div>
+          <h2 class="slide-title">Minh Họa Từng Bước: Đọc Là Làm Được Ngay</h2>
+          <p class="slide-subtitle">
+            Trong cơn đói rét và hoảng loạn, không ai đọc nổi những đoạn văn dài triết lý. Ứng dụng vẽ sơ đồ lát cắt rõ ràng từng lớp kỹ thuật để người dùng chỉ việc bắt chước thao tác.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="card" style="padding: 14px 18px;">
+              <div class="card-title" style="font-size: 14px;">
+                <span class="badge badge-water">LỌC NƯỚC</span> Sơ Đồ Lọc Đa Tầng Bằng Vật Liệu Rừng
+              </div>
+              <div class="card-desc">
+                Minh họa chi tiết 4 lớp: Lớp 1 (Sỏi to cản rác) ➔ Lớp 2 (Cát mịn giữ cặn bùn) ➔ Lớp 3 (Than củi hấp phụ kim loại & mùi độc) ➔ Lớp 4 (Vải xô/áo thun lọc trong).
+              </div>
+            </div>
+
+            <div class="card" style="padding: 14px 18px;">
+              <div class="card-title" style="font-size: 14px;">
+                <span class="badge badge-fire">ĐÁNH LỬA</span> Kỹ Thuật Khoan Cung (Bow Drill)
+              </div>
+              <div class="card-desc">
+                Minh họa chuẩn xác: Góc vát rãnh chữ V (notch) trên ván lửa, độ căng của dây cung, cách tì gối ép thanh khoan và cách bọc than hồng vào bùi nhùi cỏ khô để thổi bùng ngọn lửa.
+              </div>
+            </div>
+
+            <div class="card" style="padding: 14px 18px;">
+              <div class="card-title" style="font-size: 14px;">
+                <span class="badge badge-forest">BẪY CÁ</span> Bẫy Phễu Một Chiều Bờ Suối
+              </div>
+              <div class="card-desc">
+                Chỉ dẫn cách cắt đầu chai nhựa nhét ngược vào thân tạo thành phễu: Cá bơi theo dòng nước vào ăn mồi giun đất và không thể bơi ngược ra được.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="media-frame" style="height: 480px;">
+          <img src="./assets/bushcraft_guides.jpg" alt="Illustrated Guides for Water Filter and Bow Drill Fire" />
+          <div class="media-caption">
+            <span>UI MINH HỌA LỌC NƯỚC VÀ ĐÁNH LỬA KHOAN CUNG • TIẾNG VIỆT CHUẨN</span>
+            <span>APPLE FLAT DESIGN</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Conversational AI Improvisation -->
+    <section class="slide" data-slide="5">
+      <div class="split-layout reverse">
+        <div class="media-frame" style="height: 480px;">
+          <img src="./assets/bushcraft_chat.jpg" alt="Smart Offline AI Chat solving fishing trap problem" />
+          <div class="media-caption">
+            <span>OFFLINE LOCAL LLM CHAT • TRẢ LỜI NGẪU CHẾ THEO ĐỒ VẬT SẴN CÓ</span>
+            <span>QWEN 4B ON A17 PRO</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="slide-eyebrow">Trí Tuệ Nhân Tạo Ứng Biến (Improvisation AI)</div>
+          <h2 class="slide-title">Giải Quyết Bài Toán "Tôi Chỉ Có Những Đồ Này..."</h2>
+          <p class="slide-subtitle">
+            Điểm mạnh vượt trội của Local LLM (Qwen 4B) so với một cuốn sách PDF tĩnh: Người dùng có thể khai báo những thứ lặt vặt họ đang có, và AI sẽ lên kế hoạch lắp ghép thành công cụ sinh tồn!
+          </p>
+
+          <div class="card highlight" style="margin-bottom: 14px; padding: 18px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--forest); margin-bottom: 6px;">VÍ DỤ TRUY VẤN THỰC TẾ CỦA PHƯỢT THỦ:</div>
+            <div style="font-style: italic; font-size: 13.5px; color: var(--text-main); background: #f8fafc; padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--forest); margin-bottom: 10px;">
+              "Tôi chỉ có 1 sợi dây dù, 1 chai nhựa rỗng và 1 con dao nhỏ, làm sao bắt cá ở suối?"
+            </div>
+            <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
+              ➔ <strong>AI ngoại tuyến phân tích & chỉ dẫn:</strong><br/>
+              1. Cắt rời đầu chai 1/3, lật ngược nhét vào thân làm phễu một chiều.<br/>
+              2. Đục các lỗ nhỏ quanh thân chai để nước lưu thông và mùi mồi lan tỏa.<br/>
+              3. Đào giun đất cho vào chai, dùng dây dù buộc cổ bẫy thả ngược dòng suối.
+            </div>
+          </div>
+
+          <div class="card" style="padding: 14px 18px;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--text-main);">⚡ Tốc độ suy luận ngoại tuyến:</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+              Khởi tạo câu trả lời trong 1.5 giây, tốc độ xuất chữ 32 token/s mượt mà trên chip iPhone 15 Pro mà không hề gửi 1 byte dữ liệu nào lên đám mây.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Interactive Bushcraft Toolkit Simulator -->
+    <section class="slide" data-slide="6">
+      <div class="slide-eyebrow">Trải Nghiệm Trực Tiếp (Interactive Demo)</div>
+      <h2 class="slide-title">Mô Phỏng Tình Huống Sinh Tồn Ngay Trên Sân Khấu</h2>
+      <p class="slide-subtitle">
+        Bấm chọn một tình huống thực địa dưới đây để xem cách hệ thống trích xuất cẩm nang và gợi ý giải pháp sinh tồn trong tích tắc:
+      </p>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button class="btn btn-secondary active" id="btn-sc-fire" onclick="simulateScenario('fire')">🔥 Lạc rừng thông, diêm ướt sũng</button>
+        <button class="btn btn-secondary" id="btn-sc-water" onclick="simulateScenario('water')">💧 Kẹt suối đục ngầu, khát nước</button>
+        <button class="btn btn-secondary" id="btn-sc-bone" onclick="simulateScenario('bone')">🩹 Trượt ngã gãy cẳng tay ở vách đá</button>
+        <button class="btn btn-secondary" id="btn-sc-lost" onclick="simulateScenario('lost')">🧭 Trời mù sương, mất phương hướng</button>
+      </div>
+
+      <div class="card highlight" id="scenario-display-card" style="padding: 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge badge-fire" id="sc-badge">KỸ THUẬT: TẠO LỬA NƠI ẨM ƯỚT</span>
+            <span style="font-size: 12px; font-weight: 800; color: var(--text-main);" id="sc-title">CÁCH NHÓM LỬA TRONG RỪNG MƯA DẦM</span>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--forest); font-weight: 700;">● TÌM THẤY 4 BÀI CẨM NANG LIÊN QUAN (32ms)</span>
+        </div>
+
+        <div id="sc-content" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+          <strong>CÁC BƯỚC THỰC HIỆN TẠI CHỖ:</strong><br/>
+          1. <strong>Tìm gỗ nhựa thông (Fatwood):</strong> Tìm cành thông gãy lâu ngày hoặc phần gốc mục. Lõi gỗ sẫm màu mùi tinh dầu nồng nặc là nơi chứa 100% nhựa cháy.<br/>
+          2. <strong>Cạo phoi mịn (Feather sticks):</strong> Dùng dao cạo lớp phoi mỏng như lông vũ làm bùi nhùi bắt tia lửa.<br/>
+          3. <strong>Nguồn tia lửa ngẫu chế:</strong> Nếu không có đá lửa, dùng 2 sợi dây điện nhỏ hoặc giấy bạc kẹo cao su quẹt chập 2 cực pin điện thoại dự phòng để bén lửa vào bùi nhùi.<br/>
+          4. <strong>Xếp củi hình tháp (Teepee):</strong> Xếp que củi nhỏ từ trong ra ngoài để tạo luồng khí đối lưu hút nhiệt.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Foraging & Edible Plants Database -->
+    <section class="slide" data-slide="7">
+      <div class="slide-eyebrow">An Toàn Tuyệt Đối: Chống Ngộ Độc Sinh Tồn</div>
+      <h2 class="slide-title">Quy Tắc Thử Nghiệm Độc Tố Đa Năng (Universal Edibility Test)</h2>
+      <p class="slide-subtitle">
+        Ăn nhầm nấm kịch độc hoặc lá ngón có thể tử vong trong 30 phút. Ứng dụng cung cấp quy trình kiểm tra độc tính 5 bước chuẩn quân đội kèm danh mục cây ăn được tại Việt Nam.
+      </p>
+
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--danger);">
+          <div class="card-title" style="color: var(--danger); font-size: 14.5px;">
+            ⚠️ QUY TẮC SỐNG CÒN 5 BƯỚC KHI THỬ CÂY LẠ
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: var(--text-secondary); margin-top: 10px;">
+            <div><strong>Bước 1: Ngửi mùi:</strong> Mùi quả hạnh nhân đắng hoặc mùi đào thối ➔ VỨT BỎ NGAY (chứa xyanua).</div>
+            <div><strong>Bước 2: Chà lên da:</strong> Vò nát lá chà lên mặt trong cổ tay, chờ 15 phút xem có mẩn ngứa/bỏng rát.</div>
+            <div><strong>Bước 3: Chạm lên môi:</strong> Chạm mẫu cây lên môi ngoài trong 3 phút, theo dõi phản ứng rát/tê.</div>
+            <div><strong>Bước 4: Nếm đầu lưỡi:</strong> Đặt 1 mẩu nhỏ lên đầu lưỡi trong 15 phút, KHÔNG ĐƯỢC NUỐT.</div>
+            <div><strong>Bước 5: Nhai thử:</strong> Nhai kỹ 1 mẩu nhỏ trong 15 phút, nuốt và nhịn ăn trong 8 tiếng để kiểm chứng.</div>
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--forest);">
+          <div class="card-title" style="color: var(--forest); font-size: 14.5px;">
+            🌿 TOP CÂY DẠI DỄ KIẾM & AN TOÀN TẠI RỪNG VIỆT NAM
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: var(--text-secondary); margin-top: 10px;">
+            <div>• <strong>Đọt mây & Củ mài:</strong> Tinh bột quý giá dưới lòng đất, nướng chín ăn như khoai.</div>
+            <div>• <strong>Măng rừng (Tre/Nứa/Vầu):</strong> Luộc kỹ 2-3 lần đổ nước để loại bỏ hoàn toàn axit cyanhydric.</div>
+            <div>• <strong>Rau tàu bay, Rau dớn bờ suối:</strong> Dễ nhận diện, nấu chín ăn bổ sung chất xơ và vitamin.</div>
+            <div>• <strong>Búp chuối rừng & Thân chuối non:</strong> Nguồn nước ngọt tinh khiết và lương thực sinh tồn khẩn cấp.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Dual Brain Architecture (4B vs 2B) -->
+    <section class="slide" data-slide="8">
+      <div class="slide-eyebrow">Tối Ưu Phần Cứng Điện Thoại Trong Rừng</div>
+      <h2 class="slide-title">Bộ Não Đôi: Thông Minh Khi Cần, Bền Bỉ Khi Nguy Cấp</h2>
+      <p class="slide-subtitle">
+        Trong rừng sâu, mỗi 1% pin đều là cơ hội sống sót. Hệ thống sở hữu thuật toán chuyển đổi linh hoạt giữa hai mô hình AI cục bộ theo nhiệt độ và năng lượng máy.
+      </p>
+
+      <div class="grid-2">
+        <div class="card highlight">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="font-size: 15px; color: var(--text-main);">🧠 Qwen3.5-4B (Chế độ Trí tuệ Toàn năng)</strong>
+            <span class="badge badge-forest">MẶC ĐỊNH</span>
+          </div>
+          <div class="card-desc" style="margin-bottom: 12px;">
+            Hiểu các câu hỏi phức tạp, tổng hợp nhiều công cụ có sẵn để đưa ra giải pháp bushcraft nhiều bước hoàn chỉnh.
+          </div>
+          <table class="spec-table">
+            <tr><td>Dung lượng cài</td><td><strong>~3.06 GB (INT4)</strong></td></tr>
+            <tr><td>Mức RAM đỉnh</td><td><strong>~3.8 GB (ổn định trên 8GB)</strong></td></tr>
+            <tr><td>Tốc độ</td><td><strong>30 – 35 token/s</strong></td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="font-size: 15px; color: var(--text-main);">🔋 Qwen3.5-2B (Chế độ Sinh Tồn Tiết Kiệm Pin)</strong>
+            <span class="badge badge-fire">PIN &lt; 20% / NẮNG GẮT</span>
+          </div>
+          <div class="card-desc" style="margin-bottom: 12px;">
+            Tự động kích hoạt khi pin yếu hoặc nhiệt độ iPhone tăng cao ngoài trời nắng. Cắt giảm 40% tiêu hao pin, xuất chữ siêu tốc.
+          </div>
+          <table class="spec-table">
+            <tr><td>Dung lượng cài</td><td><strong>~1.75 GB (INT4)</strong></td></tr>
+            <tr><td>Mức RAM đỉnh</td><td><strong>~2.1 GB peak</strong></td></tr>
+            <tr><td>Tốc độ</td><td><strong>48 – 55 token/s (nhanh gấp đôi)</strong></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 16px; background: var(--forest-light); border-color: rgba(21, 128, 61, 0.3);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 13px; color: var(--forest); font-weight: 700;">
+            🛡️ FALLBACK KHI HẾT SẠCH PIN: Nếu pin dưới 3%, AI chủ động nhường tài nguyên cho tính năng đọc văn bản thuần túy và màn hình phát tín hiệu chớp sáng cứu hộ SOS.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Market Size & Commercial Potential -->
+    <section class="slide" data-slide="9">
+      <div class="slide-eyebrow">Quy Mô Thị Trường & Tiềm Năng Thương Mại</div>
+      <h2 class="slide-title">Thị Trường Outdoor, Du Lịch Mạo Hiểm & Dân Phượt Toàn Cầu</h2>
+      <p class="slide-subtitle">
+        Không chỉ là ứng dụng khẩn cấp, đây là người bạn đồng hành không thể thiếu cho hàng chục triệu người yêu thiên nhiên, trekking, cắm trại và sinh tồn hoang dã.
+      </p>
+
+      <div class="grid-4" style="margin-bottom: 20px;">
+        <div class="card" style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 30px; font-weight: 900; color: var(--forest);">45 Triệu+</div>
+          <div style="font-size: 13px; font-weight: 800; margin: 4px 0;">Người đi dã ngoại & trekking</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Thị trường Đông Nam Á & Châu Á - TBD tăng trưởng 18%/năm.</div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 30px; font-weight: 900; color: var(--fire);">$29.99</div>
+          <div style="font-size: 13px; font-weight: 800; margin: 4px 0;">Gói Bản Quyền Vĩnh Viễn</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Tải 1 lần dùng trọn đời, cập nhật gói kỹ năng định kỳ.</div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 30px; font-weight: 900; color: var(--water);">$0</div>
+          <div style="font-size: 13px; font-weight: 800; margin: 4px 0;">Chi Phí Máy Chủ API</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Biên lợi nhuận gộp &gt; 92% do xử lý 100% trên chip người dùng.</div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 30px; font-weight: 900; color: var(--text-main);">B2B & B2G</div>
+          <div style="font-size: 13px; font-weight: 800; margin: 4px 0;">Kiểm Lâm & Cứu Hộ</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Cung cấp gói thiết bị chuyên dụng cho ban quản lý rừng và quân đội.</div>
+        </div>
+      </div>
+
+      <div class="card highlight">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 800; font-size: 15px; color: var(--text-main);">Chiến Lược Mở Rộng Hệ Sinh Thái (Expansion)</div>
+            <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 3px;">
+              Tích hợp nhận diện hình ảnh cỏ cây qua camera offline (Core ML Vision) trong giai đoạn tiếp theo để người dùng chỉ cần giơ máy quét là biết nấm có ăn được không.
+            </div>
+          </div>
+          <span class="badge badge-forest" style="font-size: 11px;">ROADMAP V2.0 VISION</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: 12-Week Roadmap & Investment Ask -->
+    <section class="slide" data-slide="10">
+      <div class="slide-eyebrow">Lộ Trình Triển Khai & Kêu Gọi Hợp Tác</div>
+      <h2 class="slide-title">Kế Hoạch Ra Mắt Ứng Dụng Sinh Tồn Toàn Năng</h2>
+      <p class="slide-subtitle">
+        12 tuần từ bản vẽ kỹ thuật đến ứng dụng chính thức trên App Store với sự đồng hành của các chuyên gia sinh tồn và kiểm lâm kỳ cựu.
+      </p>
+
+      <div class="grid-4" style="margin-bottom: 20px;">
+        <div class="card">
+          <span class="badge badge-forest" style="margin-bottom: 8px;">GIAI ĐOẠN 1</span>
+          <div style="font-weight: 800; font-size: 13.5px; margin-bottom: 4px;">Số Hóa 500 Kỹ Năng</div>
+          <div style="font-size: 11.5px; color: var(--text-secondary);">
+            Chuẩn hóa cẩm nang lửa, nước, bẫy cá, lán trại, cây cỏ và vẽ sơ đồ minh họa.
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="badge badge-water" style="margin-bottom: 8px;">GIAI ĐOẠN 2</span>
+          <div style="font-weight: 800; font-size: 13.5px; margin-bottom: 4px;">Bộ Máy Tìm Kiếm RRF</div>
+          <div style="font-size: 11.5px; color: var(--text-secondary);">
+            Đóng gói SQLite FTS5 tiếng Việt và mô hình nhúng vector offline &lt; 40ms.
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="badge badge-fire" style="margin-bottom: 8px;">GIAI ĐOẠN 3</span>
+          <div style="font-weight: 800; font-size: 13.5px; margin-bottom: 4px;">Tích Hợp AI Ứng Biến</div>
+          <div style="font-size: 11.5px; color: var(--text-secondary);">
+            Tối ưu Qwen 4B/2B trên chip Apple A17 Pro và khóa chặt bộ lọc an toàn y tế.
+          </div>
+        </div>
+
+        <div class="card highlight">
+          <span class="badge badge-forest" style="margin-bottom: 8px;">GIAI ĐOẠN 4</span>
+          <div style="font-weight: 800; font-size: 13.5px; margin-bottom: 4px;">Test Thực Địa & Release</div>
+          <div style="font-size: 11.5px; color: var(--text-secondary);">
+            Thử nghiệm trực tiếp tại Vườn Quốc Gia Cát Tiên & Hoàng Liên Sơn, phát hành App Store.
+          </div>
+        </div>
+      </div>
+
+      <div class="card highlight" style="background: linear-gradient(90deg, #ecfdf5 0%, #fff7ed 100%); border-color: #cbd5e1;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 900; font-size: 16px; color: var(--text-main);">Người Bạn Đồng Hành Đáng Tin Nhất Giữa Thiên Nhiên Hoang Dã</div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+              Biến chiếc iPhone trong tay bạn thành người thầy sinh tồn dày dặn kinh nghiệm, sẵn sàng cho mọi cuộc phiêu lưu.
+            </div>
+          </div>
+          <button class="btn" onclick="goToSlide(1)">Trở về Đầu Trang ↺</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navigation Dock -->
+  <div id="dock">
+    <button class="dock-btn" id="prev-btn" title="Slide trước (Mũi tên trái)">◀</button>
+    <div class="slide-counter">
+      <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+    <button class="dock-btn" id="next-btn" title="Slide sau (Mũi tên phải hoặc Space)">▶</button>
+    <button class="dock-btn" id="overview-btn" title="Xem danh sách tất cả slide (Phím O)">☷</button>
+    <button class="dock-btn" id="fullscreen-btn" title="Toàn màn hình (Phím F)">⛶</button>
+    
+    <div class="keyboard-hint">
+      <kbd>←</kbd> <kbd>→</kbd> Di chuyển • <kbd>O</kbd> Tổng quan • <kbd>F</kbd> Toàn màn hình
+    </div>
+  </div>
+
+  <!-- Overview Modal -->
+  <div id="overview-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1240px; margin: 0 auto 24px;">
+      <h3 style="font-size: 22px; font-weight: 800; color: #ffffff;">Mục Lục 10 Slide Thuyết Trình (Bushcraft AI Deck)</h3>
+      <button class="btn btn-secondary" id="close-overview-btn">Đóng (Esc)</button>
+    </div>
+    <div class="overview-grid" id="overview-grid"></div>
+  </div>
+
+  <script>
+    // State
+    const totalSlides = 10;
+    let currentSlide = 1;
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const currentSlideEl = document.getElementById('current-slide');
+    const totalSlidesEl = document.getElementById('total-slides');
+    totalSlidesEl.textContent = totalSlides;
+
+    // Motion.js animation helper
+    function animateSlideIn(targetSlide) {
+      if (window.Motion && window.Motion.animate) {
+        window.Motion.animate(
+          targetSlide,
+          { opacity: [0, 1], y: [16, 0] },
+          { duration: 0.38, easing: [0.16, 1, 0.3, 1] }
+        );
+
+        const cards = targetSlide.querySelectorAll('.card, .media-frame, .module-card');
+        if (cards.length > 0) {
+          window.Motion.animate(
+            cards,
+            { opacity: [0, 1], y: [12, 0] },
+            { duration: 0.35, delay: window.Motion.stagger(0.05), easing: [0.16, 1, 0.3, 1] }
+          );
+        }
+      }
+    }
+
+    function goToSlide(n) {
+      if (n < 1 || n > totalSlides || n === currentSlide) return;
+
+      const oldSlide = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+      const newSlide = document.querySelector(`.slide[data-slide="${n}"]`);
+
+      if (oldSlide) {
+        oldSlide.classList.remove('active');
+        oldSlide.style.opacity = 0;
+      }
+
+      currentSlide = n;
+      newSlide.classList.add('active');
+      animateSlideIn(newSlide);
+
+      // Update HUD & Progress
+      currentSlideEl.textContent = currentSlide;
+      progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      updateOverviewSelection();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    // Event Listeners
+    document.getElementById('next-btn').addEventListener('click', nextSlide);
+    document.getElementById('prev-btn').addEventListener('click', prevSlide);
+
+    // Keyboard Navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'o':
+        case 'O':
+          toggleOverview();
+          break;
+        case 'Escape':
+          closeOverview();
+          break;
+        case 'Home':
+          goToSlide(1);
+          break;
+        case 'End':
+          goToSlide(totalSlides);
+          break;
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+    document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+    // Overview Grid System
+    const overviewModal = document.getElementById('overview-modal');
+    const overviewGrid = document.getElementById('overview-grid');
+
+    function buildOverview() {
+      overviewGrid.innerHTML = '';
+      slides.forEach((slide, idx) => {
+        const slideNum = idx + 1;
+        const title = slide.querySelector('.slide-title')?.textContent || `Slide ${slideNum}`;
+        const eyebrow = slide.querySelector('.slide-eyebrow')?.textContent || '';
+
+        const thumb = document.createElement('div');
+        thumb.className = `overview-thumb ${slideNum === currentSlide ? 'active' : ''}`;
+        thumb.innerHTML = `
+          <div style="font-size: 11px; font-family: var(--font-mono); color: var(--forest); margin-bottom: 4px; font-weight: 700;">#0${slideNum} ${eyebrow}</div>
+          <div style="font-size: 13.5px; font-weight: 800; color: var(--text-main); line-height: 1.35;">${title}</div>
+        `;
+        thumb.addEventListener('click', () => {
+          goToSlide(slideNum);
+          closeOverview();
+        });
+        overviewGrid.appendChild(thumb);
+      });
+    }
+
+    function toggleOverview() {
+      if (overviewModal.classList.contains('open')) {
+        closeOverview();
+      } else {
+        buildOverview();
+        overviewModal.classList.add('open');
+      }
+    }
+
+    function closeOverview() {
+      overviewModal.classList.remove('open');
+    }
+
+    function updateOverviewSelection() {
+      const thumbs = document.querySelectorAll('.overview-thumb');
+      thumbs.forEach((t, i) => {
+        if (i + 1 === currentSlide) t.classList.add('active');
+        else t.classList.remove('active');
+      });
+    }
+
+    document.getElementById('overview-btn').addEventListener('click', toggleOverview);
+    document.getElementById('close-overview-btn').addEventListener('click', closeOverview);
+
+    // Interactive Bushcraft Scenario Simulator on Slide 6
+    function simulateScenario(type) {
+      const card = document.getElementById('scenario-display-card');
+      const badge = document.getElementById('sc-badge');
+      const title = document.getElementById('sc-title');
+      const content = document.getElementById('sc-content');
+
+      const bFire = document.getElementById('btn-sc-fire');
+      const bWater = document.getElementById('btn-sc-water');
+      const bBone = document.getElementById('btn-sc-bone');
+      const bLost = document.getElementById('btn-sc-lost');
+
+      bFire.classList.remove('active');
+      bWater.classList.remove('active');
+      bBone.classList.remove('active');
+      bLost.classList.remove('active');
+
+      if (type === 'fire') {
+        bFire.classList.add('active');
+        badge.className = 'badge badge-fire';
+        badge.textContent = 'KỸ THUẬT: TẠO LỬA NƠI ẨM ƯỚT';
+        title.textContent = 'CÁCH NHÓM LỬA TRONG RỪNG MƯA DẦM';
+        content.innerHTML = `
+          <strong>CÁC BƯỚC THỰC HIỆN TẠI CHỖ:</strong><br/>
+          1. <strong>Tìm gỗ nhựa thông (Fatwood):</strong> Tìm cành thông mục hoặc rễ cây chết. Phần gỗ đỏ sẫm chứa đặc nhựa thông là nhiên liệu bén lửa siêu nhạy kể cả khi bị ướt.<br/>
+          2. <strong>Cạo phoi mỏng (Feather sticks):</strong> Cạo lớp phoi gỗ mịn như cánh lông vũ để bắt tia lửa.<br/>
+          3. <strong>Tạo tia lửa ngẫu chế:</strong> Dùng pin điện thoại chập 2 cực bằng dây dẫn hoặc cọ xát khoan cung (Bow drill).<br/>
+          4. <strong>Xếp củi kiểu bếp Dakota:</strong> Đào 2 hố thông nhau dưới lòng đất để giấu khói và hút gió cưỡng bức, ngọn lửa cháy cực mạnh.
+        `;
+      } else if (type === 'water') {
+        bWater.classList.add('active');
+        badge.className = 'badge badge-water';
+        badge.textContent = 'KỸ THUẬT: LỌC NƯỚC BỜ SUỐI';
+        title.textContent = 'CHẾ BÌNH LỌC NƯỚC BẰNG CHAI NHỰA & THAN HOẠT TÍNH';
+        content.innerHTML = `
+          <strong>CÁC BƯỚC THỰC HIỆN TẠI CHỖ:</strong><br/>
+          1. <strong>Cắt chai nhựa 1.5L:</strong> Cắt bỏ phần đáy, đục lỗ nhỏ ở nắp chai rồi bịt 1 lớp vải áo thun sạch.<br/>
+          2. <strong>Nạp 4 lớp lọc ngược:</strong> Vải xô ➔ Lớp than củi đập vụn dày 8cm (hấp phụ độc tố) ➔ Lớp cát mịn 10cm (giữ bùn vi sinh) ➔ Lớp sỏi cuội nhỏ giữ kết cấu.<br/>
+          3. <strong>Quy trình lọc:</strong> Đổ nước đục từ từ qua miệng chai, thu nước trong vào ca kim loại.<br/>
+          4. <strong>Đun sôi diệt khuẩn:</strong> Bắt buộc đun sôi lăn tăn ít nhất 3 phút trước khi uống để diệt vi khuẩn tả, kiết lỵ.
+        `;
+      } else if (type === 'bone') {
+        bBone.classList.add('active');
+        badge.className = 'badge badge-danger';
+        badge.textContent = 'SƠ CỨU: NẸP CỐ ĐỊNH XƯƠNG GÃY';
+        title.textContent = 'CỐ ĐỊNH GÃY CẲNG TAY BẰNG CÀNH CÂY VÀ DÂY DÙ';
+        content.innerHTML = `
+          <strong>CÁC BƯỚC THỰC HIỆN TẠI CHỖ:</strong><br/>
+          1. <strong>Tìm 2 cành cây thẳng:</strong> Dài từ khuỷu tay đến lòng bàn tay, cứng cáp, bọc lót áo thun để không chọc vào da.<br/>
+          2. <strong>Áp nẹp 2 bên:</strong> Đặt 1 cành mặt trước, 1 cành mặt sau cẳng tay, giữ nguyên tư thế góc 90 độ.<br/>
+          3. <strong>Cố định bằng dây dù/dây leo:</strong> Buộc chặt ở 3 điểm (trên chỗ gãy, dưới chỗ gãy, và cổ tay). KHÔNG buộc đè lên ổ gãy.<br/>
+          4. <strong>Treo tay lên cổ:</strong> Dùng vạt áo làm dải đeo cổ đỡ cẳng tay sát ngực, hạn chế tối đa cử động.
+        `;
+      } else {
+        bLost.classList.add('active');
+        badge.className = 'badge badge-forest';
+        badge.textContent = 'ĐỊNH HƯỚNG: TỰ NHIÊN';
+        title.textContent = 'XÁC ĐỊNH PHƯƠNG HƯỚNG KHI MẤT LA BÀN & GPS';
+        content.innerHTML = `
+          <strong>CÁC BƯỚC THỰC HIỆN TẠI CHỖ:</strong><br/>
+          1. <strong>Bóng gậy mặt trời (Shadow stick):</strong> Cắm cọc 1m xuống đất, đánh dấu đỉnh bóng lúc đầu (Tây), chờ 15 phút đánh dấu đỉnh bóng thứ hai (Đông). Nối 2 điểm là trục Đông - Tây.<br/>
+          2. <strong>Dấu hiệu rêu và vỏ cây:</strong> Ở bán cầu Bắc, rêu thường mọc ẩm ướt ở hướng Bắc thân cây, vòng sinh trưởng của vân gỗ hẹp hơn về hướng Bắc.<br/>
+          3. <strong>Quy tắc dòng chảy suối:</strong> Khi đi lạc trong rừng sâu, hãy luôn men theo hướng dòng nước chảy xuôi — suối nhỏ sẽ đổ ra sông lớn, sông lớn luôn dẫn về làng mạc và đồng bằng.
+        `;
+      }
+
+      if (window.Motion && window.Motion.animate) {
+        window.Motion.animate(card, { scale: [0.98, 1] }, { duration: 0.2 });
+      }
+    }
+
+    // Touch Swipe Support for Mobile/iPad
+    let touchStartX = 0;
+    let touchEndX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) nextSlide();
+      if (touchEndX - touchStartX > 50) prevSlide();
+    }, false);
+
+    // Initial Trigger
+    window.addEventListener('DOMContentLoaded', () => {
+      const firstSlide = document.querySelector('.slide.active');
+      animateSlideIn(firstSlide);
+    });
+  </script>
+</body>
+</html>
