@@ -31,7 +31,12 @@ public struct SOSScreen: View {
     @State private var litIndex: Int? = nil
     @State private var strobeTask: Task<Void, Never>?
     @State private var openCard: EmergencyCard?
+    @State private var whistling = false
+    @State private var whistleMissing = false
+    @State private var copied = false
+    @Environment(FieldSensors.self) private var sensors: FieldSensors?
     @Environment(\.palette) private var p
+    private var store: UserStore { .shared }
 
     public init(location: LocationFix?, cards: [EmergencyCard] = [], onClose: @escaping () -> Void) {
         self.location = location
@@ -45,25 +50,15 @@ public struct SOSScreen: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    HStack(spacing: 12) { Beacon(); Text("SOS").font(.system(size: 28, weight: .bold)).tracking(0.6).foregroundStyle(p.red) }
-                    Spacer()
-                    Button(action: close) {
-                        Image(systemName: "xmark").font(.system(size: 16, weight: .semibold)).foregroundStyle(p.text)
-                            .frame(width: ResQRadius.tap, height: ResQRadius.tap).surface(p, radius: 22, fill: p.surface2)
-                    }
-                    .buttonStyle(.plain).accessibilityLabel("Đóng")
-                }
-                .frame(height: 56)
-
                 coordinates
 
                 HStack(spacing: 10) {
                     HoldToArmButton(title: "Đèn SOS", icon: "flashlight.on.fill", idle: "Giữ để bật", active: "Đang nháy · chạm để tắt",
                                     isOn: strobing, onArm: startStrobe, onStop: stopStrobe)
                     // Whistle: bundled recorded whistle asset at max volume (never synthesized).
-                    HoldToArmButton(title: "Còi báo", icon: "megaphone.fill", idle: "Giữ để bật", active: "Đang phát · chạm để tắt",
-                                    isOn: false, onArm: {}, onStop: {})
+                    HoldToArmButton(title: "Còi báo", icon: "megaphone.fill",
+                                    idle: whistleMissing ? "Chưa có âm thanh còi" : "Giữ để bật", active: "Đang phát · chạm để tắt",
+                                    isOn: whistling, onArm: startWhistle, onStop: stopWhistle)
                 }
                 MorseStrip(steps: Self.morse, lit: litIndex).opacity(strobing ? 1 : 0.45)
 
@@ -74,7 +69,7 @@ public struct SOSScreen: View {
                         Link(destination: URL(string: "tel:\(h.number)")!) {
                             VStack(spacing: 3) {
                                 Text(h.number).font(ResQFont.number(24))
-                                Text(h.label).font(.system(size: 11.5)).opacity(main ? 0.85 : 1).foregroundStyle(main ? .white : p.text3)
+                                Text(h.label).font(.rq(size: 11.5)).opacity(main ? 0.85 : 1).foregroundStyle(main ? .white : p.text3)
                             }
                             .foregroundStyle(main ? .white : p.text)
                             .frame(maxWidth: .infinity, minHeight: 80)
@@ -93,32 +88,44 @@ public struct SOSScreen: View {
                     }
                 }
                 Label("Sóng yếu thì gửi SMS. Tin nhắn thường lọt qua khi cuộc gọi không kết nối được.", systemImage: "cellularbars")
-                    .font(.system(size: 13)).foregroundStyle(p.text3)
+                    .font(.rq(size: 13)).foregroundStyle(p.text3)
+
+                if !store.pins.isEmpty {
+                    sectionTitle("Điểm đã ghim", trailing: "\(store.pins.count) điểm")
+                    VStack(spacing: 0) {
+                        ForEach(Array(store.pins.enumerated()), id: \.element.id) { i, pin in
+                            if i > 0 { Rectangle().fill(p.hair).frame(height: 1).padding(.leading, 14) }
+                            pinRow(pin)
+                        }
+                    }
+                    .background(p.scheme == .light ? Color.white : p.text.opacity(0.04), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(p.hair2))
+                }
 
                 if !cards.isEmpty {
                     sectionTitle("Việc cần làm ngay", trailing: nil)
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                        ForEach(cards) { c in
-                            Button { openCard = c } label: {
-                                VStack(alignment: .leading) {
-                                    Image(systemName: "cross.case.fill").font(.system(size: 24)).foregroundStyle(p.red)
-                                    Spacer()
-                                    Text(c.title).font(.system(size: 15, weight: .semibold)).foregroundStyle(p.text)
-                                    Text("\(c.steps.count) bước").font(ResQFont.caption).foregroundStyle(p.text3)
-                                }
-                                .padding(14).frame(maxWidth: .infinity, minHeight: 104, alignment: .leading)
-                                .background(LinearGradient(colors: [p.passTop, p.passBottom], startPoint: .topLeading, endPoint: .bottomTrailing),
-                                            in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-                                .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(p.passLine))
-                            }
-                            .pressable()
-                        }
+                        ForEach(cards) { c in EmergencyTile(card: c) { openCard = c } }
                     }
                 }
             }
             .padding(.horizontal, 18).padding(.bottom, 26)
         }
         .scrollIndicators(.hidden)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            HStack {
+                HStack(spacing: 12) { Beacon(); Text("SOS").font(.rq(size: 28, weight: .bold)).tracking(0.6).foregroundStyle(p.red) }
+                Spacer()
+                Button(action: close) {
+                    Image(systemName: "xmark").font(.rq(size: 16, weight: .semibold)).foregroundStyle(p.text)
+                        .frame(width: ResQRadius.tap, height: ResQRadius.tap).surface(p, radius: 22, fill: p.surface2)
+                }
+                .buttonStyle(.plain).accessibilityLabel("Đóng")
+            }
+            .frame(height: 56).padding(.horizontal, 18).padding(.bottom, 6)
+            // Opaque bar so scrolled content never runs under the status bar.
+            .background((p.scheme == .light ? Color.white : Color(hex: 0x0B0303)).opacity(0.94).ignoresSafeArea(edges: .top))
+        }
         .background {
             ZStack {
                 p.scheme == .light ? Color.white : Color(hex: 0x0B0303)
@@ -135,14 +142,14 @@ public struct SOSScreen: View {
                 .presentationDetents([.large]).presentationDragIndicator(.visible)
                 .environment(\.palette, p)
         }
-        .onDisappear { stopStrobe() }
+        .onDisappear { stopStrobe(); stopWhistle() }
     }
 
     private func sectionTitle(_ t: String, trailing: String?) -> some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(t).font(.system(size: 17, weight: .semibold)).foregroundStyle(p.text)
+            Text(t).font(.rq(size: 17, weight: .semibold)).foregroundStyle(p.text)
             Spacer()
-            if let trailing { Text(trailing).font(.system(size: 13)).foregroundStyle(p.text3) }
+            if let trailing { Text(trailing).font(.rq(size: 13)).foregroundStyle(p.text3) }
         }
         .padding(.top, 14)
     }
@@ -151,22 +158,29 @@ public struct SOSScreen: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("VỊ TRÍ CỦA BẠN · GPS").font(ResQFont.eyebrow).tracking(1.2).foregroundStyle(p.text3)
             if let l = location {
-                Text(String(format: "%.5f° N\n%.5f° E", l.latitude, l.longitude))
+                Text(String(format: "%.5f° %@\n%.5f° %@", abs(l.latitude), l.latitude >= 0 ? "N" : "S",
+                            abs(l.longitude), l.longitude >= 0 ? "E" : "W"))
                     .font(ResQFont.number(32, .medium)).foregroundStyle(p.text).lineSpacing(0)
                     .minimumScaleFactor(0.6).textSelection(.enabled).padding(.top, 4)
                 Text(CoordinateFormatter.dms(l.latitude, l.longitude)).font(ResQFont.number(13, .regular)).foregroundStyle(p.text2)
                 Rectangle().fill(p.hair).frame(height: 1).padding(.vertical, 8)
                 HStack(spacing: 22) {
-                    meta("Độ cao", l.altitudeMeters.map { "\(Int($0)) m" } ?? "–")
+                    meta("Độ cao", l.altitudeMeters.map { HomeDashboard.meters($0) } ?? "–")
                     meta("Sai số", "±\(Int(l.accuracyMeters)) m")
                     meta("Cập nhật", l.time)
                 }
                 let message = CoordinateFormatter.sosMessage(lat: l.latitude, lon: l.longitude, accuracyMeters: l.accuracyMeters, time: l.time)
                 HStack(spacing: 8) {
-                    Button { copy(message) } label: { ghost("Sao chép", icon: "doc.on.doc") }.pressable()
-                    ShareLink(item: message) { ghost("Gửi SMS", icon: "message") }.pressable()
+                    Button { copy(message) } label: { ghost(copied ? "Đã chép" : "Sao chép", icon: copied ? "checkmark" : "doc.on.doc") }.pressable()
+                    if let sms = Self.smsURL(message) {
+                        Link(destination: sms) { ghost("Gửi SMS", icon: "message") }.pressable()
+                    }
                 }
                 .padding(.top, 8)
+            } else if sensors?.locationAllowed == false {
+                Text("ResQ chưa được dùng GPS. GPS chạy cả khi không có sóng.").font(ResQFont.body).foregroundStyle(p.text2)
+                Button { sensors?.requestLocationPermission() } label: { ghost("Cho phép vị trí", icon: "location.fill") }
+                    .pressable().padding(.top, 8)
             } else {
                 Text("Đang lấy vị trí… Ra chỗ thoáng, nhìn thấy bầu trời.").font(ResQFont.body).foregroundStyle(p.text2)
             }
@@ -180,18 +194,56 @@ public struct SOSScreen: View {
 
     private func meta(_ k: String, _ v: String) -> some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(k).font(.system(size: 12)).foregroundStyle(p.text3)
+            Text(k).font(.rq(size: 12)).foregroundStyle(p.text3)
             Text(v).font(ResQFont.number(16, .medium)).foregroundStyle(p.text)
         }
     }
 
     private func ghost(_ text: String, icon: String) -> some View {
-        Label(text, systemImage: icon).font(.system(size: 15, weight: .semibold)).foregroundStyle(p.text)
+        Label(text, systemImage: icon).font(.rq(size: 15, weight: .semibold)).foregroundStyle(p.text)
             .frame(maxWidth: .infinity, minHeight: 48)
             .background(p.text.opacity(0.07), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
     }
 
-    private func close() { stopStrobe(); onClose() }
+    private func close() { stopStrobe(); stopWhistle(); onClose() }
+
+    /// Opens Messages with the coordinates prefilled; the user picks the recipient.
+    static func smsURL(_ body: String) -> URL? {
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "&+=?")
+        return body.addingPercentEncoding(withAllowedCharacters: allowed).flatMap { URL(string: "sms:&body=\($0)") }
+    }
+
+    private func startWhistle() {
+        whistling = WhistlePlayer.shared.start()
+        whistleMissing = !whistling
+    }
+
+    private func stopWhistle() {
+        WhistlePlayer.shared.stop()
+        whistling = false
+    }
+
+    private func pinRow(_ pin: UserStore.Pin) -> some View {
+        let coord = String(format: "%.5f, %.5f", pin.latitude, pin.longitude)
+        return HStack(spacing: 12) {
+            Image(systemName: "mappin.circle.fill").font(.rq(size: 22)).foregroundStyle(p.red)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(coord).font(ResQFont.number(14, .medium)).foregroundStyle(p.text)
+                Text("\(RelativeDay.label(pin.date)) \(RelativeDay.time(pin.date)) · ±\(Int(pin.accuracyMeters)) m · \(pin.note)")
+                    .font(.rq(size: 12)).foregroundStyle(p.text3).lineLimit(1)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Button { copy(coord) } label: {
+                Image(systemName: "doc.on.doc").font(.rq(size: 15)).foregroundStyle(p.text2).frame(width: 36, height: 36)
+            }
+            .buttonStyle(.plain).accessibilityLabel("Sao chép toạ độ")
+        }
+        .padding(.horizontal, 14).padding(.vertical, 10)
+        .contextMenu {
+            Button("Xoá điểm", systemImage: "trash", role: .destructive) { store.remove(pin: pin) }
+        }
+    }
 
     private func startStrobe() {
         stopStrobe()
@@ -221,6 +273,8 @@ public struct SOSScreen: View {
         #if os(iOS)
         UIPasteboard.general.string = text
         #endif
+        copied = true
+        Task { try? await Task.sleep(for: .seconds(2)); copied = false }
     }
 }
 
@@ -236,16 +290,15 @@ struct HoldToArmButton: View {
     let onArm: () -> Void
     let onStop: () -> Void
     @State private var progress: CGFloat = 0
-    @State private var armedLocal = false
     @Environment(\.palette) private var p
 
     var body: some View {
-        let on = isOn || armedLocal
+        let on = isOn
         VStack(alignment: .leading) {
-            Image(systemName: icon).font(.system(size: 26))
+            Image(systemName: icon).font(.rq(size: 26))
             Spacer()
-            Text(title).font(.system(size: 17, weight: .semibold))
-            Text(on ? active : idle).font(.system(size: 12.5)).opacity(on ? 0.85 : 1).foregroundStyle(on ? .white : p.text3)
+            Text(title).font(.rq(size: 17, weight: .semibold))
+            Text(on ? active : idle).font(.rq(size: 12.5)).opacity(on ? 0.85 : 1).foregroundStyle(on ? .white : p.text3)
         }
         .foregroundStyle(on || progress > 0.35 ? .white : p.text)
         .padding(16).frame(maxWidth: .infinity, minHeight: 128, alignment: .leading)
@@ -258,15 +311,20 @@ struct HoldToArmButton: View {
         }
         .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous).strokeBorder(p.hair2))
         .contentShape(Rectangle())
-        .onTapGesture { if on { armedLocal = false; progress = 0; onStop() } }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(on ? "Chạm hai lần để tắt" : "Chạm hai lần để bật")
+        .accessibilityAction { if on { onStop() } else { onArm() } }
+        .onTapGesture { if on { progress = 0; onStop() } }
         .onLongPressGesture(minimumDuration: 0.65) {
-            armedLocal = true; onArm()
+            onArm()
+            if !isOn { withAnimation(ResQMotion.ease) { progress = 0 } }
         } onPressingChanged: { pressing in
             guard !on else { return }
             withAnimation(pressing ? .linear(duration: 0.65) : ResQMotion.ease) { progress = pressing ? 1 : 0 }
         }
-        .sensoryFeedback(.impact(weight: .heavy), trigger: armedLocal)
-        .onChange(of: isOn) { _, new in if !new { armedLocal = false; progress = 0 } }
+        .haptic(.impact(weight: .heavy), trigger: isOn)
+        .onChange(of: isOn) { _, new in if !new { progress = 0 } }
     }
 }
 

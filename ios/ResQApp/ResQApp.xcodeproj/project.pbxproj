@@ -1,0 +1,483 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		169D6EB81E2B3D3ED7B2F07A /* ResQCore in Frameworks */ = {isa = PBXBuildFile; productRef = E56D6A97E5CBAEEFDD94E2B2 /* ResQCore */; };
+		566CDDFE0D4E1E76D19D0BC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F3DDB7D900906EBEE745280 /* Assets.xcassets */; };
+		BD9C6ECF893F22EB637F19B6 /* ResQUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2D5F6197526A9F47AF196803 /* ResQUI */; };
+		D4615DE25987703A963509B1 /* ScreenTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FBC26D8A7CAA0255E2A8561 /* ScreenTour.swift */; };
+		D757AC1264A1C670788A7362 /* ResQApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0826F2AA55D66447BCC14F5 /* ResQApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8A2968AC9DB9324C6018D8E3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3BBDBE526C35CF1E389F4AE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BD5517CC70560302123F91D;
+			remoteInfo = ResQApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		064694E566DA0AACDFD31674 /* ResQApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ResQApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FBC26D8A7CAA0255E2A8561 /* ScreenTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTour.swift; sourceTree = "<group>"; };
+		73BA34BD1F702E883A9A4F45 /* ResQAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ResQAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F3DDB7D900906EBEE745280 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		87CF7AA0BF783FC2F28D1179 /* ResQKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ResQKit; path = ../ResQKit; sourceTree = SOURCE_ROOT; };
+		A0826F2AA55D66447BCC14F5 /* ResQApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResQApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		873E1A393D3F12DC14E2A4CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD9C6ECF893F22EB637F19B6 /* ResQUI in Frameworks */,
+				169D6EB81E2B3D3ED7B2F07A /* ResQCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		57D40220B2FFD67B4DF10BA1 = {
+			isa = PBXGroup;
+			children = (
+				8B9181C40AEEA439C29C31A5 /* Packages */,
+				6D8E313E89FC171F09C495C8 /* ResQApp */,
+				B707B70A11E785F6AB85CF5A /* ResQAppUITests */,
+				BEA8F7F95B78D14BA91EF791 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6D8E313E89FC171F09C495C8 /* ResQApp */ = {
+			isa = PBXGroup;
+			children = (
+				7F3DDB7D900906EBEE745280 /* Assets.xcassets */,
+				A0826F2AA55D66447BCC14F5 /* ResQApp.swift */,
+			);
+			path = ResQApp;
+			sourceTree = "<group>";
+		};
+		8B9181C40AEEA439C29C31A5 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				87CF7AA0BF783FC2F28D1179 /* ResQKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		B707B70A11E785F6AB85CF5A /* ResQAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6FBC26D8A7CAA0255E2A8561 /* ScreenTour.swift */,
+			);
+			path = ResQAppUITests;
+			sourceTree = "<group>";
+		};
+		BEA8F7F95B78D14BA91EF791 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				064694E566DA0AACDFD31674 /* ResQApp.app */,
+				73BA34BD1F702E883A9A4F45 /* ResQAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		133FC1BB737F7EB11E48A7FA /* ResQAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87692F7F38AE51BE9959DFC9 /* Build configuration list for PBXNativeTarget "ResQAppUITests" */;
+			buildPhases = (
+				224B6D7A51FD8FEA3AE852A2 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B62ACABACF3B06F0DA81622C /* PBXTargetDependency */,
+			);
+			name = ResQAppUITests;
+			packageProductDependencies = (
+			);
+			productName = ResQAppUITests;
+			productReference = 73BA34BD1F702E883A9A4F45 /* ResQAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		5BD5517CC70560302123F91D /* ResQApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5BC672066B6304065A9AA89 /* Build configuration list for PBXNativeTarget "ResQApp" */;
+			buildPhases = (
+				2470F8A9AE9267FE526EE9F7 /* Sources */,
+				1985DDB1C23C72B278BB40D2 /* Resources */,
+				873E1A393D3F12DC14E2A4CB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ResQApp;
+			packageProductDependencies = (
+				2D5F6197526A9F47AF196803 /* ResQUI */,
+				E56D6A97E5CBAEEFDD94E2B2 /* ResQCore */,
+			);
+			productName = ResQApp;
+			productReference = 064694E566DA0AACDFD31674 /* ResQApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3BBDBE526C35CF1E389F4AE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					133FC1BB737F7EB11E48A7FA = {
+						TestTargetID = 5BD5517CC70560302123F91D;
+					};
+					5BD5517CC70560302123F91D = {
+						DevelopmentTeam = 22KWPJB89L;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 88B05179D2711F6C3DF242D7 /* Build configuration list for PBXProject "ResQApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 57D40220B2FFD67B4DF10BA1;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AC6FCFCF9251CAEFB5A1FF2E /* XCLocalSwiftPackageReference "../ResQKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = BEA8F7F95B78D14BA91EF791 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5BD5517CC70560302123F91D /* ResQApp */,
+				133FC1BB737F7EB11E48A7FA /* ResQAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1985DDB1C23C72B278BB40D2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				566CDDFE0D4E1E76D19D0BC9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		224B6D7A51FD8FEA3AE852A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4615DE25987703A963509B1 /* ScreenTour.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2470F8A9AE9267FE526EE9F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D757AC1264A1C670788A7362 /* ResQApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B62ACABACF3B06F0DA81622C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5BD5517CC70560302123F91D /* ResQApp */;
+			targetProxy = 8A2968AC9DB9324C6018D8E3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6945E95365450026D1DAAAD9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6EC7F09A94FBF1F38492B361 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 22KWPJB89L;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ResQ;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Chụp ảnh cây, nấm, vết thương để tra cứu. Ảnh chỉ nằm trên máy.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ResQ dùng GPS để hiện toạ độ SOS, giờ mặt trời lặn và ghim vị trí. GPS chạy cả khi không có sóng.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Nói câu hỏi thay vì gõ, tiện khi đang sơ cứu hoặc đeo găng.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Chuyển giọng nói tiếng Việt thành chữ, ưu tiên xử lý ngay trên máy.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huzastudio.resq;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		80D929B477AC0F58B9A502DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 22KWPJB89L;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ResQ;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Chụp ảnh cây, nấm, vết thương để tra cứu. Ảnh chỉ nằm trên máy.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ResQ dùng GPS để hiện toạ độ SOS, giờ mặt trời lặn và ghim vị trí. GPS chạy cả khi không có sóng.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Nói câu hỏi thay vì gõ, tiện khi đang sơ cứu hoặc đeo găng.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Chuyển giọng nói tiếng Việt thành chữ, ưu tiên xử lý ngay trên máy.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huzastudio.resq;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		913817D82FAAE75733E9244A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.resq.ResQAppUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ResQApp;
+			};
+			name = Debug;
+		};
+		946C014915FFF555F21ECFD8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D01E91F7C7813C0968F9C383 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.resq.ResQAppUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ResQApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		87692F7F38AE51BE9959DFC9 /* Build configuration list for PBXNativeTarget "ResQAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				913817D82FAAE75733E9244A /* Debug */,
+				D01E91F7C7813C0968F9C383 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		88B05179D2711F6C3DF242D7 /* Build configuration list for PBXProject "ResQApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				946C014915FFF555F21ECFD8 /* Debug */,
+				6945E95365450026D1DAAAD9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F5BC672066B6304065A9AA89 /* Build configuration list for PBXNativeTarget "ResQApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EC7F09A94FBF1F38492B361 /* Debug */,
+				80D929B477AC0F58B9A502DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AC6FCFCF9251CAEFB5A1FF2E /* XCLocalSwiftPackageReference "../ResQKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../ResQKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2D5F6197526A9F47AF196803 /* ResQUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ResQUI;
+		};
+		E56D6A97E5CBAEEFDD94E2B2 /* ResQCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ResQCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 3BBDBE526C35CF1E389F4AE0 /* Project object */;
+}

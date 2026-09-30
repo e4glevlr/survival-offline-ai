@@ -592,7 +592,7 @@ details.more .body { padding: 0 16px 8px; }
     </div>
     <div class="dev">
       <b>iPhone 15 Pro · 8 GB</b>
-      <div class="meter"><span>Mô hình</span><i style="--v:100%;--c:var(--green)"></i><span>E2B</span></div>
+      <div class="meter"><span>Mô hình</span><i style="--v:100%;--c:var(--green)"></i><span>E4B</span></div>
       <div class="meter"><span>Pin</span><i style="--v:64%"></i><span class="num">64%</span></div>
       <div class="meter"><span>Nhiệt</span><i style="--v:28%;--c:var(--green)"></i><span>Ổn</span></div>
     </div>
@@ -610,7 +610,7 @@ details.more .body { padding: 0 16px 8px; }
         </div>
         <button class="sos press" id="sosBtn" aria-label="Mở màn hình SOS"><span class="i f">emergency</span>SOS</button>
       </div>
-      <div class="live"><span class="live-pill"><span class="dot"></span>Ngoại tuyến<span class="sep"></span><span id="liveModel">Gemma 4 E2B</span><span class="sep"></span><span class="num">64%</span></span></div>
+      <div class="live"><span class="live-pill"><span class="dot"></span>Ngoại tuyến<span class="sep"></span><span id="liveModel">Gemma 4 E4B</span><span class="sep"></span><span class="num">64%</span></span></div>
     </header>
 
     <!-- ============ ASK ============ -->
@@ -673,7 +673,7 @@ details.more .body { padding: 0 16px 8px; }
         <div class="brow">
           <div class="bl">
             <button class="round-s" id="attBtn" aria-label="Đính kèm"><span class="i">add</span></button>
-            <button class="model press" id="modelBtn"><span class="dot"></span><span id="modelLbl">E2B</span><span class="num">8 GB</span></button>
+            <button class="model press" id="modelBtn"><span class="dot"></span><span id="modelLbl">E4B</span><span class="num">8 GB</span></button>
           </div>
           <div class="swap">
             <button id="voiceBtn" aria-label="Nói"><span class="i">graphic_eq</span>Nói</button>
@@ -701,8 +701,8 @@ details.more .body { padding: 0 16px 8px; }
     </div>
     <div class="g-lbl">Mô hình AI</div>
     <div class="group" id="models">
-      <button class="row sel" data-model="E2B"><span class="radio"></span><span class="txt"><b>Gemma 4 E2B</b><small>Chuẩn · 2,6 GB · đã cài</small></span></button>
-      <button class="row" data-model="E4B"><span class="radio"></span><span class="txt"><b>Gemma 4 E4B</b><small>Chất lượng cao · 3,7 GB · cần 12 GB RAM</small></span></button>
+      <button class="row sel" data-model="E4B"><span class="radio"></span><span class="txt"><b>Gemma 4 E4B</b><small>Mặc định · 3,7 GB · đã cài</small></span></button>
+      <button class="row" data-model="E2B"><span class="radio"></span><span class="txt"><b>Gemma 4 E2B</b><small>Nhẹ · 2,6 GB · chưa đạt kiểm định</small></span></button>
       <button class="row" data-model="OFF"><span class="radio"></span><span class="txt"><b>Chỉ tra cứu</b><small>Không AI · cẩm nang, tìm kiếm, SOS vẫn đủ</small></span></button>
     </div>
     <div class="g-lbl">Dung lượng · <span class="num">2,95 GB</span></div>
@@ -728,7 +728,7 @@ details.more .body { padding: 0 16px 8px; }
       <div><b><span class="num">4/6</span> đã sẵn sàng</b><small>Còn nhận dạng giọng nói tiếng Việt và sạc pin.</small></div>
     </div>
     <div class="group">
-      <div class="row"><span class="sq" style="--sq:#ff7a2f"><span class="i">memory</span></span><span class="txt"><b>Mô hình AI</b><small>Gemma 4 E2B · đã chạy thử</small></span><span class="state"><span class="i ok-i">check_circle</span></span></div>
+      <div class="row"><span class="sq" style="--sq:#ff7a2f"><span class="i">memory</span></span><span class="txt"><b>Mô hình AI</b><small>Gemma 4 E4B · đã chạy thử</small></span><span class="state"><span class="i ok-i">check_circle</span></span></div>
       <div class="row"><span class="sq" style="--sq:#0a84ff"><span class="i">menu_book</span></span><span class="txt"><b>Cẩm nang</b><small>v2026.09 · mới nhất</small></span><span class="state"><span class="i ok-i">check_circle</span></span></div>
       <div class="row"><span class="sq" style="--sq:#ff9f0a"><span class="i">record_voice_over</span></span><span class="txt"><b>Giọng đọc tiếng Việt</b><small>Đã tải</small></span><span class="state"><span class="i ok-i">check_circle</span></span></div>
       <button class="row press" id="dlStt"><span class="sq" style="--sq:#bf5af2"><span class="i">mic</span></span><span class="txt"><b>Nhận dạng giọng nói</b><small>Chưa tải · 180 MB · bấm để tải</small></span><span class="state"><span class="i warn-i">download_for_offline</span></span></button>
@@ -993,7 +993,7 @@ details.more .body { padding: 0 16px 8px; }
     $$('#models .row').forEach(x => x.classList.toggle('sel', x === r));
     const m = r.dataset.model;
     $('#liveModel').textContent = m === 'OFF' ? 'Chỉ tra cứu' : 'Gemma 4 ' + m; $('#modelLbl').textContent = m === 'OFF' ? 'Tra cứu' : m;
-    if (m === 'E4B') toast('Máy 8 GB: E4B dễ bị hệ điều hành tắt khi thiếu RAM', 'warning'); else haptic();
+    if (m === 'E2B') toast('E2B chưa đạt kiểm định: câu trả lời kém tin cậy hơn E4B', 'warning'); else haptic();
   });
   $$('.switch').forEach(s => s.onclick = () => { s.setAttribute('aria-checked', s.getAttribute('aria-checked') !== 'true'); haptic(); });
   $('#bigSw').addEventListener('click', e => app.classList.toggle('large', e.currentTarget.getAttribute('aria-checked') === 'true'));

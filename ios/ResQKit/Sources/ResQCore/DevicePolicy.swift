@@ -2,8 +2,8 @@ import Foundation
 
 /// One model installed per device (never 4B + 2B side by side: storage, and swapping costs a reload).
 public enum ModelTier: String, Sendable, Codable, CaseIterable {
-    case large      // Gemma 4 E4B (or the bake-off winner of the 4B class)
-    case standard   // Gemma 4 E2B (or the 2B-class winner). Default.
+    case large      // Gemma 4 E4B on LiteRT-LM. Default: won the bake-off (bench/, docs/03).
+    case standard   // Gemma 4 E2B. Not recommended until an E2B build passes the bench gate (≥ 80% pass).
     case searchOnly // no LLM: Search + Emergency Cards + Guides still fully work
 }
 
@@ -30,6 +30,30 @@ public struct DeviceSnapshot: Sendable, Equatable {
     }
 }
 
+/// Measured on the phone right after the model file is downloaded: a short prefill + decode run (~10 s).
+/// RAM says whether the model fits; only a measurement says whether it answers in time.
+/// Example (bench, docs/03 §10): OPPO CPH2637 (Dimensity 6300, 8 GB) runs E4B at 20 / 2.9 tok/s.
+public struct ModelSpeed: Sendable, Equatable {
+    public var prefillTokensPerSecond: Double
+    public var decodeTokensPerSecond: Double
+
+    public init(prefillTokensPerSecond: Double, decodeTokensPerSecond: Double) {
+        self.prefillTokensPerSecond = prefillTokensPerSecond
+        self.decodeTokensPerSecond = decodeTokensPerSecond
+    }
+
+    /// Typical prompt (system contract + ~1.1K evidence budget, bench median 749 tokens).
+    static let promptTokens = 750.0
+    /// RG-13: first token p95 ≤ 3 s. The first action line (~40 tokens later) should follow within ~5 s.
+    static let maxFirstTokenSeconds = 3.0
+    static let minDecodeTokensPerSecond = 8.0
+
+    public var meetsLatencyBudget: Bool {
+        Self.promptTokens / prefillTokensPerSecond <= Self.maxFirstTokenSeconds
+            && decodeTokensPerSecond >= Self.minDecodeTokensPerSecond
+    }
+}
+
 public struct GenerationPlan: Sendable, Equatable {
     public var llmEnabled: Bool
     public var maxOutputTokens: Int
@@ -43,15 +67,15 @@ public struct DevicePolicy: Sendable {
 
     static let gib: UInt64 = 1 << 30
 
-    /// Decided once, at model download time. Thresholds are starting points for the device benchmark.
-    /// The OS reports less than the marketed RAM (a "12 GB" Android phone reports ~10.4–11 GiB,
-    /// an "8 GB" one ~7–7.5 GiB), so thresholds sit below the class boundaries.
-    public func recommendedTier(for d: DeviceSnapshot) -> ModelTier {
-        switch d.physicalMemoryBytes {
-        case (9 * Self.gib + Self.gib / 2)...: return .large       // 12 GB class
-        case (6 * Self.gib + Self.gib / 2)...: return .standard    // 8 GB class (iPhone 15 Pro)
-        default: return .searchOnly                                  // 6 GB class: enable E2B only after benchmark
-        }
+    /// Decided once, at model download time. The OS reports less than the marketed RAM
+    /// (an "8 GB" phone reports ~7–7.5 GiB), so the threshold sits below the class boundary.
+    /// E2B scored 33–59% on the bench and put dangerous advice in LAM_NGAY on a real phone,
+    /// so there is no E2B tier: a phone that cannot run E4B in time gets search + Emergency Cards.
+    /// `measured` is nil only until the post-download calibration has run.
+    public func recommendedTier(for d: DeviceSnapshot, measured: ModelSpeed? = nil) -> ModelTier {
+        guard d.physicalMemoryBytes >= 6 * Self.gib + Self.gib / 2 else { return .searchOnly }
+        guard let measured else { return .large }
+        return measured.meetsLatencyBudget ? .large : .searchOnly
     }
 
     /// Decided per request. Energy saving = less work per answer, not a model swap.

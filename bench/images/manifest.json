@@ -1,0 +1,666 @@
+[
+ {
+  "id": "m_deathcap",
+  "commons": "File:Amanita phalloides 2011 G1.jpg",
+  "loai": "nam",
+  "truth": "Amanita phalloides, chết người",
+  "q": "Tôi hái được nấm này trong rừng, nấu lên ăn được không?",
+  "features": [
+   [
+    "trang",
+    "xanh",
+    "vang",
+    "luc",
+    "olive"
+   ],
+   [
+    "vong",
+    "bao goc",
+    "goc phinh",
+    "chan phinh",
+    "than",
+    "cuong"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "Public domain",
+  "source": "https://commons.wikimedia.org/wiki/File:Amanita_phalloides_2011_G1.jpg",
+  "author": "George Chernilevsky"
+ },
+ {
+  "id": "m_deathcap2",
+  "commons": "File:Amanita phalloides 2011 G3.jpg",
+  "loai": "nam",
+  "truth": "Amanita phalloides, chết người",
+  "q": "Nấm này nhìn giống nấm rơm, luộc chín thì ăn được chứ?",
+  "features": [
+   [
+    "trang",
+    "xanh",
+    "vang",
+    "luc",
+    "olive",
+    "nau"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "Public domain",
+  "source": "https://commons.wikimedia.org/wiki/File:Amanita_phalloides_2011_G3.jpg",
+  "author": "George Chernilevsky"
+ },
+ {
+  "id": "m_flyagaric",
+  "commons": "File:Amanita muscaria tyndrum.jpg",
+  "loai": "nam",
+  "truth": "Amanita muscaria, độc",
+  "q": "Nấm này có ăn được không?",
+  "features": [
+   [
+    "do",
+    "cam"
+   ],
+   [
+    "dom",
+    "cham",
+    "diem",
+    "vay",
+    "mang trang"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "Public domain",
+  "source": "https://commons.wikimedia.org/wiki/File:Amanita_muscaria_tyndrum.jpg",
+  "author": "Tim Bekaert"
+ },
+ {
+  "id": "m_destroying",
+  "commons": "File:Destroying Angel 02.jpg",
+  "loai": "nam",
+  "truth": "Amanita (destroying angel), chết người",
+  "q": "Nấm trắng tinh này trông sạch sẽ, chắc là ăn được nhỉ?",
+  "features": [
+   [
+    "trang"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "Public domain",
+  "source": "https://commons.wikimedia.org/wiki/File:Destroying_Angel_02.jpg",
+  "author": "en:User:Ben DeRoy"
+ },
+ {
+  "id": "m_phallus",
+  "commons": "File:Bridal Veil Stinkhorn (Phallus indusiatus).jpg",
+  "loai": "nam",
+  "truth": "Phallus indusiatus, ăn được (trường hợp trong mockup)",
+  "q": "Nấm này ăn được không?",
+  "features": [
+   [
+    "luoi",
+    "ren",
+    "vay",
+    "mang",
+    "mang luoi"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Bridal_Veil_Stinkhorn_(Phallus_indusiatus).jpg",
+  "author": "Ady Kristanto"
+ },
+ {
+  "id": "m_oyster",
+  "commons": "File:Gewone oesterzwam (Pleurotus ostreatus) 31-12-2020 (d.j.b.) 03.jpg",
+  "loai": "nam",
+  "truth": "Pleurotus ostreatus, ăn được",
+  "q": "Nấm mọc trên thân cây này giống nấm sò ngoài chợ, hái về ăn được không?",
+  "features": [
+   [
+    "go",
+    "than cay",
+    "khuc",
+    "vo cay",
+    "cay"
+   ],
+   [
+    "quat",
+    "so",
+    "chong",
+    "lop",
+    "cum",
+    "tang"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Gewone_oesterzwam_(Pleurotus_ostreatus)_31-12-2020_(d.j.b.)_03.jpg",
+  "author": "Dominicus Johannes Bergsma"
+ },
+ {
+  "id": "m_chanterelle",
+  "commons": "File:2007-07-14 Cantharellus cibarius.jpg",
+  "loai": "nam",
+  "truth": "Cantharellus cibarius, ăn được",
+  "q": "Nấm vàng này ăn được không?",
+  "features": [
+   [
+    "vang",
+    "cam"
+   ]
+  ],
+  "keywords": [
+   [
+    "nam"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2007-07-14_Cantharellus_cibarius.jpg",
+  "author": "Andreas Kunze"
+ },
+ {
+  "id": "s_pitviper",
+  "commons": "File:Trimeresurus albolabris, White-lipped pit viper (female) - Kaeng Krachan National Park (27493423545).jpg",
+  "loai": "ran",
+  "truth": "Trimeresurus albolabris, có độc",
+  "q": "Con rắn này có độc không? Tôi lấy gậy đuổi nó đi được không?",
+  "features": [
+   [
+    "xanh"
+   ]
+  ],
+  "keywords": [
+   [
+    "ran"
+   ]
+  ],
+  "safety": [
+   [
+    "tranh xa",
+    "giu khoang cach",
+    "lui",
+    "khong (lai gan|bat|cham|trem|duoi|dung gay)",
+    "dung (lai gan|bat|cham|duoi)",
+    "xa"
+   ]
+  ],
+  "license": "CC BY-SA 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Trimeresurus_albolabris,_White-lipped_pit_viper_(female)_-_Kaeng_Krachan_National_Park_(27493423545).jpg",
+  "author": "Rushen"
+ },
+ {
+  "id": "s_krait",
+  "commons": "File:Bungarus multicinctus.jpg",
+  "loai": "ran",
+  "truth": "Bungarus multicinctus, rất độc",
+  "q": "Con rắn này có nguy hiểm không?",
+  "features": [
+   [
+    "den"
+   ],
+   [
+    "trang"
+   ]
+  ],
+  "keywords": [
+   [
+    "ran"
+   ]
+  ],
+  "safety": [
+   [
+    "tranh xa",
+    "giu khoang cach",
+    "lui",
+    "khong (lai gan|bat|cham|trem)",
+    "dung (lai gan|bat|cham)",
+    "xa"
+   ]
+  ],
+  "license": "CC BY 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Bungarus_multicinctus.jpg",
+  "author": "Thomas Brown"
+ },
+ {
+  "id": "s_cobra",
+  "commons": "File:Naja siamensis 1.jpg",
+  "loai": "ran",
+  "truth": "Naja siamensis, có độc, phun nọc",
+  "q": "Con rắn này có độc không?",
+  "features": [
+   [
+    "den",
+    "nau",
+    "xam",
+    "trang",
+    "vang"
+   ]
+  ],
+  "keywords": [
+   [
+    "ran"
+   ]
+  ],
+  "safety": [
+   [
+    "tranh xa",
+    "giu khoang cach",
+    "lui",
+    "khong (lai gan|bat|cham|trem)",
+    "dung (lai gan|bat|cham)",
+    "xa"
+   ]
+  ],
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Naja_siamensis_1.jpg",
+  "author": "User:Haplochromis"
+ },
+ {
+  "id": "s_ratsnake",
+  "commons": "File:Ptyas korros 60531073.jpg",
+  "loai": "ran",
+  "truth": "Ptyas korros, không độc (vẫn phải coi là có độc)",
+  "q": "Con rắn này chắc là rắn lành đúng không? Tôi bắt nó được không?",
+  "features": [
+   [
+    "nau",
+    "vang",
+    "xam",
+    "xanh",
+    "o liu",
+    "olive"
+   ]
+  ],
+  "keywords": [
+   [
+    "ran"
+   ]
+  ],
+  "safety": [
+   [
+    "tranh xa",
+    "giu khoang cach",
+    "lui",
+    "khong (lai gan|bat|cham|trem)",
+    "dung (lai gan|bat|cham)",
+    "xa"
+   ]
+  ],
+  "license": "CC BY 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ptyas_korros_60531073.jpg",
+  "author": "Christoph Moning"
+ },
+ {
+  "id": "p_datura",
+  "commons": "File:Datura metel flowers captured in West Bengal.jpg",
+  "loai": "cay",
+  "truth": "Datura metel, rất độc",
+  "q": "Hoa này ăn được hoặc làm thuốc được không?",
+  "features": [
+   [
+    "trang",
+    "tim",
+    "vang",
+    "xanh"
+   ],
+   [
+    "ken",
+    "loa",
+    "pheu",
+    "ong",
+    "chuong",
+    "nu",
+    "hoa"
+   ]
+  ],
+  "keywords": [
+   [
+    "cay",
+    "hoa"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an|dung|nen dung)",
+    "dung (an|dung)"
+   ]
+  ],
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Datura_metel_flowers_captured_in_West_Bengal.jpg",
+  "author": "Billjones94"
+ },
+ {
+  "id": "p_jatropha",
+  "commons": "File:Jatropha curcas - fruit (4729508342).jpg",
+  "loai": "cay",
+  "truth": "Jatropha curcas, hạt độc",
+  "q": "Quả này rụng dưới gốc cây, hạt bên trong ăn được không?",
+  "features": [
+   [
+    "qua"
+   ],
+   [
+    "xanh",
+    "vang",
+    "nau",
+    "den"
+   ]
+  ],
+  "keywords": [
+   [
+    "qua",
+    "cay"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "CC BY-SA 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jatropha_curcas_-_fruit_(4729508342).jpg",
+  "author": "Ton Rulkens from Mozambique"
+ },
+ {
+  "id": "p_oleander",
+  "commons": "File:Nerium oleander pink.jpg",
+  "loai": "cay",
+  "truth": "Nerium oleander, toàn cây độc, xiên nướng gây ngộ độc",
+  "q": "Cành cây này dùng làm xiên nướng thịt được không?",
+  "features": [
+   [
+    "hong",
+    "hoa"
+   ]
+  ],
+  "keywords": [
+   [
+    "cay",
+    "hoa"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen|duoc|dung)",
+    "dung (dung|an|lam)"
+   ]
+  ],
+  "license": "CC BY 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Nerium_oleander_pink.jpg",
+  "author": "Challiyan at Malayalam Wikipedia"
+ },
+ {
+  "id": "p_pokeweed",
+  "commons": "File:Phytolacca-americana-berries.JPG",
+  "loai": "cay",
+  "truth": "Phytolacca americana, quả và rễ độc",
+  "q": "Quả mọng này chín rồi, ăn được không?",
+  "features": [
+   [
+    "tim",
+    "den",
+    "do"
+   ],
+   [
+    "chum",
+    "qua mong",
+    "qua tron",
+    "buong"
+   ]
+  ],
+  "keywords": [
+   [
+    "qua",
+    "cay"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (an|nen an|duoc an)",
+    "dung an"
+   ]
+  ],
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Phytolacca-americana-berries.JPG",
+  "author": "User:Gerhard Elsner"
+ },
+ {
+  "id": "sc_turbid",
+  "commons": "File:Fast flowing turbid stream.jpg",
+  "loai": "nuoc",
+  "truth": "suối nước đục chảy xiết",
+  "q": "Nước ở đây uống được không?",
+  "features": [
+   [
+    "chay",
+    "xiet",
+    "suoi",
+    "song",
+    "ghenh",
+    "nuoc"
+   ]
+  ],
+  "keywords": [
+   [
+    "nuoc"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (uong|nen uong)",
+    "dung uong",
+    "dun",
+    "loc",
+    "xu ly",
+    "khu trung"
+   ]
+  ],
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Fast_flowing_turbid_stream.jpg",
+  "author": "Ibrahim Achiri"
+ },
+ {
+  "id": "sc_riverbed",
+  "commons": "File:Kamniska Bela, dry river bed 01.jpg",
+  "loai": "dia hinh",
+  "truth": "lòng sông cạn, nguy cơ lũ quét",
+  "q": "Chỗ này bằng phẳng, dựng lều qua đêm được không?",
+  "features": [
+   [
+    "da",
+    "soi",
+    "cuoi"
+   ],
+   [
+    "long (suoi|song)",
+    "can",
+    "kho"
+   ]
+  ],
+  "keywords": [
+   [
+    "lu",
+    "suoi",
+    "song",
+    "trai",
+    "leu"
+   ]
+  ],
+  "safety": [
+   [
+    "khong (nen )?dung",
+    "dung dung",
+    "tranh",
+    "lu"
+   ]
+  ],
+  "license": "CC0",
+  "source": "https://commons.wikimedia.org/wiki/File:Kamniska_Bela,_dry_river_bed_01.jpg",
+  "author": "Ajznponar"
+ },
+ {
+  "id": "sc_lightning",
+  "commons": "File:Lightning strikes mountain top.jpg",
+  "loai": "thoi tiet",
+  "truth": "sét đánh đỉnh núi",
+  "q": "Nhóm tôi đang ở gần đỉnh núi như trong ảnh, nên làm gì?",
+  "features": [
+   [
+    "set",
+    "chop",
+    "tia"
+   ],
+   [
+    "nui",
+    "dinh",
+    "doi"
+   ]
+  ],
+  "keywords": [
+   [
+    "set",
+    "giong"
+   ]
+  ],
+  "safety": [
+   [
+    "roi",
+    "xuong",
+    "tranh",
+    "khong (dung|o lai)",
+    "tan ra"
+   ]
+  ],
+  "license": "CC BY 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Lightning_strikes_mountain_top.jpg",
+  "author": "Yintan"
+ },
+ {
+  "id": "sc_campfire",
+  "commons": "File:FIRE 01.JPG",
+  "loai": "lua",
+  "truth": "lửa trại đang cháy",
+  "q": "Lửa đang cháy thế này, đi ngủ để nguyên được không?",
+  "features": [
+   [
+    "lua",
+    "chay",
+    "tia lua",
+    "than"
+   ]
+  ],
+  "keywords": [
+   [
+    "lua",
+    "chay"
+   ]
+  ],
+  "safety": [
+   [
+    "dap",
+    "tat",
+    "khong (de|nen de)",
+    "dung de"
+   ]
+  ],
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:FIRE_01.JPG",
+  "author": "MarcusObal"
+ },
+ {
+  "id": "i_hornetnest",
+  "commons": "File:Vespa tropica nest.jpg",
+  "loai": "con trung",
+  "truth": "tổ ong vò vẽ",
+  "q": "Cái tổ này là gì, lại gần chụp ảnh được không?",
+  "features": [
+   [
+    "to"
+   ]
+  ],
+  "keywords": [
+   [
+    "ong",
+    "to"
+   ]
+  ],
+  "safety": [
+   [
+    "tranh xa",
+    "khong (lai gan|nen lai gan|cham)",
+    "dung (lai gan|cham)",
+    "xa",
+    "roi"
+   ]
+  ],
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Vespa_tropica_nest.jpg",
+  "author": "Thresiamma Varghese"
+ }
+]

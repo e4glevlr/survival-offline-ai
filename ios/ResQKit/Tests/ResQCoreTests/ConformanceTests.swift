@@ -240,19 +240,33 @@ final class DevicePolicyTests: XCTestCase {
     func testTierByMemory() {
         // Values as reported by the OS, not marketed RAM.
         XCTAssertEqual(policy.recommendedTier(for: DeviceSnapshot(physicalMemoryBytes: 11_200_000_000)), .large)     // "12 GB"
-        XCTAssertEqual(policy.recommendedTier(for: DeviceSnapshot(physicalMemoryBytes: 7_500_000_000)), .standard)   // "8 GB"
+        XCTAssertEqual(policy.recommendedTier(for: DeviceSnapshot(physicalMemoryBytes: 7_500_000_000)), .large)      // "8 GB"
         XCTAssertEqual(policy.recommendedTier(for: DeviceSnapshot(physicalMemoryBytes: 5_600_000_000)), .searchOnly) // "6 GB"
+    }
+
+    func testMeasuredSpeedOverridesRAM() {
+        let eightGB = DeviceSnapshot(physicalMemoryBytes: 7_500_000_000)
+        // OPPO CPH2637, Dimensity 6300, E4B measured on device: 40 s to first token.
+        let slow = ModelSpeed(prefillTokensPerSecond: 20, decodeTokensPerSecond: 2.9)
+        XCTAssertEqual(policy.recommendedTier(for: eightGB, measured: slow), .searchOnly)
+        // iPhone 17 Pro, E4B GPU (published): 0.6 s to first token, 25 tok/s.
+        let fast = ModelSpeed(prefillTokensPerSecond: 1189, decodeTokensPerSecond: 25)
+        XCTAssertEqual(policy.recommendedTier(for: eightGB, measured: fast), .large)
+        // Fast prefill but decode too slow for the first action line to arrive in time.
+        XCTAssertFalse(ModelSpeed(prefillTokensPerSecond: 1000, decodeTokensPerSecond: 6.5).meetsLatencyBudget)
+        // Not enough RAM: no measurement can help.
+        XCTAssertEqual(policy.recommendedTier(for: DeviceSnapshot(physicalMemoryBytes: 5_600_000_000), measured: fast), .searchOnly)
     }
 
     func testEnergySavingShrinksWorkInsteadOfSwappingModel() {
         let low = DeviceSnapshot(physicalMemoryBytes: 8 * gib, batteryLevel: 0.15)
-        let plan = policy.plan(installed: .standard, device: low, route: Route(risk: .normal))
+        let plan = policy.plan(installed: .large, device: low, route: Route(risk: .normal))
         XCTAssertTrue(plan.llmEnabled)
         XCTAssertEqual(plan.maxOutputTokens, 250)
         XCTAssertEqual(plan.budget.maxBlocks, 3)
 
         let empty = DeviceSnapshot(physicalMemoryBytes: 8 * gib, batteryLevel: 0.05)
-        XCTAssertFalse(policy.plan(installed: .standard, device: empty, route: Route(risk: .normal)).llmEnabled)
+        XCTAssertFalse(policy.plan(installed: .large, device: empty, route: Route(risk: .normal)).llmEnabled)
     }
 }
 

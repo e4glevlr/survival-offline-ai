@@ -1,0 +1,6 @@
+litert/gemma4-e2b            vs gemma4:e2b-it-qat: -50.0 pts  95% CI [-67.1, -32.9]
+litert/gemma4-e4b            vs gemma4:e2b-it-qat: +5.7 pts  95% CI [-10.0, +21.4]
+litert/qwen3.5-2b            vs gemma4:e2b-it-qat: -71.4 pts  95% CI [-87.1, -54.3]
+litert/qwen3.5-4b            vs gemma4:e2b-it-qat: -68.6 pts  95% CI [-85.7, -48.6]
+qwen3.5:2b-q4_K_M            vs gemma4:e2b-it-qat: -82.9 pts  95% CI [-94.3, -70.0]
+qwen3.5:4b-q4_K_M            vs gemma4:e2b-it-qat: -11.4 pts  95% CI [-27.1, +4.3]

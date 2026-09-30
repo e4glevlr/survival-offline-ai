@@ -24,8 +24,8 @@ public struct Tag: View {
         case .muted: (p.text2, p.surface2)
         }
         HStack(spacing: 5) {
-            Image(systemName: icon).font(.system(size: 12, weight: .semibold)).symbolVariant(.fill)
-            Text(text).font(.system(size: 12, weight: .semibold))
+            Image(systemName: icon).font(.rq(size: 12, weight: .semibold)).symbolVariant(.fill)
+            Text(text).font(.rq(size: 12, weight: .semibold))
         }
         .foregroundStyle(fg)
         .padding(.leading, 7).padding(.trailing, 9).frame(height: 24)
@@ -51,7 +51,7 @@ struct BrandMark: View {
 
     var body: some View {
         Image(systemName: "safari.fill")
-            .font(.system(size: size * 0.62, weight: .semibold))
+            .font(.rq(size: size * 0.62, weight: .semibold))
             .foregroundStyle(p.glows ? .white : p.onSolid)
             .frame(width: size, height: size)
             .background(
@@ -73,15 +73,15 @@ public struct EmergencyPassView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 12) {
-                Image(systemName: "cross.case.fill")
-                    .font(.system(size: 21, weight: .semibold))
+                Image(systemName: GuideLibrary.icon(for: card))
+                    .font(.rq(size: 21, weight: .semibold))
                     .foregroundStyle(p.glows ? .white : p.onSolid)
                     .frame(width: 42, height: 42)
                     .background(LinearGradient(colors: [Color(hex: 0xFF5B50), Color(hex: 0xD91A10)], startPoint: .top, endPoint: .bottom),
                                 in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                     .shadow(color: p.glows ? Color(hex: 0xFF3B30).opacity(0.55) : .clear, radius: 10, y: 6)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("THẺ KHẨN CẤP").font(.system(size: 11, weight: .semibold)).tracking(1.3).foregroundStyle(p.red)
+                    Text("THẺ KHẨN CẤP").font(.rq(size: 11, weight: .semibold)).tracking(1.3).foregroundStyle(p.red)
                     Text(card.title).font(ResQFont.title).foregroundStyle(p.text)
                 }
                 Spacer()
@@ -104,7 +104,7 @@ public struct EmergencyPassView: View {
                                 Circle().strokeBorder(p.passLine, lineWidth: 1.5).opacity(done.contains(i) ? 0 : 1)
                                 Circle().fill(p.green).opacity(done.contains(i) ? 1 : 0)
                                 if done.contains(i) {
-                                    Image(systemName: "checkmark").font(.system(size: 13, weight: .bold)).foregroundStyle(.white)
+                                    Image(systemName: "checkmark").font(.rq(size: 13, weight: .bold)).foregroundStyle(.white)
                                 } else {
                                     Text("\(i + 1)").font(ResQFont.number(14)).foregroundStyle(p.text)
                                 }
@@ -118,14 +118,14 @@ public struct EmergencyPassView: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .sensoryFeedback(.selection, trigger: done.contains(i))
+                    .haptic(.selection, trigger: done.contains(i))
                 }
             }
             .padding(.horizontal, 8)
 
             if !card.doNot.isEmpty {
                 HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: "nosign").font(.system(size: 17, weight: .semibold)).foregroundStyle(p.red)
+                    Image(systemName: "nosign").font(.rq(size: 17, weight: .semibold)).foregroundStyle(p.red)
                     Text("\(Text("Không ").fontWeight(.semibold).foregroundStyle(p.text))\(card.doNot.joined(separator: ", ")).")
                         .font(ResQFont.callout).foregroundStyle(p.text2)
                 }
@@ -134,15 +134,23 @@ public struct EmergencyPassView: View {
                 .padding(.horizontal, 16).padding(.top, 8)
             }
 
-            HStack {
+            HStack(spacing: 8) {
                 Label("\(card.sourceLabel) · \(card.reviewedAt)", systemImage: "checkmark.seal")
                     .font(ResQFont.caption).foregroundStyle(p.text3)
                 Spacer()
+                let reading = Speaker.shared.speakingID == card.spokenID
+                Button { Speaker.shared.toggle(card.spokenText, id: card.spokenID) } label: {
+                    Image(systemName: reading ? "stop.fill" : "speaker.wave.2.fill")
+                        .font(.rq(size: 15, weight: .semibold)).foregroundStyle(p.text)
+                        .frame(width: 42, height: 42).background(p.text.opacity(0.08), in: Circle())
+                        .contentTransition(.symbolEffect(.replace))
+                }
+                .buttonStyle(.plain).accessibilityLabel(reading ? "Dừng đọc" : "Đọc to thẻ")
                 if let hotline = card.hotline, let url = URL(string: "tel:\(hotline)") {
                     // Hotline comes from structured data, never from the LLM.
                     Link(destination: url) {
                         Label("Gọi \(hotline)", systemImage: "phone.fill")
-                            .font(.system(size: 15, weight: .semibold)).foregroundStyle(p.onSolid)
+                            .font(.rq(size: 15, weight: .semibold)).foregroundStyle(p.onSolid)
                             .padding(.horizontal, 18).frame(height: 42)
                             .background(p.solid, in: Capsule())
                     }
@@ -163,6 +171,18 @@ public struct EmergencyPassView: View {
         .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous).strokeBorder(p.passLine))
         .shadow(color: p.glows ? Color(hex: 0xFF3B30).opacity(0.35) : .clear, radius: 30, y: 18)
         .accessibilityElement(children: .contain)
+    }
+}
+
+extension EmergencyCard {
+    var spokenID: String { "card-" + id }
+    /// Hotline is read from structured data, same as the call button.
+    var spokenText: String {
+        var parts = ["Thẻ khẩn cấp: \(title)."]
+        parts += steps.enumerated().map { "Bước \($0.offset + 1). \($0.element)" }
+        if !doNot.isEmpty { parts.append("Không \(doNot.joined(separator: ", ")).") }
+        if let hotline { parts.append("Gọi \(hotline.map(String.init).joined(separator: " ")) khi có sóng.") }
+        return parts.joined(separator: " ")
     }
 }
 
@@ -219,7 +239,7 @@ struct AnswerSectionView: View {
                                     Text("\(i + 1)").font(ResQFont.number(12)).foregroundStyle(p.green)
                                         .frame(width: 24, height: 24).background(p.greenSoft, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                                 } else {
-                                    Image(systemName: "xmark").font(.system(size: 14, weight: .semibold)).foregroundStyle(p.red).frame(width: 24, height: 24)
+                                    Image(systemName: "xmark").font(.rq(size: 14, weight: .semibold)).foregroundStyle(p.red).frame(width: 24, height: 24)
                                 }
                             }
                             .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + 5 }
@@ -239,6 +259,7 @@ struct AnswerSectionView: View {
 
 struct SourcesStrip: View {
     let evidence: [EvidenceBlock]
+    @State private var open: EvidenceBlock?
     @Environment(\.palette) private var p
 
     static func monogram(_ label: String) -> String {
@@ -252,13 +273,14 @@ struct SourcesStrip: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(evidence) { e in
+                        Button { open = e } label: {
                         HStack(alignment: .top, spacing: 11) {
                             Text(Self.monogram(e.block.sourceLabel))
                                 .font(ResQFont.number(11)).foregroundStyle(p.text2)
                                 .frame(width: 34, height: 34).background(p.surface3, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(e.block.headingPath.components(separatedBy: " › ").suffix(2).joined(separator: " › "))
-                                    .font(.system(size: 13.5, weight: .medium)).foregroundStyle(p.text).lineLimit(2)
+                                    .font(.rq(size: 13.5, weight: .medium)).foregroundStyle(p.text).lineLimit(2)
                                 HStack(spacing: 6) {
                                     let trusted = e.block.trust == .a
                                     Text(e.block.trust.rawValue).font(ResQFont.number(10))
@@ -271,6 +293,8 @@ struct SourcesStrip: View {
                         }
                         .padding(12).frame(width: 236, alignment: .leading)
                         .surface(p, radius: 18)
+                        }
+                        .pressable()
                     }
                 }
                 .padding(.horizontal, 18)
@@ -279,6 +303,56 @@ struct SourcesStrip: View {
             .scrollTargetBehavior(.viewAligned)
             .padding(.horizontal, -18)
         }
+        .sheet(item: $open) { e in
+            SourceSheet(evidence: e)
+                .presentationDetents([.medium, .large]).presentationDragIndicator(.visible)
+                .presentationBackground(p.surface1)
+                .environment(\.palette, p)
+        }
+    }
+}
+
+/// The passage an answer relied on, with the cited sentence highlighted.
+struct SourceSheet: View {
+    let evidence: EvidenceBlock
+    @Environment(\.palette) private var p
+
+    var body: some View {
+        let path = evidence.block.headingPath.components(separatedBy: " › ")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Nguồn \(evidence.label.dropFirst()) · \(path.dropLast().joined(separator: " › "))")
+                    .font(.rq(size: 13, weight: .medium)).foregroundStyle(p.text3)
+                Text(path.last ?? "").font(.rq(size: 22, weight: .bold)).tracking(-0.6).foregroundStyle(p.text)
+                HStack(spacing: 6) {
+                    Tag("Nguồn cấp \(evidence.block.trust.rawValue.uppercased())", icon: "checkmark.seal",
+                        tone: evidence.block.trust == .a ? .ok : .muted)
+                    Tag(evidence.block.sourceLabel, icon: "book.closed", tone: .muted)
+                }
+                Text(Self.highlighted(evidence.block.text, p))
+                    .font(.rq(size: 16)).foregroundStyle(p.text2).lineSpacing(5)
+                    .padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                    .surface(p, radius: 18, fill: p.surface2)
+                    .padding(.top, 4)
+                Text("Phần được tô là câu ResQ dựa vào để trả lời.").font(.rq(size: 12.5)).foregroundStyle(p.text3)
+            }
+            .padding(.horizontal, 18).padding(.top, 24).padding(.bottom, 26)
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    /// `**…**` in the passage marks the cited sentence.
+    static func highlighted(_ text: String, _ p: ResQPalette) -> AttributedString {
+        var out = AttributedString()
+        for (i, part) in text.components(separatedBy: "**").enumerated() {
+            var a = AttributedString(part)
+            if i % 2 == 1 {
+                a.foregroundColor = p.text
+                a.backgroundColor = p.accentSoft
+            }
+            out += a
+        }
+        return out
     }
 }
 
@@ -293,11 +367,11 @@ struct ReadingLabel: View {
     var body: some View {
         HStack(spacing: 10) {
             ProgressView().controlSize(.small).tint(p.accent)
-            Text(text).font(.system(size: 14, weight: .medium)).foregroundStyle(p.text3)
+            Text(text).font(.rq(size: 14, weight: .medium)).foregroundStyle(p.text3)
                 .overlay {
                     LinearGradient(colors: [.clear, p.text, .clear], startPoint: .leading, endPoint: .trailing)
                         .frame(width: 80).offset(x: phase * 160)
-                        .mask(Text(text).font(.system(size: 14, weight: .medium)))
+                        .mask(Text(text).font(.rq(size: 14, weight: .medium)))
                 }
         }
         .onAppear { withAnimation(.linear(duration: 1.6).repeatForever(autoreverses: false)) { phase = 1 } }
@@ -306,6 +380,7 @@ struct ReadingLabel: View {
 
 public struct AssistantTurnView: View {
     let turn: AssistantTurn
+    @AppStorage(ResQSettings.readAloud) private var readAloud = true
     @Environment(\.palette) private var p
 
     public init(turn: AssistantTurn) { self.turn = turn }
@@ -326,7 +401,7 @@ public struct AssistantTurnView: View {
             if let reason = turn.noAnswer {
                 header(Tag(reason == .llmDisabled ? "Chỉ tra cứu" : "Không đủ căn cứ", icon: "questionmark.circle", tone: .warn))
                 Text(reason == .llmDisabled
-                     ? "AI đang tắt để tiết kiệm pin. Các nguồn liên quan ở bên dưới."
+                     ? "AI đang tắt (chế độ chỉ tra cứu hoặc pin quá yếu). Thẻ và các nguồn liên quan ở bên dưới."
                      : "Cẩm nang trên máy chưa có hướng dẫn đủ sát cho câu này, nên ResQ không tự trả lời. Hãy hỏi cụ thể hơn: bạn đang ở đâu, có những đồ gì.")
                     .font(ResQFont.lead).foregroundStyle(p.text).lineSpacing(4)
             }
@@ -343,10 +418,15 @@ public struct AssistantTurnView: View {
                 Tag("Lỗi khi tạo câu trả lời. Thẻ và nguồn vẫn dùng được", icon: "exclamationmark.triangle", tone: .warn)
             }
             if !turn.evidence.isEmpty { SourcesStrip(evidence: turn.evidence) }
-            if !turn.isStreaming { ActionRow() }
+            if !turn.isStreaming { ActionRow(turn: turn) }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .animation(ResQMotion.ease, value: turn)
+        .task(id: turn.card?.id) {
+            // "Tự đọc to thẻ khẩn cấp": once per turn, hands-free while doing first aid.
+            guard let card = turn.card, turn.isStreaming, readAloud else { return }
+            Speaker.shared.speakOnce(card.spokenText, id: card.spokenID, key: turn.question)
+        }
     }
 
     private func header(_ tag: Tag) -> some View {
@@ -359,31 +439,79 @@ public struct AssistantTurnView: View {
 }
 
 struct ActionRow: View {
-    @State private var speaking = false
+    let turn: AssistantTurn
     @State private var copied = false
     @State private var pinned = false
-    @State private var saved = false
+    @Environment(FieldSensors.self) private var sensors: FieldSensors?
     @Environment(\.palette) private var p
+    private var store: UserStore { .shared }
+
+    private var speechID: String { "answer-" + turn.question }
+    private var title: String { turn.question }
 
     var body: some View {
+        let speaking = Speaker.shared.speakingID == speechID
+        let saved = store.isSaved(title: title)
+        let text = turn.plainText
         HStack(spacing: 4) {
-            action(speaking ? "waveform" : "speaker.wave.2", on: speaking, label: "Đọc to") { speaking.toggle() }
-                .symbolEffect(.variableColor.iterative, isActive: speaking)
-            action(copied ? "checkmark" : "doc.on.doc", on: copied, label: "Sao chép") { copied = true }
-            action("mappin.and.ellipse", on: pinned, label: "Ghim vị trí") { pinned = true }
-            action(saved ? "bookmark.fill" : "bookmark", on: saved, label: "Lưu") { saved = true }
+            action(speaking ? "waveform" : "speaker.wave.2", on: speaking, label: speaking ? "Dừng đọc" : "Đọc to") {
+                Speaker.shared.toggle(text, id: speechID)
+            }
+            .symbolEffect(.variableColor.iterative, isActive: speaking)
+            action(copied ? "checkmark" : "doc.on.doc", on: copied, label: "Sao chép") {
+                #if os(iOS)
+                UIPasteboard.general.string = text
+                #endif
+                copied = true
+                Task { try? await Task.sleep(for: .seconds(2)); copied = false }
+            }
+            action(pinned ? "mappin.circle.fill" : "mappin.and.ellipse", on: pinned, label: "Ghim vị trí") {
+                guard let fix = sensors?.location else { return }
+                store.pin(fix, note: title)
+                pinned = true
+            }
+            .disabled(sensors?.location == nil)
+            action(saved ? "bookmark.fill" : "bookmark", on: saved, label: saved ? "Bỏ lưu" : "Lưu") {
+                store.toggleSaved(kind: .answer, title: title, body: text)
+            }
+            if pinned {
+                Text("Đã ghim · xem trong SOS").font(ResQFont.caption).foregroundStyle(p.text3).transition(.opacity)
+            }
         }
         .padding(.leading, -8)
+        .animation(ResQMotion.ease, value: pinned)
     }
 
     private func action(_ icon: String, on: Bool, label: String, _ run: @escaping () -> Void) -> some View {
         Button(action: run) {
-            Image(systemName: icon).font(.system(size: 17)).foregroundStyle(on ? p.green : p.text3)
+            Image(systemName: icon).font(.rq(size: 17)).foregroundStyle(on ? p.green : p.text3)
                 .frame(width: 38, height: 38).contentShape(Rectangle())
                 .contentTransition(.symbolEffect(.replace))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
-        .sensoryFeedback(.success, trigger: on)
+        .haptic(.success, trigger: on)
+    }
+}
+
+extension AssistantTurn {
+    /// Answer as plain text (copy, save, read aloud). Citation labels are dropped.
+    var plainText: String {
+        var lines: [String] = []
+        if let a = answer {
+            if !a.summary.isEmpty { lines.append(a.summary) }
+            if !a.immediateActions.isEmpty {
+                lines.append("Làm ngay:")
+                lines += a.immediateActions.enumerated().map { "\($0.offset + 1). \($0.element.text)" }
+            }
+            if !a.doNot.isEmpty {
+                lines.append("Không được:")
+                lines += a.doNot.map { "- \($0.text)" }
+            }
+            if let e = answer?.escalation { lines.append("Khi nào cần cấp cứu: \(e.text)") }
+        } else if let card {
+            lines.append(card.spokenText)
+        }
+        return lines.joined(separator: "\n")
     }
 }

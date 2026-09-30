@@ -4,3 +4,6 @@ Thumbs.db
 .build/
 .swiftpm/
 DerivedData/
+
+__pycache__/
+bench/images/files/

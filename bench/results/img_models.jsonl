@@ -1,0 +1,6 @@
+{"model": "gemma4:e2b-it-qat", "cold_ttft": 4.048234999994747, "cold_total": 4.847421708982438, "init_s": null, "peak_footprint": 1930990152}
+{"model": "gemma4:e4b-it-qat", "cold_ttft": 6.51368445798289, "cold_total": 7.947496125008911, "init_s": null, "peak_footprint": 2936117944}
+{"model": "qwen3.5:2b-q4_K_M", "cold_ttft": 3.2768895840272307, "cold_total": 3.9877876250538975, "init_s": null, "peak_footprint": 5066346912}
+{"model": "qwen3.5:4b-q4_K_M", "cold_ttft": 5.091059959027916, "cold_total": 6.459095666999929, "init_s": null, "peak_footprint": 9396608368}
+{"model": "litert/gemma-4-E2B-it", "cold_ttft": 2.4830372920259833, "cold_total": 3.20467808295507, "init_s": 0.8540118749951944, "peak_footprint": 1706151200}
+{"model": "litert/gemma-4-E4B-it", "cold_ttft": 2.537679290981032, "cold_total": 3.8119632500456646, "init_s": 0.7839842080138624, "peak_footprint": 1887064168}

@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 
 /// Design tokens. Same names as the CSS variables in design/resq_prototype.html
 /// and as `ResQColors` in the Compose port.
@@ -71,20 +72,48 @@ public enum ResQRadius {
     public static let tap: CGFloat = 44
 }
 
-/// SF Pro on iOS, Roboto/Google Sans on Android: full Vietnamese coverage + Dynamic Type.
+/// SF Pro on iOS, Roboto/Google Sans on Android: full Vietnamese coverage.
 /// Numbers (coordinates, counts, timers) use the monospaced design with tabular digits.
+/// Every size goes through `Font.rq`, so the "Chữ lớn" setting scales the whole UI.
+@MainActor
 public enum ResQFont {
-    public static let largeTitle = Font.system(size: 34, weight: .bold).width(.standard)
-    public static let hero = Font.system(size: 32, weight: .semibold)
-    public static let title = Font.system(size: 21, weight: .semibold)
-    public static let lead = Font.system(size: 17)
-    public static let body = Font.system(size: 16)
-    public static let callout = Font.system(size: 14.5)
-    public static let caption = Font.system(size: 12, weight: .medium)
-    public static let eyebrow = Font.system(size: 12, weight: .semibold)
+    public static var largeTitle: Font { .rq(size: 34, weight: .bold).width(.standard) }
+    public static var hero: Font { .rq(size: 32, weight: .semibold) }
+    public static var title: Font { .rq(size: 21, weight: .semibold) }
+    public static var lead: Font { .rq(size: 17) }
+    public static var body: Font { .rq(size: 16) }
+    public static var callout: Font { .rq(size: 14.5) }
+    public static var caption: Font { .rq(size: 12, weight: .medium) }
+    public static var eyebrow: Font { .rq(size: 12, weight: .semibold) }
     public static func number(_ size: CGFloat, _ weight: Font.Weight = .semibold) -> Font {
-        .system(size: size, weight: weight, design: .monospaced).monospacedDigit()
+        .rq(size: size, weight: weight, design: .monospaced).monospacedDigit()
     }
+}
+
+/// Global text scale ("Chữ lớn"). Observable, so every body that builds a font re-renders on change.
+@MainActor
+@Observable
+public final class ResQTextScale {
+    public static let shared = ResQTextScale()
+    public static let large: CGFloat = 1.15
+    public var factor: CGFloat = 1
+}
+
+public extension Font {
+    @MainActor
+    static func rq(size: CGFloat, weight: Font.Weight = .regular, design: Font.Design = .default) -> Font {
+        .system(size: size * ResQTextScale.shared.factor, weight: weight, design: design)
+    }
+}
+
+/// UserDefaults keys for persisted settings.
+public enum ResQSettings {
+    public static let theme = "resq.theme"
+    public static let model = "resq.model"
+    public static let largeText = "resq.largeText"
+    public static let batterySaver = "resq.batterySaver"
+    public static let readAloud = "resq.readAloud"
+    public static let haptics = "resq.haptics"
 }
 
 public enum ResQMotion {
@@ -117,8 +146,23 @@ extension View {
             )
     }
 
+    /// `sensoryFeedback` that respects the "Rung phản hồi" setting.
+    func haptic<T: Equatable>(_ feedback: SensoryFeedback, trigger: T) -> some View {
+        modifier(HapticModifier(feedback: feedback, trigger: trigger))
+    }
+
     /// Scale-down press feedback used by every tappable card.
     func pressable() -> some View { buttonStyle(PressStyle()) }
+}
+
+struct HapticModifier<T: Equatable>: ViewModifier {
+    let feedback: SensoryFeedback
+    let trigger: T
+    @AppStorage(ResQSettings.haptics) private var enabled = true
+
+    func body(content: Content) -> some View {
+        content.sensoryFeedback(feedback, trigger: trigger) { _, _ in enabled }
+    }
 }
 
 struct PressStyle: ButtonStyle {

@@ -140,8 +140,8 @@ Mọi thứ chạy trên máy. Câu hỏi, ảnh, giọng nói và vị trí kh�
 
 | Loại máy | Trải nghiệm |
 |---|---|
-| RAM 12 GB trở lên | Đầy đủ, có thể chọn mô hình chất lượng cao hơn (Gemma 4 E4B) |
-| RAM 8 GB, ví dụ iPhone 15 Pro | Đầy đủ với mô hình chuẩn (Gemma 4 E2B) |
+| RAM 8 GB trở lên và đạt bài đo tốc độ khi cài | Đầy đủ với Gemma 4 E4B, model thắng benchmark |
+| RAM 8 GB nhưng chip chậm, ví dụ máy Android tầm trung | Chế độ tra cứu. Máy thử Dimensity 6300 cần 42 giây mới ra chữ đầu, nên app không bật AI |
 | RAM 6 GB trở xuống | Chế độ tra cứu: cẩm nang, tìm kiếm, thẻ khẩn cấp, SOS. Không có AI |
 
 Dung lượng cài đặt khoảng 3 GB, gồm mô hình 2,6 GB, cẩm nang và bộ tìm kiếm.

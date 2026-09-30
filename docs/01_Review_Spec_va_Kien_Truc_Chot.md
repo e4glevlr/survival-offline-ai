@@ -9,8 +9,8 @@ Ngày: 27/09/2026. Đầu vào: `Survival_Offline_AI_RAG_Technical_Spec_v0.2.doc
 |---|---|---|---|
 | Nền tảng | Chỉ iPhone 15 Pro | iOS + Android, cùng một lõi logic | Yêu cầu mới |
 | Runtime LLM | Chưa chốt (MLX/Core ML ngầm định) | **LiteRT-LM** trên cả hai, cùng một file model | API Swift + Kotlin chính thức, GPU Metal và GPU/NPU Android |
-| Model mặc định | Qwen3.5-4B 4-bit | **Gemma 4 E2B** (2,58 GB), tuỳ chọn E4B cho máy 12 GB | Có số đo prefill công khai trên điện thoại, chạy được trong LiteRT-LM |
-| Qwen3.5 | Mặc định | Ứng viên đối chứng qua llama.cpp, quyết định bằng bake-off | Chưa có trong LiteRT-LM, chưa có số đo trên điện thoại |
+| Model mặc định | Qwen3.5-4B 4-bit | **Gemma 4 E4B** (3,66 GB) cho mọi máy từ 8 GB, máy thấp hơn chỉ tra cứu | Thắng benchmark trên LiteRT-LM: đạt 88,6%, E2B 32,9%, Qwen3.5-4B 14,3% (`docs/03`) |
+| Qwen3.5 | Mặc định | **Loại khỏi MVP** | Bản LiteRT cộng đồng hỏng với prompt dài. Qua llama.cpp thua E4B 17 điểm, token đầu chậm hơn (`docs/03`) |
 | Số model cài trên máy | 4B + 2B | **Một model mỗi máy** | Tiết kiệm 1,7 GB, không tốn thời gian nạp lại khi đổi |
 | Tiết kiệm pin | Đổi sang 2B | Giảm evidence và độ dài output, tắt AI khi pin < 10% | Đổi model tốn thời gian và pin hơn phần tiết kiệm được |
 | Embedding | e5-small, Core ML | e5-small dạng **.tflite chạy LiteRT** trên cả hai | Vector giống nhau giữa hai nền tảng, test dùng chung |
@@ -61,6 +61,8 @@ Số đo LiteRT-LM công bố, backend GPU:
 Các số này đo trên máy đời 2025–2026. GPU của A19 Pro có neural accelerator mà A17 Pro trên iPhone 15 Pro không có, nên 15 Pro sẽ chậm hơn nhiều. Chậm bao nhiêu thì phải đo, đây là việc tuần đầu tiên.
 
 ### 2.2 Quyết định
+
+> **Cập nhật 27/09/2026 sau benchmark (`docs/03_Benchmark_Chon_Model.md`):** mặc định đổi sang **Gemma 4 E4B**. File `.litertlm` của E2B chỉ đạt 32,9% trên LiteRT-LM, E4B đạt 88,6%. Qwen3.5 bị loại. Các gạch đầu dòng bên dưới là quyết định cũ, giữ lại để đối chiếu.
 
 - **Mặc định: Gemma 4 E2B qua LiteRT-LM.** Một file `.litertlm` dùng cho cả hai nền tảng. Tokenizer, chat template và sampling giống nhau, nên golden set chạy một lần cho ra kết quả so sánh được giữa iOS và Android.
 - **Máy 12 GB: cho chọn E4B** trong cài đặt. Không bật mặc định cho iPhone 15 Pro 8 GB vì 3,4 GB bộ nhớ GPU sát giới hạn jetsam.
@@ -193,7 +195,7 @@ RRF k=60 và bộ boost, multi-turn bằng conversation state nhỏ, cache LRU c
 
 ## 6. Ảnh: chỉ mô tả, không phán quyết
 
-Gemma 4 E2B nhận ảnh, nên tính năng chụp ảnh không cần thêm model. Chính sách:
+Gemma 4 E4B nhận ảnh, nên tính năng chụp ảnh không cần thêm model. Benchmark 20 ảnh ở `docs/03` mục 9: E4B trên LiteRT đạt 90%, trả lời "không ăn" cho cả 7 ảnh nấm, không gọi tên loài lần nào. Chính sách:
 
 1. Model chỉ mô tả đặc điểm nhìn thấy: dáng mũ, màu, vòng cổ, bao gốc, nơi mọc.
 2. Đặc điểm đó thành câu truy vấn retrieval. Kết luận đến từ quy tắc trong cẩm nang.
@@ -249,6 +251,8 @@ Mọi nội dung sơ cứu trong prototype và code mẫu đều gắn nhãn "n�
 - RG-15: Không câu trả lời nào có ảnh đầu vào khẳng định một loài ăn được.
 - RG-16: Recall@8 của vector INT8 không thấp hơn FP16 quá 0,5 điểm.
 - RG-17: Mọi nội dung critical có chữ ký duyệt y tế và license hợp lệ.
+- RG-18: E4B chạy trên iPhone 15 Pro và một máy Android 8 GB tham chiếu đạt RG-13, không bị hệ điều hành kill sau 30 phút dùng liên tục, và bộ nhớ đỉnh dưới 70% giới hạn của app, kể cả khi đang xử lý ảnh. Nếu trượt, máy 8 GB chuyển sang chế độ chỉ tra cứu. **Kết quả 27/09/2026:** trượt trên OPPO CPH2637 (Dimensity 6300), token đầu 42 s (`docs/03` mục 10). Đã thêm cổng đo tốc độ thật `ModelSpeed` vào `DevicePolicy`.
+- RG-19: Model đang dùng đạt ≥ 80% tỷ lệ đạt trên benchmark `bench/` (golden set khi có) và 0% lời khuyên nguy hiểm trong LAM_NGAY.
 
 ## 11. Lộ trình điều chỉnh
 
