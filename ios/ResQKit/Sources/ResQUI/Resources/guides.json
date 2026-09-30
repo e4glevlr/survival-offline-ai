@@ -1,0 +1,676 @@
+{
+  "version": "2026-09-30-draft",
+  "note": "Bản nháp để thử nghiệm, chưa qua chuyên gia duyệt. Viết lại bằng tiếng Việt từ US Army FM 21-76 (phạm vi công cộng), IFRC International First Aid Guidelines 2020 và WHO.",
+  "articles": [
+    {
+      "id": "fire-site", "pillar": "Lửa và giữ nhiệt", "icon": "flame.fill", "minutes": 3,
+      "title": "Chọn chỗ nhóm lửa",
+      "source": "FM 21-76, ch.7", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Chọn chỗ khô, khuất gió và dọn sạch một vòng 1 m để lửa không lan.",
+      "steps": [
+        "**Chọn chỗ khô, khuất gió**, gần củi, gần chỗ ngủ nhưng không sát lều.",
+        "**Dọn một vòng rộng ít nhất 1 m**: gạt hết lá khô, cỏ, cào lớp đất mặt đến khi lộ đất trơ.",
+        "**Xếp vách chắn** bằng khúc gỗ hoặc đá phía sau đống lửa để hắt nhiệt về phía bạn và chặn tàn lửa bay.",
+        "**Đất ẩm, sình lầy**: lót một lớp cành tươi cỡ cổ tay làm nền, xếp thêm một lớp vuông góc lên trên.",
+        "**Gió mạnh hoặc cần giấu lửa**: đào hố lửa kiểu Dakota, gồm một hố đốt và một hố thông gió nối vào từ phía đầu gió."
+      ],
+      "warnings": [
+        "Không dùng đá ướt, đá xốp, đá lấy dưới suối kê bếp: khi nóng có thể nổ văng.",
+        "Không đốt lửa trong lều kín. Khói có khí CO, gây ngộ độc khi ngủ.",
+        "Không nhóm lửa dưới tán cây khô, trên lớp rễ mục hay đất than bùn."
+      ]
+    },
+    {
+      "id": "fire-lay", "pillar": "Lửa và giữ nhiệt", "icon": "flame", "minutes": 4,
+      "title": "Bùi nhùi, củi mồi và cách xếp củi",
+      "source": "FM 21-76, ch.7", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Lửa cần không khí, nhiệt và nhiên liệu. Chuẩn bị đủ ba loại vật liệu rồi mới châm.",
+      "steps": [
+        "**Bùi nhùi**: thứ thật khô, bắt lửa từ một tia lửa: vỏ cây khô xé tơi, cỏ khô, bông, giấy, mùn gỗ mục khô. Chuẩn bị một nắm to bằng nắm tay.",
+        "**Củi mồi**: que khô cỡ que diêm đến cỡ ngón tay. Gom gấp đôi lượng bạn nghĩ là đủ.",
+        "**Củi đốt**: khúc to hơn, cháy chậm. Lấy cành chết còn trên cây, bẻ nghe “rắc” là khô.",
+        "**Xếp chóp nón**: đặt bùi nhùi ở giữa, dựng củi mồi nghiêng quanh thành hình nón, chừa một khe ở phía đầu gió. Kiểu này cháy được cả khi củi hơi ẩm.",
+        "**Châm từ phía đầu gió**, thổi nhẹ vào gốc lửa, thêm củi mồi từ nhỏ đến lớn. Chỉ cho củi đốt vào khi củi mồi đã cháy đều.",
+        "**Cần lửa cháy lâu không phải trông**: xếp kiểu kim tự tháp, nhiều lớp củi vuông góc nhau, nhóm lửa trên cùng để lửa cháy dần xuống."
+      ],
+      "warnings": [
+        "Không lấy củi nằm sát đất: trông khô nhưng thường ngấm ẩm bên trong.",
+        "Không đổ xăng, dầu vào đống lửa đang cháy."
+      ]
+    },
+    {
+      "id": "fire-no-match", "pillar": "Lửa và giữ nhiệt", "icon": "sun.max.fill", "minutes": 4,
+      "title": "Tạo lửa khi không có diêm",
+      "source": "FM 21-76, ch.7", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Kính lúp, que đánh lửa, pin hay đá lửa đều tạo được lửa nếu bùi nhùi thật khô.",
+      "steps": [
+        "**Kính lúp, ống nhòm, kính máy ảnh**: ngày nắng, hội tụ điểm sáng nhỏ nhất lên bùi nhùi, giữ yên đến khi bốc khói rồi thổi nhẹ.",
+        "**Chai nước tròn hoặc túi nilon đựng nước** cũng hội tụ được nắng, nhưng lâu hơn.",
+        "**Que đánh lửa (ferro, magie)**: đặt đầu que sát bùi nhùi, giữ dao đứng yên rồi kéo que ngược ra sau để tia lửa rơi trúng chỗ.",
+        "**Pin**: nối hai đoạn dây vào hai cực, chạm hai đầu dây trần vào nhau sát bùi nhùi. Pin 9V chạm vào bùi nhùi bông thép sẽ cháy ngay.",
+        "**Đá lửa và thép**: đập sống dao thép carbon vào cạnh sắc của đá cứng, hứng tia lửa bằng vải than (vải bông đã nung đen trong hộp kín).",
+        "**Khi có tàn đỏ**: gói tàn vào tổ bùi nhùi, thổi đều và dài hơi đến khi bùng lửa, rồi đặt vào đống củi đã xếp sẵn."
+      ],
+      "warnings": [
+        "Dao inox cho tia lửa rất kém, cần thép carbon.",
+        "Không làm chập pin lithium của điện thoại, sạc dự phòng: pin có thể phồng, cháy, nổ."
+      ]
+    },
+    {
+      "id": "fire-bow-drill", "pillar": "Lửa và giữ nhiệt", "icon": "hand.draw.fill", "minutes": 5,
+      "title": "Tạo lửa bằng cung khoan",
+      "source": "FM 21-76, ch.7", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Cách tạo lửa bằng ma sát đáng tin nhất, nhưng tốn sức và cần luyện trước.",
+      "steps": [
+        "**Ván lửa**: gỗ mềm khô, dày khoảng 2,5 cm, rộng 10 cm. Khoét một hõm nhỏ cách mép 2 cm, rồi cắt rãnh chữ V từ mép ván vào tâm hõm.",
+        "**Trục khoan**: cành gỗ cứng khô, thẳng, to 2 cm, dài 25 cm. Đầu dưới để tù, đầu trên vót tròn.",
+        "**Tay đè**: hòn đá hoặc miếng gỗ cứng có hõm nhỏ để giữ đầu trên của trục.",
+        "**Cung**: cành tươi dẻo dài bằng cánh tay, căng dây giữa hai đầu (dây giày, paracord), không để chùng.",
+        "**Khoan**: đặt bùi nhùi dưới rãnh V, một chân giẫm giữ ván, quấn dây cung một vòng quanh trục, tay đè giữ đầu trên, kéo cung qua lại đều tay.",
+        "**Tăng dần lực đè và tốc độ** khi trục chạy đều. Bột gỗ đen, nóng dồn vào rãnh V và bốc khói là đã có than hồng.",
+        "**Nhẹ tay chuyển than hồng** vào bùi nhùi, thổi đến khi bùng lửa."
+      ],
+      "warnings": [
+        "Đừng để đến lúc cần mới thử lần đầu. Hãy luyện ở nhà.",
+        "Không dùng gỗ tươi hay gỗ nhiều nhựa làm ván và trục."
+      ]
+    },
+    {
+      "id": "fire-keep-out", "pillar": "Lửa và giữ nhiệt", "icon": "moon.stars.fill", "minutes": 3,
+      "title": "Giữ lửa qua đêm và dập lửa",
+      "source": "FM 21-76, ch.7", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Ủ than để sáng ra khỏi nhóm lại; tắt hẳn lửa trước khi rời trại.",
+      "steps": [
+        "**Dùng gỗ cứng khô, ít mùi** làm củi chính: cháy lâu, ít khói.",
+        "**Hong củi ẩm** quanh đống lửa trước khi cho vào.",
+        "**Ủ than qua đêm**: vun than vào giữa, phủ một lớp tro mỏng, gác vài khúc gỗ cứng lên. Sáng ra gạt tro, thổi là than hồng lại.",
+        "**Mang lửa theo**: giữ một mẩu mùn gỗ đang âm ỉ trong hộp kim loại có đục lỗ thoáng.",
+        "**Dập lửa khi rời đi**: đổ nước, khuấy tro, đổ nước lần nữa. Đưa mu bàn tay lại gần tro, còn thấy ấm là chưa tắt."
+      ],
+      "warnings": [
+        "Không bỏ đi khi lửa còn âm ỉ. Gió có thể thổi bùng lại và gây cháy rừng.",
+        "Không chỉ lấp đất lên lửa rồi đi: than bên dưới vẫn cháy âm ỉ nhiều giờ."
+      ]
+    },
+    {
+      "id": "warmth", "pillar": "Lửa và giữ nhiệt", "icon": "thermometer.snowflake", "minutes": 4,
+      "title": "Giữ ấm khi trời lạnh, ướt",
+      "source": "FM 21-76, ch.5, ch.15", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Người ướt gặp gió có thể hạ thân nhiệt cả khi trời không quá lạnh. Giữ khô quan trọng hơn mặc dày.",
+      "steps": [
+        "**Giữ quần áo sạch**: đồ bám bùn, mồ hôi giữ ấm kém hẳn.",
+        "**Tránh ra mồ hôi**: leo dốc, làm việc nặng thì cởi bớt lớp ngoài, nghỉ trước khi ướt đẫm.",
+        "**Mặc nhiều lớp mỏng, rộng**: giữ ấm hơn một lớp dày. Có đồ khác thì tránh để áo cotton làm lớp trong cùng.",
+        "**Giữ khô**: thay đồ ướt ngay, hong tất và găng bên lửa. Giày ướt thì lót túi nilon giữa tất và giày.",
+        "**Cách ly khỏi mặt đất**: nằm thẳng trên đất có thể mất tới 80% nhiệt cơ thể. Lót lá khô, cỏ, cành thông dày 20–30 cm.",
+        "**Che đầu và cổ**, ăn uống đủ, nằm sát người đi cùng để giữ nhiệt.",
+        "**Bình nước nóng** hoặc đá hơ lửa bọc vải dày đặt ở bụng, nách giúp ấm nhanh."
+      ],
+      "warnings": [
+        "Không uống rượu cho ấm: rượu làm cơ thể mất nhiệt nhanh hơn.",
+        "Không để đá nóng chạm da hay đưa vào túi ngủ khi chưa bọc vải dày.",
+        "Run cầm cập, nói líu, lơ mơ là dấu hiệu hạ thân nhiệt. Mở thẻ khẩn cấp “Hạ thân nhiệt”."
+      ]
+    },
+
+    {
+      "id": "water-bottle-filter", "pillar": "Nước sạch", "icon": "drop.fill", "minutes": 4,
+      "title": "Lọc nước bằng chai nhựa",
+      "source": "FM 21-76", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Lọc làm nước trong và bớt mùi, chưa diệt được vi khuẩn.",
+      "steps": [
+        "**Cắt đáy chai** 1,5 L rồi úp ngược, cổ chai hướng xuống.",
+        "**Nhét vải** áo thun hoặc khăn chặt vào cổ chai.",
+        "**Xếp lớp** từ dưới lên: than củi đập nhỏ, cát mịn, sỏi nhỏ, sỏi to.",
+        "**Đổ nước từ từ**, bỏ phần nước đầu tiên còn đục.",
+        "**Đun sôi sùng sục** ít nhất 1 phút. Lọc chỉ làm trong nước, không diệt vi khuẩn."
+      ],
+      "warnings": [
+        "Không uống nước mới lọc mà chưa đun sôi hoặc khử trùng.",
+        "Nước quá đục thì để lắng vài giờ trước khi lọc; thay cát, than sau vài lần lọc."
+      ]
+    },
+    {
+      "id": "water-purify", "pillar": "Nước sạch", "icon": "drop.triangle.fill", "minutes": 4,
+      "title": "Khử trùng nước uống",
+      "source": "FM 21-76, ch.6; WHO", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Đun sôi là chắc nhất. Không có lửa thì dùng viên khử trùng, i-ốt hoặc phơi nắng.",
+      "steps": [
+        "**Đun sôi** đến khi sủi bọt sùng sục, giữ 1 phút. Ở độ cao trên 2.000 m giữ 3 phút.",
+        "**Viên khử trùng (Aquatabs, Chloramin B)**: pha đúng liều ghi trên vỏ, thường chờ 30 phút rồi mới uống.",
+        "**Cồn i-ốt 2%**: 5 giọt cho 1 lít nước trong, 10 giọt nếu nước đục hoặc lạnh. Lắc đều, chờ 30 phút.",
+        "**Nước đục**: để lắng vài giờ hoặc lọc qua vải trước. Hoá chất diệt khuẩn kém khi nước đục.",
+        "**Không có lửa, không có thuốc**: rót nước trong vào chai nhựa PET trong suốt, loại tối đa 2 lít, phơi nắng gắt ít nhất 6 giờ. Trời nhiều mây thì phơi 2 ngày.",
+        "**Khử mùi**: thả vài cục than củi vào nước, để 45 phút rồi gạn.",
+        "**Nước mưa** hứng thẳng vào đồ đựng sạch thường uống được. Nước suối, sông, ao hồ, nhất là gần bản làng, luôn phải khử trùng."
+      ],
+      "warnings": [
+        "Lọc và để lắng chỉ làm trong nước, không diệt vi khuẩn, ký sinh trùng.",
+        "Người bệnh tuyến giáp, phụ nữ có thai không nên dùng i-ốt nhiều ngày liền.",
+        "Phơi nắng không dùng được cho nước đục hay chai thuỷ tinh, chai màu."
+      ]
+    },
+    {
+      "id": "water-find", "pillar": "Nước sạch", "icon": "humidity.fill", "minutes": 5,
+      "title": "Tìm nguồn nước trong rừng",
+      "source": "FM 21-76, ch.6", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Nước dồn về chỗ thấp, và có sẵn trong tre, chuối, dây leo, sương sớm.",
+      "steps": [
+        "**Đi xuống chỗ thấp**: nước dồn về khe, thung lũng, chân vách đá. Lối mòn thú đi và tiếng ếch nhái thường dẫn tới nước.",
+        "**Lấy sương sớm**: buộc vải hoặc túm cỏ mềm quanh cổ chân, đi qua bãi cỏ ướt sương trước khi mặt trời lên, vắt vào bình. Lặp lại đến khi hết sương.",
+        "**Hốc cây, kẽ đá**: nhét vải vào cho thấm rồi vắt ra. Ong, kiến bu vào một hốc cây thường là trong đó có nước.",
+        "**Tre, nứa xanh**: gõ nghe óc ách thì khoét lỗ ở gốc đốt để hứng. Hoặc uốn cong một cây tre, buộc ngọn xuống, chặt đầu ngọn; nước nhỏ giọt suốt đêm.",
+        "**Cây chuối**: chặt ngang, chừa gốc cao 30 cm, khoét lõm giữa gốc thành cái bát. Nước từ rễ dâng lên. Bỏ ba lần nước đầu vì đắng; gốc cho nước được đến 4 ngày, nhớ che lại.",
+        "**Dây leo**: chặt một nhát khía cao nhất tầm với, rồi chặt đứt sát đất, hứng nước nhỏ ra.",
+        "**Dừa non**: nước dừa non giải khát tốt. Nước dừa già nhiều dầu, uống nhiều dễ tiêu chảy."
+      ],
+      "warnings": [
+        "Không uống nhựa cây dính, đục như sữa hoặc có vị đắng.",
+        "Không để nhựa cây quá 24 giờ, nhựa sẽ lên men.",
+        "Nước lấy từ cây và từ đất vẫn nên khử trùng khi có thể."
+      ]
+    },
+    {
+      "id": "water-still-bag", "pillar": "Nước sạch", "icon": "leaf.fill", "minutes": 3,
+      "title": "Hứng nước bằng túi nilon trùm lá",
+      "source": "FM 21-76, ch.6", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Nắng làm lá xanh trong túi nilon thoát hơi nước, hơi nước đọng lại thành nước uống được.",
+      "steps": [
+        "**Chọn sườn dốc có nắng** cả ngày và loại cây lá xanh không độc.",
+        "**Làm phồng túi**: xoay miệng túi nilon trong suốt đón gió hoặc múc không khí cho đầy túi.",
+        "**Cho lá xanh vào** khoảng nửa đến ba phần tư túi, nhặt bỏ gai, que cứng có thể làm thủng túi.",
+        "**Bỏ một hòn đá nhỏ** vào túi, buộc chặt miệng túi càng sát đầu càng tốt để giữ nhiều không khí.",
+        "**Đặt túi trên dốc**, miệng túi hướng xuống dốc nhưng cao hơn chỗ trũng nhất của túi, để hòn đá nằm ở chỗ trũng.",
+        "**Chắt nước**: nới miệng túi, nghiêng cho nước đọng quanh hòn đá chảy ra, rồi buộc lại. Thay lá mới khi lá đã héo."
+      ],
+      "warnings": [
+        "Không dùng lá cây độc: nước thu được cũng độc.",
+        "Mỗi túi cho ít nước. Làm nhiều túi cùng lúc."
+      ]
+    },
+    {
+      "id": "water-still-pit", "pillar": "Nước sạch", "icon": "circle.bottomhalf.filled", "minutes": 4,
+      "title": "Hố chưng cất nước",
+      "source": "FM 21-76, ch.6", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Hút ẩm từ đất, và biến được cả nước bẩn, nước biển thành nước ngọt.",
+      "steps": [
+        "**Chọn chỗ đất ẩm, có nắng** gần như cả ngày: lòng suối cạn, chỗ trũng từng đọng nước mưa.",
+        "**Đào hố hình bát** rộng khoảng 1 m, sâu 60 cm. Đào thêm một hố nhỏ ở giữa vừa đặt cốc hoặc bình hứng đứng thẳng.",
+        "**Đặt bình hứng** vào hố giữa. Có ống nhựa thì buộc một đầu vào đáy bình, kéo đầu kia ra ngoài mép hố.",
+        "**Phủ tấm nilon trong** lên miệng hố, lấp đất kín mép.",
+        "**Đặt một hòn đá** giữa tấm nilon cho nó võng thành phễu, đỉnh phễu thấp hơn mặt đất khoảng 40 cm và nằm ngay trên bình. Nilon không được chạm thành hố.",
+        "**Có nước bẩn hoặc nước biển**: đào một rãnh sâu 25 cm, cách mép hố 25 cm, đổ nước vào rãnh. Đất lọc, hố chưng lại thành nước ngọt.",
+        "**Hút nước qua ống** mà không cần mở nilon; bịt ống lại khi không dùng."
+      ],
+      "warnings": [
+        "Một hố chỉ cho khoảng 0,5–1 lít mỗi ngày. Một người cần ít nhất ba hố.",
+        "Đào hố tốn mồ hôi. Làm lúc mát trong ngày.",
+        "Không để nước bẩn đổ tràn ra mép hố chỗ nilon tiếp đất."
+      ]
+    },
+    {
+      "id": "water-ration", "pillar": "Nước sạch", "icon": "waterbottle.fill", "minutes": 3,
+      "title": "Mất nước: uống gì, không uống gì",
+      "source": "FM 21-76, ch.6, ch.13", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Người không ăn sống được vài tuần, không uống chỉ vài ngày. Tiết kiệm mồ hôi, đừng tiết kiệm nước.",
+      "steps": [
+        "**Cần ít nhất 2 lít mỗi ngày**, kể cả khi trời lạnh. Trời nóng, làm nặng thì cần nhiều hơn hẳn.",
+        "**Uống từng ngụm đều trong ngày**, đừng chờ khát. Nước trong bình không giúp gì bạn, nước trong người mới giúp.",
+        "**Giảm mất nước**: nghỉ trong bóng râm giờ nắng gắt, làm việc lúc sáng sớm và chiều muộn, thở bằng mũi, bớt nói.",
+        "**Dấu hiệu thiếu nước**: nước tiểu ít và vàng sẫm, khô miệng, mệt, đau đầu, chóng mặt.",
+        "**Bị tiêu chảy, nôn**: uống nước bù điện giải, xem bài “Tiêu chảy, mất nước”."
+      ],
+      "warnings": [
+        "Không uống nước biển, nước tiểu, máu, rượu bia thay nước: đều làm mất nước nhanh hơn hoặc gây bệnh.",
+        "Khi thiếu nước thì ăn ít lại. Tiêu hoá cũng tốn nước."
+      ]
+    },
+
+    {
+      "id": "food-insects", "pillar": "Kiếm ăn và bẫy", "icon": "ant.fill", "minutes": 3,
+      "title": "Côn trùng, giun, ốc: đồ ăn dễ kiếm",
+      "source": "FM 21-76, ch.8", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Lo nước và chỗ trú trước. Khi cần ăn, tìm thứ dễ bắt và ít rủi ro trước khi nghĩ đến săn bẫy.",
+      "steps": [
+        "**Côn trùng** giàu đạm, dễ bắt: mối, kiến, dế, châu chấu, con nhộng trắng trong gỗ mục.",
+        "**Tìm dưới khúc gỗ mục**, dưới đá, tấm ván nằm trên đất và trong bãi cỏ.",
+        "**Bỏ cánh, chân có gai**. Nấu chín loài có vỏ cứng như châu chấu, bọ cánh cứng vì chúng mang ký sinh trùng.",
+        "**Giun đất**: đào ở đất mùn ẩm hoặc nhặt sau mưa, thả vào nước sạch vài phút cho giun nhả đất, nấu chín rồi ăn.",
+        "**Ốc, trai, hến nước ngọt**: tìm ở chỗ nước nông đáy cát hoặc bùn, luộc hoặc nướng cả vỏ.",
+        "**Ăn ít một** khi đã nhịn lâu, nhất là với thức ăn lạ."
+      ],
+      "warnings": [
+        "Tránh côn trùng trưởng thành biết đốt, cắn; con có lông, màu sặc sỡ hoặc mùi hắc; nhện, ve, ruồi, muỗi.",
+        "Không ăn ốc sống hay tái: ốc nước ngọt mang giun sán gây viêm màng não."
+      ]
+    },
+    {
+      "id": "food-plants", "pillar": "Kiếm ăn và bẫy", "icon": "leaf.circle.fill", "minutes": 4,
+      "title": "Cây dại: cách tránh ngộ độc",
+      "source": "FM 21-76, ch.9", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Chỉ ăn cây bạn nhận ra chắc chắn. Ở nơi xa bệnh viện, ngộ độc thực vật có thể chết người.",
+      "steps": [
+        "**Ưu tiên cây quen**: rau má, rau dền, rau sam, măng, bắp và lõi chuối rừng.",
+        "**Loại ngay cây có**: nhựa trắng đục hoặc đổi màu; hạt, đậu nằm trong quả dạng vỏ; vị đắng hoặc như xà phòng; gai, lông tơ; lá xẻ giống cà rốt, rau mùi; mùi hạnh nhân ở lá, thân; bông hạt có cựa màu hồng, tím, đen; lá mọc thành cụm ba.",
+        "**Măng**: bóc vỏ, thái mỏng, luộc kỹ và thay nước ít nhất hai lần. Măng sống chứa chất sinh ra xyanua.",
+        "**Nấu chín** phần lớn rau dại. Lúc đầu ăn ít, vì ăn nhiều lúc đói dễ tiêu chảy, đau bụng.",
+        "**Không còn gì để ăn**: chỉ thử cây mọc nhiều quanh đó, thử từng phần cây một (lá, rễ, hoa riêng). Chạm da, chạm môi, ngậm, rồi mới nuốt một chút, chờ nhiều giờ giữa mỗi bước. Mỗi phần cây mất hơn 24 giờ."
+      ],
+      "warnings": [
+        "Không ăn nấm dại. Không mẹo dân gian nào (bạc đổi màu, sâu ăn được, mùi thơm) phân biệt được nấm độc. Phép thử cây ở trên không áp dụng cho nấm.",
+        "Không ăn lá ngón (rất dễ nhầm với lá rau), sắn sống, hạt củ đậu.",
+        "Cây có ba lá hoặc có nhựa trắng: đừng chạm tay trần nếu không cần."
+      ]
+    },
+    {
+      "id": "food-shellfish", "pillar": "Kiếm ăn và bẫy", "icon": "tortoise.fill", "minutes": 3,
+      "title": "Bắt cua, tôm, ốc ở suối và ven biển",
+      "source": "FM 21-76, ch.8", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Nguồn đạm có quanh năm, bắt không cần dụng cụ, nhưng phải nấu chín kỹ.",
+      "steps": [
+        "**Cua, tôm suối** trú dưới đá ban ngày: lật đá từ phía hạ lưu, úp tay hoặc rổ chặn phía sau.",
+        "**Câu cua** bằng mẩu ruột, thịt buộc đầu dây. Khi cua kẹp mồi, kéo từ từ vào bờ trước khi nó nhả.",
+        "**Tôm nhỏ** tụ ở đám rêu nổi và đáy bùn ao hồ. Ban đêm soi đèn để xúc.",
+        "**Ven biển**: tìm ốc, hàu, sò bám đá và trong vũng nước khi triều rút. Cua, tôm biển bắt dễ nhất vào ban đêm.",
+        "**Luộc hoặc nướng chín kỹ** mọi loài giáp xác, thân mềm."
+      ],
+      "warnings": [
+        "Không ăn cua, tôm suối sống hay nướng tái: dễ nhiễm sán lá phổi.",
+        "Không ăn sò, hến đã chết sẵn, vỏ há không khép khi chạm vào.",
+        "Không ăn sò ốc ở chỗ triều cường không ngập tới, và ở vùng biển có thuỷ triều đỏ."
+      ]
+    },
+    {
+      "id": "food-fishing", "pillar": "Kiếm ăn và bẫy", "icon": "fish.fill", "minutes": 4,
+      "title": "Câu cá bằng dụng cụ tự chế",
+      "source": "FM 21-76, ch.8", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Cá thường dễ kiếm hơn thú rừng, bắt lại không gây ồn.",
+      "steps": [
+        "**Tìm cá** ở vũng sâu, chỗ nước xoáy sau tảng đá, dưới bụi cây rủ xuống nước, quanh cây đổ. Cá ăn mạnh trước cơn mưa bão, ít ăn khi nước đục sau mưa.",
+        "**Lưỡi câu tự chế**: uốn ghim băng, kim khâu, dây thép, đinh nhỏ. Hoặc buộc gai, xương, mảnh vỏ ốc vào một đoạn gỗ cứng dài 2,5 cm.",
+        "**Que mồi hai đầu nhọn**: vót que gỗ hoặc xương nhọn hai đầu, khía giữa để buộc dây, xuyên mồi dọc theo que. Cá nuốt mồi thì que mắc ngang trong họng.",
+        "**Câu cắm**: cắm hai cọc dẻo xuống đáy, căng một dây giữa hai cọc ngay dưới mặt nước, treo vài lưỡi có mồi sao cho không quấn vào nhau. Để qua đêm, sáng ra thu.",
+        "**Mồi**: giun, côn trùng, ruột cá, cua nhỏ bắt ngay tại chỗ.",
+        "**Soi đèn ban đêm** để dụ cá lại gần."
+      ],
+      "warnings": [
+        "Cá trê có gai ở vây, đâm vào rất đau và dễ nhiễm trùng.",
+        "Không dùng thuốc nổ, kích điện, chất độc để bắt cá."
+      ]
+    },
+    {
+      "id": "food-traps", "pillar": "Kiếm ăn và bẫy", "icon": "hare.fill", "minutes": 3,
+      "title": "Chỗ đặt bẫy và che mùi",
+      "source": "FM 21-76, ch.8", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Bẫy tốt đặt sai chỗ cũng không bắt được gì. Đặt nơi có dấu vết và che mùi người.",
+      "steps": [
+        "**Đặt nơi có dấu vết**: lối mòn, dấu chân, phân, cỏ bị gặm, chỗ uống nước, chỗ kiếm ăn.",
+        "**Phân biệt đường mòn** (rõ, nhiều loài dùng) với **lối riêng** (nhỏ, một loài). Đặt bẫy ở lối riêng nối chỗ ngủ, chỗ ăn và chỗ uống.",
+        "**Làm sẵn bộ phận bẫy ở chỗ khác** rồi mang tới lắp, ít giẫm đạp quanh bẫy.",
+        "**Che mùi người**: xoa bùn lên tay và bẫy, hoặc hun khói các bộ phận bẫy. Có thời gian thì để bẫy vài ngày cho bay mùi.",
+        "**Không dùng cành mới chặt**: nhựa cây có mùi làm thú cảnh giác.",
+        "**Làm rào dẫn**: xếp cành hai bên lối đi thành hình phễu thu hẹp dần về phía bẫy.",
+        "**Đặt nhiều bẫy**, kiểm tra mỗi ngày. Một bẫy lẻ hiếm khi bắt được gì."
+      ],
+      "warnings": [
+        "Chỉ đặt bẫy khi thật sự phải sinh tồn. Săn bẫy động vật hoang dã trong vườn quốc gia, khu bảo tồn là vi phạm pháp luật.",
+        "Đánh dấu chỗ đặt bẫy để tự tìm lại và người khác không giẫm phải.",
+        "Không dùng nước tiểu người để che mùi."
+      ]
+    },
+    {
+      "id": "food-fish-prep", "pillar": "Kiếm ăn và bẫy", "icon": "frying.pan.fill", "minutes": 3,
+      "title": "Sơ chế cá và nhận biết cá hỏng",
+      "source": "FM 21-76, ch.8", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Cá hỏng rất nhanh khi trời nóng. Làm ngay sau khi bắt và nấu chín kỹ.",
+      "steps": [
+        "**Làm cá ngay** sau khi bắt: cắt bỏ mang và mạch máu dọc sống lưng, mổ bụng cá dài hơn 10 cm, đánh vảy hoặc lột da.",
+        "**Nấu chín mọi loài cá nước ngọt** để diệt ký sinh trùng.",
+        "**Luộc cả da** giữ được nhiều chất béo nhất; ăn cả nước luộc.",
+        "**Nướng trong đất sét**: bọc cá một lớp đất sét, vùi vào than hồng đến khi đất khô cứng, đập vỡ lấy cá. Thịt tách thớ dễ dàng là chín.",
+        "**Để dành**: hun khói hoặc rán. Cắt đầu, bỏ xương sống trước khi hun.",
+        "**Dấu hiệu cá hỏng**: mắt trũng, mùi lạ, mang không còn đỏ hồng, ấn tay để lại vết lõm, da nhớt, vị cay hoặc tê lưỡi."
+      ],
+      "warnings": [
+        "Nấu chín không làm cá hỏng thành ăn được. Nghi ngờ thì bỏ.",
+        "Không ăn gỏi cá nước ngọt: dễ nhiễm sán lá gan.",
+        "Không ăn cá nóc và các loài cá biển lạ bắt quanh rạn san hô."
+      ]
+    },
+
+    {
+      "id": "shelter-site", "pillar": "Trú ẩn, nút dây", "icon": "mappin.and.ellipse", "minutes": 3,
+      "title": "Chọn chỗ dựng chỗ trú",
+      "source": "FM 21-76, ch.5", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Chỗ trú đủ nằm, gần vật liệu, tránh lũ, đá lở và cây chết.",
+      "steps": [
+        "**Đủ rộng để nằm thẳng, đủ bằng phẳng**, có sẵn vật liệu dựng lều gần đó.",
+        "**Nhỏ vừa đủ**: chỗ trú càng nhỏ càng giữ được hơi ấm. Lỗi hay gặp nhất là dựng quá to.",
+        "**Tránh lòng suối, bãi bồi, khe hẹp**: lũ quét có thể ập đến dù chỗ bạn không mưa.",
+        "**Tránh chân vách đá, sườn dốc** có đá lở, đất sạt. Nhìn lên xem có cành khô, cây chết, quả dừa có thể rơi.",
+        "**Tránh chỗ trũng**: đêm xuống khí lạnh dồn về, nhiều muỗi và côn trùng.",
+        "**Kiểm tra** rắn, ổ kiến, tổ ong, bò cạp, cây có nhựa độc trước khi dọn chỗ.",
+        "**Gần nước nhưng không sát nước**, có khoảng trống gần đó để làm tín hiệu.",
+        "**Hang, hốc đá, cây đổ** là chỗ trú có sẵn. Kiểm tra thú, rắn bên trong trước."
+      ],
+      "warnings": [
+        "Nước suối đục dần, có cành lá trôi, nghe tiếng ầm từ thượng nguồn: rời lòng suối lên cao ngay.",
+        "Không trú dưới cây đứng đơn độc hay trên đỉnh trống khi có dông sét."
+      ]
+    },
+    {
+      "id": "shelter-tarp", "pillar": "Trú ẩn, nút dây", "icon": "tent.fill", "minutes": 3,
+      "title": "Mái che bằng tấm bạt hoặc áo mưa",
+      "source": "FM 21-76, ch.5", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Dựng nhanh nhất, chỉ cần một tấm bạt, vài mét dây và hai thân cây.",
+      "steps": [
+        "**Cần**: tấm bạt hoặc áo mưa cánh dơi, 2–3 m dây, 3 cọc dài 30 cm, hai cây cách nhau 2–3 m.",
+        "**Xem hướng gió**: lưng mái che quay về phía gió thổi tới.",
+        "**Buộc dây** vào hai góc của một cạnh dài, rồi buộc hai đầu dây vào hai thân cây ngang thắt lưng.",
+        "**Buộc một que ngắn 10 cm** vào mỗi dây, cách góc bạt vài cm. Nước mưa chảy theo dây sẽ nhỏ xuống ở que, không chảy vào trong.",
+        "**Kéo căng cạnh còn lại** xuống đất, đóng cọc qua lỗ khoen.",
+        "**Mưa hoặc ở nhiều đêm**: căng thêm một dây từ giữa tấm bạt lên cành cây phía trên để nước không đọng.",
+        "**Chắn hai bên** bằng cành lá hoặc ba lô, lót lá khô, cỏ bên trong."
+      ],
+      "warnings": [
+        "Mái càng thấp càng ấm và càng chịu gió tốt.",
+        "Áo mưa có mũ trùm thì túm chặt mũ lại trước khi dựng."
+      ]
+    },
+    {
+      "id": "shelter-leanto", "pillar": "Trú ẩn, nút dây", "icon": "house.lodge.fill", "minutes": 4,
+      "title": "Lều mái nghiêng bằng cành cây",
+      "source": "FM 21-76, ch.5", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Không cần bạt, chỉ cần con dao và cành lá. Làm lâu hơn nhưng che mưa gió tốt.",
+      "steps": [
+        "**Buộc một sào ngang dài 2 m** vào hai thân cây cách nhau 2 m, cao ngang ngực. Không có cây thì dùng hai cọc có chạc chữ Y.",
+        "**Gác 5–8 cành dài khoảng 3 m** từ sào ngang xuống đất, lưng mái quay về phía gió.",
+        "**Đan cành nhỏ, dây leo** ngang qua các cành dọc.",
+        "**Lợp từ dưới lên** bằng lá to (lá chuối, lá cọ), cỏ tranh, cành thông; lớp trên đè lên lớp dưới như lợp ngói.",
+        "**Lót ổ nằm** bằng cỏ khô, lá khô thật dày.",
+        "**Trời lạnh**: đốt lửa trước cửa lều, phía sau đống lửa dựng vách bằng gỗ tươi xếp chồng để hắt nhiệt vào lều."
+      ],
+      "warnings": [
+        "Mái phải đủ dốc, mái thoải sẽ dột.",
+        "Để lửa cách mép lều ít nhất 1 m. Lá khô rất dễ bắt lửa."
+      ]
+    },
+    {
+      "id": "shelter-debris", "pillar": "Trú ẩn, nút dây", "icon": "leaf.arrow.triangle.circlepath", "minutes": 4,
+      "title": "Lều lá giữ ấm",
+      "source": "FM 21-76, ch.5", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Kiểu lều tự dựng dễ làm và ấm nhất, dùng khi đêm lạnh mà không có lửa.",
+      "steps": [
+        "**Dựng sườn**: gác một sào dài hơn người bạn một chút lên chạc cây hoặc gốc cây ngang thắt lưng, đầu kia chạm đất.",
+        "**Dựng cành xiên** hai bên sào thành hình nêm, đủ rộng để nằm lọt, đủ dốc để thoát nước.",
+        "**Đan cành nhỏ** ngang qua sườn để lá không lọt xuống.",
+        "**Phủ lá khô, cỏ khô** lên toàn bộ, dày ít nhất 1 m. Càng dày càng ấm.",
+        "**Lót bên trong** một lớp lá dày khoảng 30 cm.",
+        "**Chất một đống lá ở cửa** để kéo vào bịt cửa sau khi chui vào.",
+        "**Gác thêm cành** lên lớp ngoài cùng để gió không thổi bay lá."
+      ],
+      "warnings": [
+        "Làm vừa khít người. Khoảng trống thừa làm lều lạnh.",
+        "Không đốt lửa trong hay sát lều lá."
+      ]
+    },
+    {
+      "id": "shelter-raised", "pillar": "Trú ẩn, nút dây", "icon": "bed.double.fill", "minutes": 3,
+      "title": "Giường sàn tránh nước, côn trùng",
+      "source": "FM 21-76, ch.5", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Ở vùng đầm lầy, đất ngập hay rừng mưa, ngủ trên sàn cao khô và an toàn hơn.",
+      "steps": [
+        "**Tìm bốn cây mọc thành hình chữ nhật**, hoặc đóng bốn cọc chắc (tre rất tốt), khoảng cách đủ để nằm.",
+        "**Buộc hai thanh ngang** vào hai đầu, cao hơn mức nước có thể dâng.",
+        "**Gác các thanh dọc** lên hai thanh ngang, buộc chặt từng thanh.",
+        "**Lót lá to hoặc cỏ** lên mặt sàn cho êm.",
+        "**Cần đun nấu**: đắp một lớp đất sét, bùn dày ở một góc sàn, để khô làm bếp.",
+        "**Căng bạt hoặc lợp lá** phía trên nếu trời mưa."
+      ],
+      "warnings": [
+        "Thử sàn chịu được sức nặng của bạn cả đồ đạc trước khi ngủ.",
+        "Ngủ cách mặt đất giúp tránh vắt, kiến, rắn và nước mưa chảy tràn."
+      ]
+    },
+    {
+      "id": "knots", "pillar": "Trú ẩn, nút dây", "icon": "lasso", "minutes": 5,
+      "title": "Năm nút dây cần biết",
+      "source": "Tự biên soạn", "trust": "C", "license": "Nội dung tự viết",
+      "summary": "Năm nút đủ để dựng lều, nối dây, buộc đồ và kéo vật.",
+      "steps": [
+        "**Nút dẹt** nối hai đầu dây cùng cỡ: vắt phải đè trái rồi luồn, sau đó trái đè phải rồi luồn. Hai đầu dây thò ra cùng một phía. Dùng buộc băng, bó củi, không dùng chịu lực nặng.",
+        "**Nút ghế đơn** tạo vòng cố định không tuột: tạo một khuyên nhỏ trên thân dây, luồn đầu dây từ dưới lên qua khuyên, vòng ra sau thân dây, luồn ngược xuống khuyên, kéo chặt. Dùng buộc quanh người, buộc neo, kéo vật.",
+        "**Nút thuyền chài** buộc dây vào cọc, cây: quấn một vòng, bắt chéo lên trên, quấn vòng thứ hai rồi nhét đầu dây dưới chỗ bắt chéo. Dễ chỉnh độ dài.",
+        "**Một vòng hai khoá**: quấn hai vòng quanh thân cây, rồi thắt hai nút nửa quanh thân dây. Dùng căng dây giữa hai cây, chịu lực tốt mà vẫn dễ tháo.",
+        "**Nút thợ dệt** nối hai dây khác cỡ: gập dây to thành chữ U, luồn dây nhỏ từ dưới lên qua chữ U, vòng ra sau cả hai nhánh, rồi nhét dưới chính nó.",
+        "**Luyện trước khi cần**, đến mức buộc được khi nhắm mắt, tay lạnh."
+      ],
+      "warnings": [
+        "Không dùng nút dẹt nối hai dây khác cỡ hoặc dây trơn: dễ tuột.",
+        "Không dùng dây tự chế hay nút chưa chắc để leo trèo, đu người."
+      ]
+    },
+
+    {
+      "id": "nav-shadow", "pillar": "Định hướng", "icon": "sun.min.fill", "minutes": 3,
+      "title": "Tìm hướng bằng bóng que",
+      "source": "FM 21-76, ch.18", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Một cây que và 15 phút nắng là đủ để biết Đông, Tây, Nam, Bắc.",
+      "steps": [
+        "**Cắm một que dài khoảng 1 m** thẳng đứng trên chỗ đất bằng, có nắng.",
+        "**Đánh dấu đầu bóng** bằng một hòn đá nhỏ. Dấu đầu tiên là hướng Tây.",
+        "**Chờ 10–15 phút**, đánh dấu chỗ đầu bóng mới. Đây là hướng Đông.",
+        "**Nối hai dấu** được đường Đông–Tây.",
+        "**Đứng cho dấu thứ nhất bên trái, dấu thứ hai bên phải**: bạn đang nhìn về hướng Bắc.",
+        "**Cần chính xác hơn**: buổi sáng đánh dấu đầu bóng, vẽ một cung tròn quanh que đi qua điểm đó. Buổi chiều đánh dấu chỗ đầu bóng chạm lại cung tròn. Nối hai điểm được đường Đông–Tây chuẩn."
+      ],
+      "warnings": [
+        "Kết quả là hướng gần đúng. Kiểm tra lại bằng chỗ mặt trời mọc và lặn.",
+        "Không nhìn thẳng vào mặt trời."
+      ]
+    },
+    {
+      "id": "nav-watch", "pillar": "Định hướng", "icon": "clock.fill", "minutes": 3,
+      "title": "Tìm hướng bằng đồng hồ kim",
+      "source": "FM 21-76, ch.18", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Nhanh nhưng kém chính xác ở Việt Nam, nhất là quanh giữa trưa mùa hè.",
+      "steps": [
+        "**Cầm đồng hồ nằm ngang**, xoay cho kim giờ chỉ về phía mặt trời.",
+        "**Chia đôi góc** giữa kim giờ và số 12. Đường chia đôi là trục Bắc–Nam; đầu phía mặt trời là hướng Nam.",
+        "**Kiểm tra lại**: trước trưa mặt trời ở phía Đông, sau trưa ở phía Tây.",
+        "**Chỉ có đồng hồ điện tử**: vẽ mặt đồng hồ lên giấy với kim giờ đúng giờ hiện tại, rồi làm như trên.",
+        "**Việt Nam không dùng giờ mùa hè**, dùng giờ trên điện thoại là được."
+      ],
+      "warnings": [
+        "Vào mùa hè mặt trời giữa trưa gần đỉnh đầu, có lúc lệch hẳn về phía Bắc: miền Nam khoảng cuối tháng 4 đến giữa tháng 8, miền Bắc khoảng cuối tháng 5 đến cuối tháng 7. Khi đó dùng cách bóng que."
+      ]
+    },
+    {
+      "id": "nav-stars", "pillar": "Định hướng", "icon": "star.fill", "minutes": 4,
+      "title": "Tìm hướng ban đêm bằng sao và trăng",
+      "source": "FM 21-76, ch.18", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Sao Bắc Cực chỉ hướng Bắc; chòm Nam Thập Tự chỉ hướng Nam.",
+      "steps": [
+        "**Sao Bắc Cực** đứng gần như yên ở hướng Bắc. Ở Việt Nam sao nằm thấp trên chân trời, cao xấp xỉ vĩ độ chỗ bạn đứng: chừng 9° ở Cà Mau, 23° ở Hà Giang. Một nắm tay khi duỗi thẳng tay che khoảng 10°.",
+        "**Tìm qua chòm Bắc Đẩu** (cái gáo 7 sao): nối hai sao ở mép ngoài miệng gáo, kéo dài khoảng 5 lần khoảng cách giữa chúng sẽ gặp sao Bắc Cực.",
+        "**Tìm qua chòm Tiên Hậu** (hình chữ W): sao Bắc Cực nằm thẳng ra từ ngôi sao giữa chữ W. Bắc Đẩu và Tiên Hậu luôn nằm đối nhau quanh sao Bắc Cực.",
+        "**Chòm Nam Thập Tự**: ở miền Nam thấy thấp trên chân trời phía Nam, rõ nhất vào các tối mùa xuân. Kéo dài trục dài của chữ thập khoảng 5 lần, nhìn thẳng xuống chân trời là hướng Nam.",
+        "**Trăng**: trăng mọc trước khi mặt trời lặn thì phía sáng quay về hướng Tây; trăng mọc sau nửa đêm thì phía sáng quay về hướng Đông.",
+        "**Ở yên một chỗ**: cắm hai cọc thẳng hàng theo hướng sao, sáng ra vẫn biết hướng."
+      ],
+      "warnings": [
+        "Sao Bắc Cực không sáng lắm. Tìm qua Bắc Đẩu hoặc Tiên Hậu để khỏi nhầm."
+      ]
+    },
+    {
+      "id": "nav-compass", "pillar": "Định hướng", "icon": "location.north.line.fill", "minutes": 3,
+      "title": "La bàn tự chế bằng kim khâu",
+      "source": "FM 21-76, ch.18", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Một cây kim đã nhiễm từ, thả nổi trên nước, sẽ xoay theo trục Bắc–Nam.",
+      "steps": [
+        "**Dùng la bàn điện thoại trước**: chạy không cần sóng. Xoay máy theo hình số 8 để hiệu chỉnh.",
+        "**Nhiễm từ cho kim**: vuốt kim nhiều lần theo một chiều bằng một đầu nam châm (loa, tai nghe, khoá túi có nam châm). Vuốt trên lụa hay tóc cũng được nhưng yếu hơn nhiều.",
+        "**Dùng pin**: quấn dây điện có vỏ bọc thành cuộn, nối hai đầu vào pin từ 2 V trở lên, luồn kim ra vào lòng cuộn dây nhiều lần.",
+        "**Thả nổi**: đặt kim lên mẩu lá, nút nhựa hay mẩu gỗ nhỏ, thả vào cốc nước tĩnh. Hoặc treo kim bằng một sợi chỉ buộc giữa kim.",
+        "**Kim xoay theo trục Bắc–Nam**. Biết đầu nào là Bắc bằng mặt trời: buổi sáng mặt trời ở phía Đông.",
+        "**Kiểm tra**: xoay nhẹ mẩu lá, kim phải quay về đúng hướng cũ. Để xa dao, điện thoại, vật sắt khi đọc hướng."
+      ],
+      "warnings": [
+        "Kim có thể mất từ tính sau một thời gian. Thấy kim quay chậm thì nhiễm từ lại."
+      ]
+    },
+    {
+      "id": "nav-signal", "pillar": "Định hướng", "icon": "light.beacon.max.fill", "minutes": 5,
+      "title": "Phát tín hiệu cầu cứu",
+      "source": "FM 21-76, ch.19", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Ba của bất cứ thứ gì là tín hiệu cấp cứu quốc tế: ba đống lửa, ba tiếng còi, ba cột khói.",
+      "steps": [
+        "**Chọn chỗ trống và cao nhất** có thể để nhìn thấy được từ trên không.",
+        "**Ba đống lửa** xếp tam giác hoặc thẳng hàng, cách nhau khoảng 25 m. Chuẩn bị sẵn, châm khi nghe tiếng máy bay. Đi một mình thì giữ một đống.",
+        "**Ban ngày dùng khói**: phủ lá tươi, rêu lên lửa cho khói trắng trên nền rừng tối; cao su, giẻ dầu cho khói đen trên nền sáng.",
+        "**Gương, mặt đồng hồ, nắp lon**: duỗi tay kia, hai ngón tạo chữ V kẹp máy bay ở giữa, chiếu vệt sáng vào khe hai ngón. Nắng đẹp có thể thấy từ rất xa.",
+        "**Đèn pin, đèn điện thoại** ban đêm: nháy SOS 3 ngắn, 3 dài, 3 ngắn, lặp lại.",
+        "**Ký hiệu trên mặt đất**, mỗi nét rộng ít nhất 1 m, dài 6 m, màu tương phản với nền: **V** cần giúp đỡ, **X** cần cứu y tế, **N** không, **Y** có, **mũi tên** đang đi theo hướng này.",
+        "**Trải quần áo sáng màu**, bạt, áo phao thành hình lớn ở chỗ trống hoặc trên ngọn cây.",
+        "**Còi** nghe xa hơn tiếng hét nhiều mà ít tốn sức: thổi ba tiếng, nghỉ, lặp lại.",
+        "**Điện thoại**: thử gọi 112 hoặc 115 kể cả khi máy báo chỉ gọi khẩn cấp. Tin nhắn đi được khi sóng yếu hơn cuộc gọi: nhắn kèm toạ độ trên màn hình SOS."
+      ],
+      "warnings": [
+        "Không chiếu gương vào buồng lái quá vài giây, có thể làm chói mắt phi công.",
+        "Chỉ đốt cây đứng riêng để làm đuốc tín hiệu, tránh gây cháy rừng.",
+        "Giữ pin: tắt máy khi không dùng, trời lạnh thì để máy sát người."
+      ]
+    },
+    {
+      "id": "nav-lost", "pillar": "Định hướng", "icon": "figure.hiking", "minutes": 3,
+      "title": "Khi bị lạc",
+      "source": "FM 21-76, ch.1", "trust": "B", "license": "Phạm vi công cộng",
+      "summary": "Dừng lại, nghĩ, quan sát, rồi mới quyết. Có người biết lịch trình thì ở yên thường dễ được tìm thấy hơn.",
+      "steps": [
+        "**Dừng lại**: ngồi xuống, uống nước, thở chậm. Hoảng mà đi tiếp thường càng lạc xa.",
+        "**Nghĩ lại**: lần cuối bạn chắc chắn mình ở đâu, đã đi bao lâu, theo hướng nào.",
+        "**Quan sát**: địa hình, suối, đường mòn, tiếng xe, tiếng gà chó, khói bếp. Leo lên chỗ cao nếu an toàn để nhìn.",
+        "**Ghim vị trí trên app** ngay khi có GPS để có điểm mốc cho bạn và người cứu hộ.",
+        "**Ở yên nếu có người biết lịch trình của bạn**: dựng chỗ trú, làm tín hiệu, giữ sức.",
+        "**Nếu quyết định đi**: đánh dấu đường bằng cành bẻ gãy, đá xếp, dải vải; để lại ghi chú hướng đi ở chỗ cũ.",
+        "**Men theo suối xuống hạ lưu** thường ra tới đường, bản làng. Đi trên bờ, không lội dưới lòng suối; cẩn thận thác và đá trơn.",
+        "**Chuẩn bị qua đêm sớm**: bắt đầu làm chỗ trú, nhóm lửa khi còn ít nhất 2 giờ trước khi trời tối."
+      ],
+      "warnings": [
+        "Không đi trong rừng khi trời tối.",
+        "Đi theo nhóm thì không tách nhau; cả nhóm đi theo tốc độ người chậm nhất."
+      ]
+    },
+
+    {
+      "id": "aid-wound", "pillar": "Sơ cứu dã ngoại", "icon": "bandage.fill", "minutes": 3,
+      "title": "Vết thương nhỏ, trầy xước",
+      "source": "IFRC 2020", "trust": "B", "license": "Tự viết theo hướng dẫn IFRC, chờ duyệt",
+      "summary": "Ở ngoài rừng vết xước nhỏ cũng dễ nhiễm trùng. Rửa sạch và che kín.",
+      "steps": [
+        "**Rửa tay** hoặc đeo găng, lồng túi nilon sạch vào tay nếu có.",
+        "**Cầm máu**: ép gạc hoặc vải sạch lên vết thương vài phút.",
+        "**Rửa vết thương** dưới dòng nước sạch, tốt nhất là nước đun sôi để nguội, đến khi hết đất cát.",
+        "**Che bằng gạc sạch**, băng vừa chặt. Thay băng mỗi ngày hoặc khi băng ướt, bẩn.",
+        "**Theo dõi nhiễm trùng**: sưng, nóng, đỏ lan rộng, chảy mủ, sốt. Có dấu hiệu này thì tìm đến cơ sở y tế.",
+        "**Vết thương bẩn, do đinh, gai đâm sâu**: cần tiêm phòng uốn ván. Bị chó, mèo, khỉ, dơi cắn hoặc cào: rửa xà phòng dưới vòi nước 15 phút rồi đi tiêm phòng dại."
+      ],
+      "warnings": [
+        "Không đắp lá, thuốc lào, bã cà phê, tro bếp lên vết thương.",
+        "Không thổi vào vết thương."
+      ]
+    },
+    {
+      "id": "aid-sprain", "pillar": "Sơ cứu dã ngoại", "icon": "figure.walk", "minutes": 3,
+      "title": "Bong gân, trật khớp",
+      "source": "IFRC 2020", "trust": "B", "license": "Tự viết theo hướng dẫn IFRC, chờ duyệt",
+      "summary": "Nghỉ, chườm lạnh, băng ép, kê cao. Nghi gãy xương thì cố định như gãy xương.",
+      "steps": [
+        "**Nghỉ**: ngừng dùng chỗ bị đau.",
+        "**Chườm lạnh** bằng khăn thấm nước lạnh hoặc đá bọc vải, mỗi lần 20 phút, cách nhau vài giờ.",
+        "**Băng ép vừa phải** bằng băng thun hoặc vải, quấn từ xa về phía tim. Ngón tay, ngón chân phải còn hồng, ấm.",
+        "**Kê cao** chỗ đau hơn tim khi ngồi hoặc nằm.",
+        "**Nghi gãy xương hay trật khớp** (biến dạng, không cử động được, đau chói khi ấn vào xương): cố định như gãy xương, xem thẻ “Gãy xương”.",
+        "**Phải tự đi ra**: buộc chặt giày quanh cổ chân bong gân, chống gậy."
+      ],
+      "warnings": [
+        "Không tự nắn khớp trật.",
+        "Không xoa dầu nóng, bóp rượu, day bóp mạnh trong 2 ngày đầu."
+      ]
+    },
+    {
+      "id": "aid-sting", "pillar": "Sơ cứu dã ngoại", "icon": "allergens", "minutes": 4,
+      "title": "Ong đốt, côn trùng cắn, sốc phản vệ",
+      "source": "IFRC 2020", "trust": "B", "license": "Tự viết theo hướng dẫn IFRC, chờ duyệt",
+      "summary": "Phần lớn chỉ sưng đau. Nguy hiểm là sốc phản vệ và bị ong đốt nhiều nốt.",
+      "steps": [
+        "**Rời xa tổ ong** ngay, che mặt và chạy. Không đập phá tổ.",
+        "**Lấy ngòi ong ra** càng nhanh càng tốt, cách nào cũng được: gạt bằng móng tay, mép thẻ nhựa. Đừng mất thời gian tìm dụng cụ.",
+        "**Rửa xà phòng, chườm lạnh** để bớt sưng đau.",
+        "**Theo dõi 30 phút đầu**. Dấu hiệu sốc phản vệ: khó thở, thở rít, sưng môi lưỡi họng, nổi mẩn khắp người, choáng, lơ mơ.",
+        "**Có sốc phản vệ**: gọi 115 ngay. Nếu nạn nhân có bút tiêm adrenaline, giúp họ tiêm vào mặt ngoài đùi; không đỡ sau 5–15 phút thì tiêm liều thứ hai nếu có.",
+        "**Tư thế**: khó thở thì cho ngồi; choáng, tái thì nằm kê cao chân. Ngừng thở thì ép tim.",
+        "**Bị ong đốt nhiều nốt** (ong vò vẽ, ong đất): đến bệnh viện ngay dù chưa thấy gì. Nọc có thể gây suy thận sau vài giờ.",
+        "**Rết, bò cạp**: rửa sạch, chườm lạnh, theo dõi. Trẻ nhỏ bị bò cạp đốt nên đưa đi viện."
+      ],
+      "warnings": [
+        "Không bôi vôi, đắp lá, chích nặn chỗ bị đốt.",
+        "Không để người đang có dấu hiệu phản vệ tự đứng dậy đi lại."
+      ]
+    },
+    {
+      "id": "aid-leech", "pillar": "Sơ cứu dã ngoại", "icon": "drop.degreesign.fill", "minutes": 2,
+      "title": "Vắt, đỉa bám",
+      "source": "Tự biên soạn", "trust": "C", "license": "Nội dung tự viết",
+      "summary": "Vắt không truyền bệnh nguy hiểm, nhưng gỡ sai cách dễ làm vết cắn nhiễm trùng.",
+      "steps": [
+        "**Tìm đầu hút** nhỏ ở đầu hẹp của con vắt.",
+        "**Luồn móng tay** hoặc mép thẻ nhựa sát da dưới đầu hút, gạt ngang cho nó nhả. Làm tương tự với đầu kia rồi hất đi.",
+        "**Rửa sạch, ép gạc** lên chỗ chảy máu. Máu rỉ vài giờ là bình thường vì vắt tiết chất chống đông.",
+        "**Phòng vắt**: đi tất chống vắt hoặc nhét ống quần vào tất, xoa xà phòng hoặc thuốc chống côn trùng lên giày, tất. Kiểm tra người mỗi lần nghỉ."
+      ],
+      "warnings": [
+        "Không giật mạnh: đầu hút có thể sót lại trong da.",
+        "Không rắc muối, dí lửa, đổ cồn khi vắt đang bám: vắt có thể nôn dịch vào vết cắn.",
+        "Đỉa chui vào mũi, họng, tai, hậu môn: đến cơ sở y tế."
+      ]
+    },
+    {
+      "id": "aid-ors", "pillar": "Sơ cứu dã ngoại", "icon": "cup.and.saucer.fill", "minutes": 3,
+      "title": "Tiêu chảy, mất nước: pha nước bù điện giải",
+      "source": "WHO", "trust": "B", "license": "Tự viết theo hướng dẫn WHO, chờ duyệt",
+      "summary": "Tiêu chảy nguy hiểm vì mất nước. Uống bù điện giải đúng công thức quan trọng hơn cầm tiêu chảy.",
+      "steps": [
+        "**Có gói oresol**: pha đúng lượng nước ghi trên gói, dùng hết trong 24 giờ.",
+        "**Tự pha khi không có**: 1 lít nước sạch, 6 thìa cà phê gạt đường, nửa thìa cà phê gạt muối, khuấy tan.",
+        "**Uống từng ngụm** sau mỗi lần đi ngoài. Người lớn uống bao nhiêu tuỳ khát, trẻ trên 2 tuổi khoảng nửa đến một cốc.",
+        "**Vẫn ăn** đồ mềm, dễ tiêu như cháo, cơm nát.",
+        "**Đi khám ngay** nếu phân có máu, sốt cao, nôn liên tục không uống được, lơ mơ, không đi tiểu trên 6 giờ, trẻ nhỏ khóc không có nước mắt."
+      ],
+      "warnings": [
+        "Không pha đặc hơn hướng dẫn, không thêm đường: tiêu chảy nặng hơn.",
+        "Không dùng nước ngọt có ga, nước tăng lực thay oresol.",
+        "Không tự uống thuốc cầm tiêu chảy khi có sốt hoặc phân có máu."
+      ]
+    },
+    {
+      "id": "aid-recovery", "pillar": "Sơ cứu dã ngoại", "icon": "bed.double.circle.fill", "minutes": 3,
+      "title": "Tư thế nằm nghiêng an toàn",
+      "source": "IFRC 2020", "trust": "B", "license": "Tự viết theo hướng dẫn IFRC, chờ duyệt",
+      "summary": "Dành cho người bất tỉnh nhưng vẫn thở bình thường, để không bị sặc chất nôn.",
+      "steps": [
+        "**Kiểm tra thở** trong 10 giây: nhìn ngực, nghe, cảm nhận hơi thở. Không thở hoặc thở ngáp thì ép tim ngay, xem thẻ “Bất tỉnh, ép tim”.",
+        "**Quỳ bên cạnh**, đặt tay gần bạn của nạn nhân vuông góc với thân, khuỷu gập, lòng bàn tay ngửa.",
+        "**Kéo tay kia** vắt qua ngực, áp mu bàn tay vào má phía gần bạn, giữ ở đó.",
+        "**Co gối phía xa** lên, bàn chân đặt trên đất.",
+        "**Kéo gối đó về phía bạn** để lật người sang nằm nghiêng, tay vẫn đỡ dưới má.",
+        "**Ngửa nhẹ đầu** cho thông đường thở, miệng hướng xuống để dịch chảy ra. Chân trên gập vuông góc để người không lăn.",
+        "**Theo dõi thở** liên tục đến khi có cứu hộ. Nằm quá 30 phút thì lật sang bên kia."
+      ],
+      "warnings": [
+        "Không cho người bất tỉnh ăn uống.",
+        "Không để người bất tỉnh nằm ngửa một mình."
+      ]
+    }
+  ]
+}

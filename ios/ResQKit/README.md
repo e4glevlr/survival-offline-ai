@@ -21,8 +21,17 @@ ResQKit/
 │   ├── ChatViewModel.swift     Nhận PipelineEvent và dựng từng lượt trả lời
 │   ├── AnswerComponents.swift  EmergencyPassView (bấm từng bước), AnswerSection, SourcesStrip, Tag
 │   ├── ChatScreen.swift        Header, bảng điều khiển thực địa, danh sách tin nhắn, composer kính mờ
-│   ├── SOSScreen.swift         Toạ độ + radar, giữ để bật đèn/còi, thanh Morse, số khẩn cấp
-│   └── DemoResponder.swift     Dữ liệu giả lập + #Preview
+│   ├── SOSScreen.swift         Toạ độ + radar, giữ để bật đèn/còi, thanh Morse, số khẩn cấp, điểm đã ghim
+│   ├── DrawerMenu.swift        Menu trượt: cuộc hỏi mới, điều hướng, lịch sử thật, thẻ thiết bị
+│   ├── GuidesScreen.swift      Tab Cẩm nang, bài viết, trụ kỹ năng, câu trả lời đã lưu
+│   ├── GuideLibrary.swift      Thẻ khẩn cấp, nạp bài từ Resources/guides.json, tìm kiếm không dấu
+│   ├── Resources/guides.json   36 bài cẩm nang (nháp, xem docs/04_Noi_Dung_Cam_Nang.md)
+│   ├── SettingsSheets.swift    Cài đặt (lưu bằng @AppStorage), Trước chuyến đi (kiểm tra thật trên máy)
+│   ├── FieldSensors.swift      GPS, pin, nhiệt, RAM, mạng → dashboard, SOS, DeviceSnapshot
+│   ├── AudioServices.swift     Nhận giọng nói (Speech, ưu tiên trên máy), đọc to (AVSpeech), còi (file ghi âm)
+│   ├── MediaPicker.swift       Camera, nén ảnh JPEG
+│   ├── UserStore.swift         Lịch sử, mục đã lưu, điểm ghim (UserDefaults, không rời máy)
+│   └── DemoResponder.swift     Trả lời mẫu theo chủ đề; định tuyến và DevicePolicy là code thật + #Preview
 └── Tests/ResQCoreTests/   Bộ test conformance: port sang JUnit, hai app phải cho kết quả giống hệt
 ```
 
@@ -35,6 +44,8 @@ xcodebuild -scheme ResQKit-Package -destination 'generic/platform=iOS Simulator'
 ```
 
 Mở `Package.swift` bằng Xcode để xem `#Preview("Chat")`, `#Preview("SOS")`, `#Preview("Emergency pass")`.
+
+App chạy thử: `ios/ResQApp` (tạo bằng `xcodegen generate`). Còi SOS cần file ghi âm `whistle.m4a` (hoặc .caf/.wav/.mp3) trong bundle app; chưa có file thì nút báo "Chưa có âm thanh còi".
 
 ## Hệ thiết kế
 

@@ -15,7 +15,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "ResQCore"),
-        .target(name: "ResQUI", dependencies: ["ResQCore"]),
+        .target(name: "ResQUI", dependencies: ["ResQCore"], resources: [.process("Resources")]),
         .testTarget(name: "ResQCoreTests", dependencies: ["ResQCore"]),
     ]
 )
