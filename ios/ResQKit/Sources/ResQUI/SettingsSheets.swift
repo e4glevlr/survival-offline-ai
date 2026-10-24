@@ -45,11 +45,10 @@ struct ResQRow<Trailing: View>: View {
     var body: some View {
         HStack(spacing: 12) {
             if let icon {
-                let bg = p.glows || p.scheme == .light ? (tint ?? p.surface3) : p.surface3
-                Image(systemName: icon).font(.rq(size: 16, weight: .medium))
-                    .foregroundStyle(tint == nil ? p.text : (p.glows || p.scheme == .light ? .white : p.accent))
+                // Bare glyph, tinted; no colored tile behind it.
+                Image(systemName: icon).font(.rq(size: 17))
+                    .foregroundStyle(tint ?? p.text2)
                     .frame(width: 32, height: 32)
-                    .background(bg, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
             }
             VStack(alignment: .leading, spacing: 1) {
                 Text(title).font(.rq(size: 15.5, weight: .medium)).foregroundStyle(p.text)

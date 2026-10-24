@@ -18,7 +18,7 @@ public struct ResQPalette: Equatable, Sendable {
     public var scheme: ColorScheme
 
     public static let dark = ResQPalette(
-        bg: Color(hex: 0x09090B), surface1: Color(hex: 0x111114), surface2: Color(hex: 0x17171B), surface3: Color(hex: 0x202026),
+        bg: Color(hex: 0x0A0A0B), surface1: Color(hex: 0x151517), surface2: Color(hex: 0x1B1B1E), surface3: Color(hex: 0x26262A),
         hair: .white.opacity(0.07), hair2: .white.opacity(0.12), highlight: .white.opacity(0.06),
         text: Color(hex: 0xF5F5F7), text2: Color(hex: 0xA9A9B4), text3: Color(hex: 0x6F6F7B),
         accent: Color(hex: 0xFF7A2F), accentSoft: Color(hex: 0xFF7A2F).opacity(0.14),
@@ -117,10 +117,10 @@ public enum ResQSettings {
 }
 
 public enum ResQMotion {
-    /// Matches CSS --spring cubic-bezier(.34,1.56,.64,1)
-    public static let spring = Animation.spring(response: 0.42, dampingFraction: 0.72)
+    /// Near-critically damped: settles without visible bounce.
+    public static let spring = Animation.spring(response: 0.36, dampingFraction: 0.9)
     /// Matches CSS --ease cubic-bezier(.22,1,.36,1)
-    public static let ease = Animation.timingCurve(0.22, 1, 0.36, 1, duration: 0.5)
+    public static let ease = Animation.timingCurve(0.22, 1, 0.36, 1, duration: 0.42)
 }
 
 private struct PaletteKey: EnvironmentKey {
@@ -137,13 +137,10 @@ public extension EnvironmentValues {
 // MARK: - Shared surface styles
 
 extension View {
-    /// Card surface: fill + 1px top highlight + hairline outline (CSS: var(--hi), 0 0 0 1px var(--hair)).
+    /// Card surface: flat fill + hairline outline.
     func surface(_ p: ResQPalette, radius: CGFloat = ResQRadius.l, fill: Color? = nil) -> some View {
         background(fill ?? p.surface1, in: RoundedRectangle(cornerRadius: radius, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: radius, style: .continuous)
-                    .strokeBorder(LinearGradient(colors: [p.highlight.opacity(1.6), p.hair], startPoint: .top, endPoint: .bottom), lineWidth: 1)
-            )
+            .overlay(RoundedRectangle(cornerRadius: radius, style: .continuous).strokeBorder(p.hair, lineWidth: 1))
     }
 
     /// `sensoryFeedback` that respects the "Rung phản hồi" setting.
@@ -168,7 +165,8 @@ struct HapticModifier<T: Equatable>: ViewModifier {
 struct PressStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.965 : 1)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .opacity(configuration.isPressed ? 0.7 : 1)
             .animation(ResQMotion.ease, value: configuration.isPressed)
     }
 }

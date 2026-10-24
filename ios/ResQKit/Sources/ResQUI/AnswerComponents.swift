@@ -17,19 +17,18 @@ public struct Tag: View {
     }
 
     public var body: some View {
-        let (fg, bg): (Color, Color) = switch tone {
-        case .ok: (p.green, p.greenSoft)
-        case .warn: (p.amber, p.amberSoft)
-        case .danger: (p.red, p.redSoft)
-        case .muted: (p.text2, p.surface2)
+        // Plain inline label: only the icon carries the tone, the text stays quiet.
+        let fg: Color = switch tone {
+        case .ok: p.green
+        case .warn: p.amber
+        case .danger: p.red
+        case .muted: p.text3
         }
         HStack(spacing: 5) {
-            Image(systemName: icon).font(.rq(size: 12, weight: .semibold)).symbolVariant(.fill)
-            Text(text).font(.rq(size: 12, weight: .semibold))
+            Image(systemName: icon).font(.rq(size: 12, weight: .medium)).foregroundStyle(fg)
+            Text(text).font(.rq(size: 13, weight: .medium)).foregroundStyle(tone == .muted ? p.text3 : p.text2)
         }
-        .foregroundStyle(fg)
-        .padding(.leading, 7).padding(.trailing, 9).frame(height: 24)
-        .background(bg, in: Capsule())
+        .frame(height: 22)
         .fixedSize()
     }
 }
@@ -41,23 +40,6 @@ extension AnswerStatus {
         case .insufficientEvidence: Tag("Không đủ căn cứ", icon: "questionmark.circle", tone: .warn)
         case .conflict: Tag("Nguồn mâu thuẫn", icon: "exclamationmark.triangle", tone: .warn)
         }
-    }
-}
-
-/// Small orange-gradient app mark shown at the head of each answer.
-struct BrandMark: View {
-    var size: CGFloat = 22
-    @Environment(\.palette) private var p
-
-    var body: some View {
-        Image(systemName: "safari.fill")
-            .font(.rq(size: size * 0.62, weight: .semibold))
-            .foregroundStyle(p.glows ? .white : p.onSolid)
-            .frame(width: size, height: size)
-            .background(
-                p.glows ? AnyShapeStyle(LinearGradient(colors: [Color(hex: 0xFF9A52), Color(hex: 0xFF5A1F)], startPoint: .topLeading, endPoint: .bottomTrailing))
-                        : AnyShapeStyle(p.redDeep),
-                in: RoundedRectangle(cornerRadius: size * 0.32, style: .continuous))
     }
 }
 
@@ -74,12 +56,10 @@ public struct EmergencyPassView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 12) {
                 Image(systemName: GuideLibrary.icon(for: card))
-                    .font(.rq(size: 21, weight: .semibold))
-                    .foregroundStyle(p.glows ? .white : p.onSolid)
-                    .frame(width: 42, height: 42)
-                    .background(LinearGradient(colors: [Color(hex: 0xFF5B50), Color(hex: 0xD91A10)], startPoint: .top, endPoint: .bottom),
-                                in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    .shadow(color: p.glows ? Color(hex: 0xFF3B30).opacity(0.55) : .clear, radius: 10, y: 6)
+                    .font(.rq(size: 19, weight: .semibold))
+                    .foregroundStyle(p.glows || p.scheme == .light ? .white : p.onSolid)
+                    .frame(width: 40, height: 40)
+                    .background(p.redDeep, in: Circle())
                 VStack(alignment: .leading, spacing: 1) {
                     Text("THẺ KHẨN CẤP").font(.rq(size: 11, weight: .semibold)).tracking(1.3).foregroundStyle(p.red)
                     Text(card.title).font(ResQFont.title).foregroundStyle(p.text)
@@ -158,18 +138,9 @@ public struct EmergencyPassView: View {
             }
             .padding(16)
         }
-        .background {
-            ZStack(alignment: .topTrailing) {
-                LinearGradient(colors: [p.passTop, p.passBottom], startPoint: .topLeading, endPoint: .bottomTrailing)
-                if p.glows {
-                    RadialGradient(colors: [Color(hex: 0xFF453A).opacity(0.25), .clear], center: .center, startRadius: 0, endRadius: 100)
-                        .frame(width: 200, height: 200).offset(x: 40, y: -60)
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        }
+        .background(LinearGradient(colors: [p.passTop, p.passBottom], startPoint: .top, endPoint: .bottom),
+                    in: RoundedRectangle(cornerRadius: 24, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous).strokeBorder(p.passLine))
-        .shadow(color: p.glows ? Color(hex: 0xFF3B30).opacity(0.35) : .clear, radius: 30, y: 18)
         .accessibilityElement(children: .contain)
     }
 }
@@ -215,38 +186,37 @@ struct AnswerSectionView: View {
 
     var body: some View {
         let (title, tint): (String, Color) = switch kind {
-        case .doIt: ("LÀM NGAY", p.green)
-        case .doNot: ("KHÔNG ĐƯỢC", p.red)
-        case .escalate: ("KHI NÀO CẦN CẤP CỨU", p.amber)
+        case .doIt: ("Làm ngay", p.green)
+        case .doNot: ("Không được", p.red)
+        case .escalate: ("Khi nào cần cấp cứu", p.amber)
         }
-        VStack(alignment: .leading, spacing: 6) {
+        // Reads like a chat answer: a bold heading, then a plain list. Color only marks the heading dot and the ✕.
+        VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 8) {
-                Circle().fill(tint).frame(width: 7, height: 7).shadow(color: p.glows ? tint : .clear, radius: 5)
-                Text(title).font(ResQFont.eyebrow).tracking(1.2).foregroundStyle(p.text3)
+                Circle().fill(tint).frame(width: 6, height: 6)
+                Text(title).font(.rq(size: 16, weight: .semibold)).foregroundStyle(p.text)
             }
             if kind == .escalate, let item = items.first {
                 ItemText(item: item)
-                    .padding(.vertical, 13).padding(.leading, 18).padding(.trailing, 15)
+                    .padding(.leading, 14).padding(.vertical, 4)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .surface(p, radius: 16)
-                    .overlay(alignment: .leading) { UnevenRoundedRectangle(topLeadingRadius: 16, bottomLeadingRadius: 16).fill(tint).frame(width: 3) }
+                    .overlay(alignment: .leading) { Capsule().fill(tint).frame(width: 2) }
+                    .padding(.top, 6)
             } else {
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     ForEach(Array(items.enumerated()), id: \.offset) { i, item in
-                        HStack(alignment: .firstTextBaseline, spacing: 12) {
+                        HStack(alignment: .firstTextBaseline, spacing: 10) {
                             Group {
                                 if kind == .doIt {
-                                    Text("\(i + 1)").font(ResQFont.number(12)).foregroundStyle(p.green)
-                                        .frame(width: 24, height: 24).background(p.greenSoft, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                    Text("\(i + 1).").font(ResQFont.number(15, .regular)).foregroundStyle(p.text3)
                                 } else {
-                                    Image(systemName: "xmark").font(.rq(size: 14, weight: .semibold)).foregroundStyle(p.red).frame(width: 24, height: 24)
+                                    Image(systemName: "xmark").font(.rq(size: 12, weight: .semibold)).foregroundStyle(p.red)
                                 }
                             }
-                            .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + 5 }
+                            .frame(minWidth: 20, alignment: .leading)
                             ItemText(item: item).frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .padding(.vertical, 10)
-                        .overlay(alignment: .bottom) { if i < items.count - 1 { Rectangle().fill(p.hair).frame(height: 1) } }
+                        .padding(.vertical, 6)
                         .transition(.opacity.combined(with: .offset(y: 6)))
                     }
                 }
@@ -262,39 +232,26 @@ struct SourcesStrip: View {
     @State private var open: EvidenceBlock?
     @Environment(\.palette) private var p
 
-    static func monogram(_ label: String) -> String {
-        let words = label.split(separator: " ").filter { $0.first?.isLetter == true }
-        return words.prefix(2).compactMap { $0.first.map { String($0).uppercased() } }.joined()
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("NGUỒN TRONG CẨM NANG").font(ResQFont.eyebrow).tracking(1.2).foregroundStyle(p.text3)
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                // Compact citation chips: number + section name; tap opens the passage.
+                HStack(spacing: 6) {
                     ForEach(evidence) { e in
                         Button { open = e } label: {
-                        HStack(alignment: .top, spacing: 11) {
-                            Text(Self.monogram(e.block.sourceLabel))
-                                .font(ResQFont.number(11)).foregroundStyle(p.text2)
-                                .frame(width: 34, height: 34).background(p.surface3, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(e.block.headingPath.components(separatedBy: " › ").suffix(2).joined(separator: " › "))
-                                    .font(.rq(size: 13.5, weight: .medium)).foregroundStyle(p.text).lineLimit(2)
-                                HStack(spacing: 6) {
-                                    let trusted = e.block.trust == .a
-                                    Text(e.block.trust.rawValue).font(ResQFont.number(10))
-                                        .foregroundStyle(trusted ? p.green : p.blue)
-                                        .padding(.horizontal, 5).padding(.vertical, 3)
-                                        .background(trusted ? p.greenSoft : p.blueSoft, in: RoundedRectangle(cornerRadius: 5))
-                                    Text(e.block.sourceLabel).font(ResQFont.caption).foregroundStyle(p.text3).lineLimit(1)
-                                }
+                            HStack(spacing: 7) {
+                                Text(e.label.dropFirst()).font(ResQFont.number(11, .medium)).foregroundStyle(p.text2)
+                                    .frame(width: 18, height: 18).background(p.surface3, in: Circle())
+                                Text(e.block.headingPath.components(separatedBy: " › ").last ?? "")
+                                    .font(.rq(size: 13)).foregroundStyle(p.text2).lineLimit(1)
                             }
-                        }
-                        .padding(12).frame(width: 236, alignment: .leading)
-                        .surface(p, radius: 18)
+                            .padding(.leading, 6).padding(.trailing, 12).frame(height: 32)
+                            .frame(maxWidth: 220, alignment: .leading)
+                            .background(p.surface1, in: Capsule())
+                            .overlay(Capsule().strokeBorder(p.hair))
                         }
                         .pressable()
+                        .accessibilityLabel("Nguồn \(e.label.dropFirst()): \(e.block.headingPath), \(e.block.sourceLabel)")
                     }
                 }
                 .padding(.horizontal, 18)
@@ -366,7 +323,6 @@ struct ReadingLabel: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            ProgressView().controlSize(.small).tint(p.accent)
             Text(text).font(.rq(size: 14, weight: .medium)).foregroundStyle(p.text3)
                 .overlay {
                     LinearGradient(colors: [.clear, p.text, .clear], startPoint: .leading, endPoint: .trailing)
@@ -430,10 +386,9 @@ public struct AssistantTurnView: View {
     }
 
     private func header(_ tag: Tag) -> some View {
-        HStack(spacing: 8) {
-            BrandMark()
+        HStack(spacing: 6) {
             tag
-            Text("\(turn.evidence.count) nguồn").font(ResQFont.caption).foregroundStyle(p.text3)
+            Text("· \(turn.evidence.count) nguồn").font(.rq(size: 13)).foregroundStyle(p.text3)
         }
     }
 }

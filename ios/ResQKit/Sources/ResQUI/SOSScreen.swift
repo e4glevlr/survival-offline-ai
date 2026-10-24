@@ -68,16 +68,15 @@ public struct SOSScreen: View {
                         let main = h.number == "112"
                         Link(destination: URL(string: "tel:\(h.number)")!) {
                             VStack(spacing: 3) {
+                                Image(systemName: "phone.fill").font(.rq(size: 13)).opacity(main ? 0.9 : 0.6)
                                 Text(h.number).font(ResQFont.number(24))
                                 Text(h.label).font(.rq(size: 11.5)).opacity(main ? 0.85 : 1).foregroundStyle(main ? .white : p.text3)
                             }
                             .foregroundStyle(main ? .white : p.text)
-                            .frame(maxWidth: .infinity, minHeight: 80)
+                            .frame(maxWidth: .infinity, minHeight: 88)
                             .background {
                                 if main {
-                                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                        .fill(LinearGradient(colors: [Color(hex: 0xFF5B50), Color(hex: 0xD91A10)], startPoint: .top, endPoint: .bottom))
-                                        .shadow(color: p.glows ? Color(hex: 0xFF3B30).opacity(0.6) : .clear, radius: 14, y: 10)
+                                    RoundedRectangle(cornerRadius: 20, style: .continuous).fill(p.redDeep)
                                 } else {
                                     RoundedRectangle(cornerRadius: 20, style: .continuous).fill(p.text.opacity(0.05))
                                         .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(p.hair2))
@@ -127,14 +126,7 @@ public struct SOSScreen: View {
             .background((p.scheme == .light ? Color.white : Color(hex: 0x0B0303)).opacity(0.94).ignoresSafeArea(edges: .top))
         }
         .background {
-            ZStack {
-                p.scheme == .light ? Color.white : Color(hex: 0x0B0303)
-                if p.glows || p.scheme == .light {
-                    RadialGradient(colors: [p.scheme == .light ? Color(hex: 0xFFD9D5) : Color(hex: 0x4A0D0A), .clear],
-                                   center: .top, startRadius: 0, endRadius: 520)
-                }
-            }
-            .ignoresSafeArea()
+            (p.scheme == .light ? Color.white : Color(hex: 0x0B0303)).ignoresSafeArea()
         }
         .overlay { Color.white.opacity(litIndex != nil && strobing ? 0.85 : 0).ignoresSafeArea().allowsHitTesting(false) }
         .sheet(item: $openCard) { c in
@@ -186,7 +178,6 @@ public struct SOSScreen: View {
             }
         }
         .padding(18).frame(maxWidth: .infinity, alignment: .leading)
-        .background(alignment: .topTrailing) { Radar().frame(width: 160, height: 160).offset(x: 34, y: -34) }
         .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
         .background(p.scheme == .light ? Color.white : p.text.opacity(0.04), in: RoundedRectangle(cornerRadius: 26, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 26, style: .continuous).strokeBorder(p.hair2))
@@ -295,13 +286,20 @@ struct HoldToArmButton: View {
     var body: some View {
         let on = isOn
         VStack(alignment: .leading) {
-            Image(systemName: icon).font(.rq(size: 26))
-            Spacer()
+            ZStack {
+                Circle().stroke(on ? .white.opacity(0.25) : p.red.opacity(0.2), lineWidth: 3)
+                Circle().trim(from: 0, to: on ? 1 : progress)
+                    .stroke(on ? .white : p.red, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                Image(systemName: icon).font(.rq(size: 22))
+            }
+            .frame(width: 54, height: 54)
+            Spacer(minLength: 12)
             Text(title).font(.rq(size: 17, weight: .semibold))
             Text(on ? active : idle).font(.rq(size: 12.5)).opacity(on ? 0.85 : 1).foregroundStyle(on ? .white : p.text3)
         }
         .foregroundStyle(on || progress > 0.35 ? .white : p.text)
-        .padding(16).frame(maxWidth: .infinity, minHeight: 128, alignment: .leading)
+        .padding(16).frame(maxWidth: .infinity, minHeight: 148, alignment: .leading)
         .background {
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 24, style: .continuous).fill(p.scheme == .light ? Color.white : p.text.opacity(0.04))
@@ -364,23 +362,6 @@ struct Beacon: View {
                 }
             }
             .onAppear { go = true }
-    }
-}
-
-struct Radar: View {
-    @Environment(\.palette) private var p
-    var body: some View {
-        TimelineView(.animation) { ctx in
-            let t = ctx.date.timeIntervalSinceReferenceDate
-            ZStack {
-                ForEach(0..<3) { i in
-                    let phase = (t / 3 + Double(i) / 3).truncatingRemainder(dividingBy: 1)
-                    Circle().strokeBorder(p.red.opacity(0.45), lineWidth: 1).scaleEffect(0.15 + 0.85 * phase).opacity(1 - phase)
-                }
-                Circle().fill(p.red).frame(width: 8, height: 8).shadow(color: p.red, radius: 7)
-            }
-        }
-        .allowsHitTesting(false)
     }
 }
 

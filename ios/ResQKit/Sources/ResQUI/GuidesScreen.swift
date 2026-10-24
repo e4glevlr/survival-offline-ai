@@ -15,7 +15,7 @@ struct GuidesView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Text("Cẩm nang").font(.rq(size: 34, weight: .bold)).tracking(-1.2).foregroundStyle(p.text)
+                Text("Cẩm nang").font(.rq(size: 28, weight: .semibold)).tracking(-0.8).foregroundStyle(p.text)
                 Text(GuideLibrary.summary).font(.rq(size: 14)).foregroundStyle(p.text3)
                     .padding(.top, 6).padding(.bottom, 16)
                 search
@@ -25,7 +25,7 @@ struct GuidesView: View {
                 ScrollView(.horizontal) {
                     HStack(spacing: 10) {
                         ForEach(GuideLibrary.cards) { c in
-                            EmergencyTile(card: c, width: 138, height: 142) { onCard(c) }
+                            EmergencyTile(card: c, width: 132, height: 96) { onCard(c) }
                         }
                     }
                     .padding(.horizontal, 18).padding(.vertical, 2)
@@ -69,7 +69,7 @@ struct GuidesView: View {
                     }
                 }
             }
-            .padding(.horizontal, 18).padding(.top, 118).padding(.bottom, 40)
+            .padding(.horizontal, 18).padding(.top, 66).padding(.bottom, 40)
         }
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
@@ -87,13 +87,10 @@ struct GuidesView: View {
                 Button { query = "" } label: { Image(systemName: "xmark.circle.fill").foregroundStyle(p.text3) }
                     .buttonStyle(.plain).accessibilityLabel("Xoá")
             }
-            Text("offline").font(ResQFont.number(11, .medium)).foregroundStyle(p.text3)
-                .padding(.horizontal, 7).padding(.vertical, 5)
-                .background(p.surface3, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
         }
-        .padding(.leading, 14).padding(.trailing, 8).frame(height: 46)
-        .background(p.surface2, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(p.hair))
+        .padding(.horizontal, 14).frame(height: 44)
+        .background(p.surface1, in: Capsule())
+        .overlay(Capsule().strokeBorder(p.hair))
     }
 
     @ViewBuilder
@@ -140,37 +137,35 @@ struct SectionHeader: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(title).font(.rq(size: 17, weight: .semibold)).foregroundStyle(p.text)
+            Text(title).font(.rq(size: 15, weight: .medium)).foregroundStyle(p.text2)
             Spacer()
             if let trailing { Text(trailing).font(.rq(size: 13)).foregroundStyle(p.text3) }
         }
-        .padding(.top, 26).padding(.bottom, 12)
+        .padding(.top, 30).padding(.bottom, 10)
     }
 }
 
-/// Dark-red "pass" tile that opens an emergency card. Used in Guides and SOS.
+/// Emergency card tile: red symbol, title, step count. Used in Guides and SOS.
 struct EmergencyTile: View {
     let card: EmergencyCard
     var width: CGFloat? = nil
-    var height: CGFloat = 104
+    var height: CGFloat = 112
     let action: () -> Void
     @Environment(\.palette) private var p
 
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 3) {
-                Image(systemName: GuideLibrary.icon(for: card)).font(.rq(size: 25)).foregroundStyle(p.red)
+                Image(systemName: GuideLibrary.icon(for: card)).font(.rq(size: 18)).foregroundStyle(p.red)
                 Spacer(minLength: 0)
-                Text(card.title).font(.rq(size: 15, weight: .semibold)).foregroundStyle(p.text)
+                Text(card.title).font(.rq(size: 15, weight: .medium)).foregroundStyle(p.text)
                     .multilineTextAlignment(.leading).lineLimit(2)
-                Text("\(card.steps.count) bước").font(.rq(size: 12)).foregroundStyle(p.text3)
+                Text("\(card.steps.count) bước").font(.rq(size: 12.5)).foregroundStyle(p.text3)
             }
             .padding(14)
             .frame(width: width, height: height, alignment: .leading)
             .frame(maxWidth: width == nil ? .infinity : nil, alignment: .leading)
-            .background(LinearGradient(colors: [p.passTop, p.passBottom], startPoint: .topLeading, endPoint: .bottomTrailing),
-                        in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(p.passLine))
+            .surface(p, radius: 18)
         }
         .pressable()
     }
@@ -182,24 +177,17 @@ struct PillarTile: View {
     @Environment(\.palette) private var p
 
     var body: some View {
-        let tint = p.glows || p.scheme == .light ? pillar.tint : p.accent
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 2) {
-                Image(systemName: pillar.icon).font(.rq(size: 18)).foregroundStyle(tint)
-                    .frame(width: 34, height: 34)
-                    .background(tint.opacity(0.16), in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+            VStack(alignment: .leading, spacing: 3) {
+                Image(systemName: pillar.icon).font(.rq(size: 18)).foregroundStyle(p.text2)
                 Spacer(minLength: 0)
-                Text(pillar.title).font(.rq(size: 15.5, weight: .semibold)).tracking(-0.3).foregroundStyle(p.text)
-                    .multilineTextAlignment(.leading)
-                Text(pillar.countLabel).font(.rq(size: 12)).foregroundStyle(p.text3)
+                Text(pillar.title).font(.rq(size: 15, weight: .medium)).foregroundStyle(p.text)
+                    .multilineTextAlignment(.leading).lineLimit(2)
+                Text(pillar.countLabel).font(.rq(size: 12.5)).foregroundStyle(p.text3)
             }
             .padding(14)
-            .frame(maxWidth: .infinity, minHeight: 128, maxHeight: 128, alignment: .leading)
-            .background(alignment: .topTrailing) {
-                Image(systemName: pillar.icon).font(.rq(size: 80)).foregroundStyle(tint.opacity(0.07)).offset(x: 12, y: -12)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .surface(p)
+            .frame(maxWidth: .infinity, minHeight: 96, maxHeight: 96, alignment: .leading)
+            .surface(p, radius: 18)
         }
         .pressable()
     }
@@ -361,37 +349,6 @@ struct FilterDiagram: View {
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity)
-    }
-}
-
-/// Stylised mushroom photo used for the "Chụp ảnh để tra cứu" card.
-struct MushroomThumb: View {
-    var body: some View {
-        Canvas { ctx, size in
-            let s = size.width / 100
-            ctx.fill(Path(CGRect(origin: .zero, size: size)),
-                     with: .radialGradient(Gradient(colors: [Color(hex: 0x34502E), Color(hex: 0x142214), Color(hex: 0x050905)]),
-                                           center: CGPoint(x: size.width * 0.56, y: size.height * 0.34), startRadius: 0, endRadius: size.width * 0.8))
-            ctx.fill(Path(ellipseIn: CGRect(x: -20 * s, y: 86 * s, width: 140 * s, height: 30 * s)), with: .color(Color(hex: 0x1B2D15)))
-            var stem = Path()
-            stem.move(to: CGPoint(x: 46 * s, y: 40 * s)); stem.addLine(to: CGPoint(x: 43 * s, y: 94 * s))
-            stem.addLine(to: CGPoint(x: 57 * s, y: 94 * s)); stem.addLine(to: CGPoint(x: 54 * s, y: 40 * s)); stem.closeSubpath()
-            ctx.fill(stem, with: .linearGradient(Gradient(colors: [Color(hex: 0xBFB6A3), Color(hex: 0xFFFAF0), Color(hex: 0xAEA48F)]),
-                                                 startPoint: CGPoint(x: 43 * s, y: 0), endPoint: CGPoint(x: 57 * s, y: 0)))
-            var veil = Path()
-            veil.move(to: CGPoint(x: 42 * s, y: 44 * s))
-            veil.addQuadCurve(to: CGPoint(x: 30 * s, y: 88 * s), control: CGPoint(x: 38 * s, y: 70 * s))
-            veil.addQuadCurve(to: CGPoint(x: 70 * s, y: 88 * s), control: CGPoint(x: 50 * s, y: 96 * s))
-            veil.addQuadCurve(to: CGPoint(x: 58 * s, y: 44 * s), control: CGPoint(x: 62 * s, y: 70 * s))
-            ctx.stroke(veil, with: .color(Color(hex: 0xFAF5E8).opacity(0.6)), style: StrokeStyle(lineWidth: 0.8 * s, dash: [1.5 * s, 1.2 * s]))
-            var cap = Path()
-            cap.move(to: CGPoint(x: 38 * s, y: 46 * s))
-            cap.addQuadCurve(to: CGPoint(x: 50 * s, y: 18 * s), control: CGPoint(x: 39 * s, y: 22 * s))
-            cap.addQuadCurve(to: CGPoint(x: 62 * s, y: 46 * s), control: CGPoint(x: 61 * s, y: 22 * s))
-            cap.addQuadCurve(to: CGPoint(x: 38 * s, y: 46 * s), control: CGPoint(x: 50 * s, y: 51 * s))
-            ctx.fill(cap, with: .linearGradient(Gradient(colors: [Color(hex: 0xEFE1B8), Color(hex: 0xB59A63), Color(hex: 0x6D5733)]),
-                                                startPoint: CGPoint(x: 0, y: 18 * s), endPoint: CGPoint(x: 0, y: 50 * s)))
-        }
     }
 }
 

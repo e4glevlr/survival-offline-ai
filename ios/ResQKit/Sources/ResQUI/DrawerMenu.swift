@@ -13,47 +13,29 @@ struct DrawerMenu: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 11) {
-                Image(systemName: "safari.fill").font(.rq(size: 20)).foregroundStyle(.white)
-                    .frame(width: 40, height: 40)
-                    .background(LinearGradient(colors: [Color(hex: 0xFF9A52), Color(hex: 0xFF5A1F)], startPoint: .topLeading, endPoint: .bottomTrailing),
-                                in: RoundedRectangle(cornerRadius: 13, style: .continuous))
-                    .shadow(color: p.glows ? Color(hex: 0xFF5A1F).opacity(0.6) : .clear, radius: 10, y: 8)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("ResQ").font(.rq(size: 18, weight: .bold)).tracking(-0.5).foregroundStyle(p.text)
-                    HStack(spacing: 6) {
-                        Circle().fill(p.green).frame(width: 6, height: 6)
-                        Text("Sẵn sàng ngoại tuyến").font(.rq(size: 12)).foregroundStyle(p.text3)
-                    }
-                }
+            VStack(alignment: .leading, spacing: 2) {
+                Text("ResQ").font(.rq(size: 22, weight: .semibold)).tracking(-0.5).foregroundStyle(p.text)
+                Text("Sẵn sàng ngoại tuyến").font(.rq(size: 13)).foregroundStyle(p.text3)
             }
-            .padding(.top, 4).padding(.bottom, 18)
-
-            Button { onAction(.newChat) } label: {
-                Label("Cuộc hỏi mới", systemImage: "square.and.pencil")
-                    .font(.rq(size: 15, weight: .semibold)).foregroundStyle(p.onSolid)
-                    .padding(.horizontal, 14).frame(maxWidth: .infinity, minHeight: 46, alignment: .leading)
-                    .background(p.solid, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            }
-            .pressable()
+            .padding(.horizontal, 6).padding(.top, 8).padding(.bottom, 20)
 
             VStack(spacing: 0) {
+                navItem("square.and.pencil", "Cuộc hỏi mới", strong: true) { onAction(.newChat) }
                 navItem("staroflife.fill", "SOS khẩn cấp", iconColor: p.red) { onAction(.sos) }
                 navItem("book", "Cẩm nang") { onAction(.guides) }
                 navItem("checklist", "Trước chuyến đi") { onAction(.prep) }
                 navItem("slider.horizontal.3", "Cài đặt") { onAction(.settings) }
             }
-            .padding(.top, 14).padding(.bottom, 6)
 
             HStack {
-                Text("Gần đây").font(.rq(size: 12, weight: .semibold)).tracking(1.2).textCase(.uppercase).foregroundStyle(p.text3)
+                Text("Gần đây").font(.rq(size: 13, weight: .medium)).foregroundStyle(p.text3)
                 Spacer()
                 if !store.history.isEmpty {
                     Button("Xoá") { withAnimation(ResQMotion.ease) { store.clearHistory() } }
-                        .font(.rq(size: 12, weight: .semibold)).foregroundStyle(p.text3).buttonStyle(.plain)
+                        .font(.rq(size: 13)).foregroundStyle(p.text3).buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, 6).padding(.top, 14).padding(.bottom, 6)
+            .padding(.horizontal, 6).padding(.top, 22).padding(.bottom, 4)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
@@ -64,10 +46,10 @@ struct DrawerMenu: View {
                     ForEach(store.history) { h in
                         Button { onAction(.history(h.question)) } label: {
                             VStack(alignment: .leading, spacing: 1) {
-                                Text(h.question).font(.rq(size: 14.5)).foregroundStyle(p.text2).lineLimit(1)
+                                Text(h.question).font(.rq(size: 15)).foregroundStyle(p.text).lineLimit(1)
                                 Text(RelativeDay.label(h.date) + (h.hasImage ? " · có ảnh" : "")).font(.rq(size: 12)).foregroundStyle(p.text3)
                             }
-                            .padding(.horizontal, 6).padding(.vertical, 9)
+                            .padding(.horizontal, 6).padding(.vertical, 8)
                             .frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
@@ -86,8 +68,9 @@ struct DrawerMenu: View {
                 meter("Nhiệt", value: t.value, color: t.color, trailing: t.label)
             }
             .font(.rq(size: 12.5)).foregroundStyle(p.text3)
-            .padding(14).frame(maxWidth: .infinity, alignment: .leading)
-            .surface(p, radius: 18)
+            .padding(.horizontal, 6).padding(.top, 14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .overlay(alignment: .top) { Rectangle().fill(p.hair).frame(height: 1) }
         }
         .padding(.leading, 18).padding(.trailing, 14).padding(.top, 14).padding(.bottom, 16)
     }
@@ -109,11 +92,11 @@ struct DrawerMenu: View {
         }
     }
 
-    private func navItem(_ icon: String, _ title: String, iconColor: Color? = nil, _ run: @escaping () -> Void) -> some View {
+    private func navItem(_ icon: String, _ title: String, iconColor: Color? = nil, strong: Bool = false, _ run: @escaping () -> Void) -> some View {
         Button(action: run) {
             HStack(spacing: 12) {
-                Image(systemName: icon).font(.rq(size: 17)).foregroundStyle(iconColor ?? p.text3).frame(width: 24)
-                Text(title).font(.rq(size: 15)).foregroundStyle(p.text2)
+                Image(systemName: icon).font(.rq(size: 17)).foregroundStyle(iconColor ?? (strong ? p.text : p.text2)).frame(width: 24)
+                Text(title).font(.rq(size: 16, weight: strong ? .medium : .regular)).foregroundStyle(p.text)
             }
             .padding(.horizontal, 6).frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             .contentShape(Rectangle())
