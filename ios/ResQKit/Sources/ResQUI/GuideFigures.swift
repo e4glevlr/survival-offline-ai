@@ -36,6 +36,26 @@ enum GuideFigure {
                 Pin("Vải nhét cổ chai", 0.52, 0.66, tag: 0.64, 0.66),
                 Pin("Hứng rồi vẫn phải đun sôi", 0.47, 0.90, tag: 0.33, 0.88),
             ]),
+        "fire-lay": Spec(
+            alt: "Hai cách xếp củi. Bên trái: chóp nón, củi mồi dựng nghiêng quanh một nắm bùi nhùi, lửa cháy trong lõi. Bên phải: kim tự tháp, nhiều lớp củi xếp vuông góc, lửa nhóm trên cùng.",
+            pins: [
+                Pin("Bùi nhùi ở giữa", 0.30, 0.76, tag: 0.07, 0.62),
+                Pin("Củi mồi dựng chóp nón", 0.22, 0.40, tag: 0.07, 0.30),
+                Pin("Lửa bắt từ lõi", 0.28, 0.63, tag: 0.45, 0.45),
+                Pin("Kim tự tháp: nhóm trên cùng", 0.73, 0.34, tag: 0.92, 0.20),
+                Pin("Lớp củi vuông góc", 0.80, 0.55, tag: 0.95, 0.48),
+                Pin("Củi to ở dưới", 0.68, 0.83, tag: 0.52, 0.92),
+            ]),
+        "water-still-pit": Spec(
+            alt: "Mặt cắt hố chưng cất. Tấm nilon trong phủ kín miệng hố, mép lấp đất, hòn đá ở giữa làm nilon võng thành phễu. Hơi nước đọng dưới nilon nhỏ vào cốc ở đáy hố, một ống nhựa nối từ cốc ra ngoài mép hố.",
+            pins: [
+                Pin("Nilon trong phủ kín", 0.33, 0.31, tag: 0.10, 0.30),
+                Pin("Đá nhỏ làm phễu", 0.49, 0.35, tag: 0.33, 0.10),
+                Pin("Hơi nước đọng, nhỏ xuống", 0.42, 0.44, tag: 0.07, 0.55),
+                Pin("Cốc hứng giữa đáy", 0.50, 0.70, tag: 0.25, 0.92),
+                Pin("Ống hút, không mở nilon", 0.73, 0.30, tag: 0.90, 0.18),
+                Pin("Lấp đất kín mép", 0.25, 0.26, tag: 0.12, 0.12),
+            ]),
     ]
 }
 
