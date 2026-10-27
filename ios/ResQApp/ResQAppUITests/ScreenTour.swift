@@ -56,6 +56,8 @@ final class ScreenTour: XCTestCase {
     func test02FireAnswerSaveAndPin() {
         tapContaining("Nhóm lửa khi củi ướt")
         shot("02-fire-answer", wait: 7)
+        // The question stays pinned at the top; the action row sits below the fold.
+        app.swipeUp()
         tap("Lưu")
         tap("Ghim vị trí")
         shot("03-fire-saved-pinned")
@@ -68,9 +70,22 @@ final class ScreenTour: XCTestCase {
         shot("05-bleeding-card", wait: 4)
     }
 
+    func test03bAnaphylaxisRouting() {
+        ask("bi ong dot sung moi kho tho")
+        XCTAssertTrue(app.staticTexts["Sốc phản vệ"].firstMatch.waitForExistence(timeout: 5), "no anaphylaxis card")
+        shot("05b-anaphylaxis-card", wait: 3)
+    }
+
     func test04FishTopic() {
         tapContaining("Bắt cá")
         shot("06-fish-answer", wait: 7)
+    }
+
+    func test04bWaterFigureOpensArticle() {
+        tapContaining("Lọc nước suối")
+        shot("06b-water-figure", wait: 7)
+        tapContaining("Hình minh hoạ")
+        shot("06c-article-from-chat")
     }
 
     func test05Drawer() {

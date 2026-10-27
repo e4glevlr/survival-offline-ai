@@ -19,15 +19,19 @@ public struct DemoResponder: AnswerResponder {
     /// Router intent → reviewed card id.
     static let cardForIntent = ["severe_bleeding": "ec-bleed", "unconscious": "ec-cpr", "snake_bite": "ec-snake",
                                 "drowning": "ec-drown", "hypothermia": "ec-cold", "heat_stroke": "ec-heat",
-                                "choking": "ec-choke", "fracture": "ec-fracture"]
+                                "choking": "ec-choke", "fracture": "ec-fracture", "anaphylaxis": "ec-anaphylaxis",
+                                "burn": "ec-burn"]
+
+    typealias Source = (heading: String, org: String, tier: TrustTier, excerpt: String, article: String)
 
     struct Topic {
-        let sources: [(heading: String, org: String, tier: TrustTier, excerpt: String)]
+        let sources: [Source]
         let script: String
     }
 
-    static func src(_ heading: String, _ org: String, _ tier: TrustTier, _ excerpt: String) -> (String, String, TrustTier, String) {
-        (heading, org, tier, excerpt)
+    /// `article` is the guide article (guides.json id) that holds this passage; empty when none does.
+    static func src(_ heading: String, _ org: String, _ tier: TrustTier, _ excerpt: String, article: String = "") -> Source {
+        (heading, org, tier, excerpt, article)
     }
 
     static let snake = Topic(sources: [
@@ -49,7 +53,7 @@ public struct DemoResponder: AnswerResponder {
 
     static let fish = Topic(sources: [
         src("Kiếm ăn › Bẫy cá › Bẫy chai một chiều", "FM 21-76", .b, "Cắt đầu chai và lồng ngược vào thân để tạo **phễu một chiều**. Đục lỗ quanh thân để nước và mùi mồi thoát ra. Đặt bẫy nơi nước chảy chậm, miệng phễu hướng về hạ lưu."),
-        src("Kiếm ăn › Chế biến an toàn", "FM 21-76", .b, "Cá và động vật nước ngọt có thể mang ký sinh trùng. **Luôn nấu chín kỹ**, không ăn sống."),
+        src("Kiếm ăn › Chế biến an toàn", "FM 21-76", .b, "Cá và động vật nước ngọt có thể mang ký sinh trùng. **Luôn nấu chín kỹ**, không ăn sống.", article: "food-fish-prep"),
         src("An toàn › Vượt suối", "Nội dung mẫu", .a, "Nước ngang đầu gối đã đủ để đẩy ngã người lớn nếu chảy xiết. **Không lội ở chỗ nước xiết** khi không có dây an toàn."),
     ], script: """
     TRANG_THAI: CO_CAN_CU
@@ -65,9 +69,9 @@ public struct DemoResponder: AnswerResponder {
     """)
 
     static let water = Topic(sources: [
-        src("Nước › Lọc nước › Bình lọc nhiều tầng", "FM 21-76", .b, "Bình lọc nhiều tầng loại bỏ cặn và làm nước trong. **Lọc không làm nước an toàn để uống**, nước sau lọc vẫn phải khử trùng."),
-        src("Nước › Khử trùng › Đun sôi", "Nội dung mẫu", .a, "**Đun sôi sùng sục ít nhất 1 phút.** Ở độ cao trên 2.000 m, đun 3 phút vì nước sôi ở nhiệt độ thấp hơn."),
-        src("Nước › Tìm nguồn nước", "FM 21-76", .b, "Lấy nước ở thượng nguồn, **tránh khu vực dưới nơi có người, gia súc hoặc xác động vật**."),
+        src("Nước › Lọc nước › Bình lọc nhiều tầng", "FM 21-76", .b, "Bình lọc nhiều tầng loại bỏ cặn và làm nước trong. **Lọc không làm nước an toàn để uống**, nước sau lọc vẫn phải khử trùng.", article: "water-bottle-filter"),
+        src("Nước › Khử trùng › Đun sôi", "Nội dung mẫu", .a, "**Đun sôi sùng sục ít nhất 1 phút.** Ở độ cao trên 2.000 m, đun 3 phút vì nước sôi ở nhiệt độ thấp hơn.", article: "water-purify"),
+        src("Nước › Tìm nguồn nước", "FM 21-76", .b, "Lấy nước ở thượng nguồn, **tránh khu vực dưới nơi có người, gia súc hoặc xác động vật**.", article: "water-find"),
     ], script: """
     TRANG_THAI: CO_CAN_CU
     TOM_TAT: Bình lọc chai nhựa chỉ làm nước trong hơn, không diệt được vi khuẩn. Lọc xong vẫn phải đun sôi. [E1][E2]
@@ -82,8 +86,8 @@ public struct DemoResponder: AnswerResponder {
     """)
 
     static let fire = Topic(sources: [
-        src("Lửa › Nhóm lửa khi ẩm ướt", "FM 21-76", .b, "Dựng **sàn bằng cành khô** để cách lửa khỏi nền đất ướt. Chuẩn bị đủ ba cỡ củi trước khi đánh lửa."),
-        src("Lửa › Bùi nhùi và mồi lửa", "FM 21-76", .b, "Phần lõi của cành chết thường vẫn khô. **Chẻ đôi cành và vót phoi mỏng** từ phần lõi để làm mồi."),
+        src("Lửa › Nhóm lửa khi ẩm ướt", "FM 21-76", .b, "Dựng **sàn bằng cành khô** để cách lửa khỏi nền đất ướt. Chuẩn bị đủ ba cỡ củi trước khi đánh lửa.", article: "fire-site"),
+        src("Lửa › Bùi nhùi và mồi lửa", "FM 21-76", .b, "Phần lõi của cành chết thường vẫn khô. **Chẻ đôi cành và vót phoi mỏng** từ phần lõi để làm mồi.", article: "fire-lay"),
         src("Lửa › An toàn", "Nội dung mẫu", .a, "**Không chọc thủng hay đốt pin lithium**: pin có thể cháy dữ dội và phát nổ."),
     ], script: """
     TRANG_THAI: CO_CAN_CU
@@ -98,8 +102,8 @@ public struct DemoResponder: AnswerResponder {
     """)
 
     static let mushroom = Topic(sources: [
-        src("Hái lượm › Nấm hoang dã › Quy tắc an toàn", "Nội dung mẫu", .a, "Nhiều loài nấm độc chết người có hình dạng rất giống nấm ăn được. **Không có phép thử nào tại thực địa xác định được một cây nấm là an toàn.** Không ăn nấm hoang dã nếu chưa có người có chuyên môn xác định mẫu thật."),
-        src("Kiếm ăn › Nguồn đạm dễ nhận biết", "FM 21-76", .b, "Khi thiếu lương thực, **cá, ếch và côn trùng là nguồn đạm dễ nhận biết hơn thực vật**. Mọi loại thịt kiếm được ngoài tự nhiên đều phải nấu chín kỹ để diệt ký sinh trùng."),
+        src("Hái lượm › Nấm hoang dã › Quy tắc an toàn", "Nội dung mẫu", .a, "Nhiều loài nấm độc chết người có hình dạng rất giống nấm ăn được. **Không có phép thử nào tại thực địa xác định được một cây nấm là an toàn.** Không ăn nấm hoang dã nếu chưa có người có chuyên môn xác định mẫu thật.", article: "food-plants"),
+        src("Kiếm ăn › Nguồn đạm dễ nhận biết", "FM 21-76", .b, "Khi thiếu lương thực, **cá, ếch và côn trùng là nguồn đạm dễ nhận biết hơn thực vật**. Mọi loại thịt kiếm được ngoài tự nhiên đều phải nấu chín kỹ để diệt ký sinh trùng.", article: "food-insects"),
         src("Sơ cứu › Ngộ độc › Nấm", "Nội dung mẫu", .a, "Triệu chứng của một số loài nấm rất độc có thể xuất hiện muộn, **sau 6 đến 24 giờ**, khi người bệnh tưởng đã ổn. Giữ lại mẫu nấm và tìm hỗ trợ y tế ngay cả khi đã thấy đỡ."),
     ], script: """
     TRANG_THAI: CO_CAN_CU
@@ -114,8 +118,8 @@ public struct DemoResponder: AnswerResponder {
 
     /// Fallback evidence when nothing matches well enough.
     static let nearest = [
-        src("Trú ẩn › Chọn chỗ dựng lán", "FM 21-76", .b, "Chọn chỗ cao ráo, tránh lòng suối cạn và **dưới cây chết đứng**."),
-        src("Định hướng › Bóng gậy mặt trời", "FM 21-76", .b, "Cắm gậy thẳng, đánh dấu đầu bóng, chờ 15 phút rồi đánh dấu lần hai. **Đường nối hai dấu chạy theo hướng Tây–Đông.**"),
+        src("Trú ẩn › Chọn chỗ dựng lán", "FM 21-76", .b, "Chọn chỗ cao ráo, tránh lòng suối cạn và **dưới cây chết đứng**.", article: "shelter-site"),
+        src("Định hướng › Bóng gậy mặt trời", "FM 21-76", .b, "Cắm gậy thẳng, đánh dấu đầu bóng, chờ 15 phút rồi đánh dấu lần hai. **Đường nối hai dấu chạy theo hướng Tây–Đông.**", article: "nav-shadow"),
     ]
 
     /// Emergency with a card but no written script: answer straight from the reviewed card.
@@ -138,10 +142,10 @@ public struct DemoResponder: AnswerResponder {
         return nil
     }
 
-    static func evidence(_ t: [(heading: String, org: String, tier: TrustTier, excerpt: String)]) -> [EvidenceBlock] {
+    static func evidence(_ t: [Source]) -> [EvidenceBlock] {
         t.enumerated().map { i, e in
             EvidenceBlock(label: "E\(i + 1)",
-                          block: ParentBlock(parentId: "p\(i)", articleId: "a\(i)", sourceLabel: e.org,
+                          block: ParentBlock(parentId: "p\(i)", articleId: e.article, sourceLabel: e.org,
                                              headingPath: e.heading, text: e.excerpt, tokens: 300, trust: e.tier),
                           score: 0.05 - Double(i) * 0.01)
         }

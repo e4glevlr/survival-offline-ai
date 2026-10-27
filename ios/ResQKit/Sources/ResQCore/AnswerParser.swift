@@ -94,15 +94,22 @@ public struct AnswerParser: Sendable {
         return line.dropFirst(key.count + 1).trimmingCharacters(in: .whitespaces)
     }
 
-    static let citationPattern = try! NSRegularExpression(pattern: "\\[(E\\d+)\\]")
+    /// "[E1]", and the "[E1, E2]" form small models also write.
+    static let citationPattern = try! NSRegularExpression(pattern: "\\[(E\\d+(?:\\s*,\\s*E\\d+)*)\\]")
+    /// Space the removed citation leaves before punctuation: "kín gió [E1]." → "kín gió ."
+    static let spaceBeforePunct = try! NSRegularExpression(pattern: "\\s+([.,;:!?])")
 
     /// Splits "Bất động chi bị cắn [E1][E3]" → text + ["E1", "E3"].
     static func item(_ raw: String) -> AnswerItem {
         let ns = raw as NSString
         let matches = citationPattern.matches(in: raw, range: NSRange(location: 0, length: ns.length))
-        let citations = matches.map { ns.substring(with: $0.range(at: 1)) }
-        let text = citationPattern
+        let citations = matches.flatMap {
+            ns.substring(with: $0.range(at: 1)).split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        }
+        let stripped = citationPattern
             .stringByReplacingMatches(in: raw, range: NSRange(location: 0, length: ns.length), withTemplate: "")
+        let text = spaceBeforePunct
+            .stringByReplacingMatches(in: stripped, range: NSRange(location: 0, length: (stripped as NSString).length), withTemplate: "$1")
             .trimmingCharacters(in: .whitespaces)
         return AnswerItem(text: text, citations: citations)
     }

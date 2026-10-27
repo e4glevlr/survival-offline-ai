@@ -313,6 +313,115 @@ struct SourceSheet: View {
     }
 }
 
+// MARK: - Guide visuals
+
+/// Opens a guide article sheet; set by the chat screen.
+struct OpenArticleAction {
+    var run: @MainActor (GuideLibrary.Article) -> Void = { _ in }
+    @MainActor func callAsFunction(_ a: GuideLibrary.Article) { run(a) }
+}
+
+extension EnvironmentValues {
+    @Entry var openArticle = OpenArticleAction()
+}
+
+extension GuideLibrary.Article {
+    var hasFigure: Bool { GuideFigure.has(id) }
+    var hasCover: Bool { GuideArt.available.contains(id) }
+}
+
+/// The guide's picture for this answer, inline under the summary. Tapping opens the article.
+struct GuideVisual: View {
+    let article: GuideLibrary.Article
+    @Environment(\.openArticle) private var openArticle
+    @Environment(\.palette) private var p
+
+    var body: some View {
+        Button { openArticle(article) } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                if article.hasFigure {
+                    GuideFigureView(articleId: article.id, interactive: false, legendInset: 14).padding(.bottom, 12)
+                } else {
+                    CoverImage(articleId: article.id, contentMode: .fit)
+                }
+                Rectangle().fill(p.hair).frame(height: 1)
+                HStack(spacing: 10) {
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(article.hasFigure ? "Hình trong cẩm nang" : "Bài trong cẩm nang").font(.rq(size: 12)).foregroundStyle(p.text3)
+                        Text(article.title).font(.rq(size: 15, weight: .medium)).foregroundStyle(p.text).lineLimit(1)
+                    }
+                    Spacer(minLength: 8)
+                    Text("\(article.steps.count) bước").font(.rq(size: 13)).foregroundStyle(p.text3)
+                    Image(systemName: "chevron.right").font(.rq(size: 13, weight: .semibold)).foregroundStyle(p.text3)
+                }
+                .padding(.horizontal, 14).padding(.vertical, 11)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .surface(p, radius: 20)
+        }
+        .pressable()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Hình minh hoạ: \(article.title). \(GuideFigure.specs[article.id]?.alt ?? article.summary)")
+        .accessibilityHint("Mở bài cẩm nang")
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+/// Guide articles behind the answer, as tappable cards with their picture or pillar icon.
+struct RelatedGuides: View {
+    let title: String
+    let articles: [GuideLibrary.Article]
+    @Environment(\.openArticle) private var openArticle
+    @Environment(\.palette) private var p
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title).font(.rq(size: 13)).foregroundStyle(p.text3)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(articles) { a in
+                        Button { openArticle(a) } label: { card(a) }
+                            .pressable()
+                            .accessibilityLabel("\(a.title), \(a.meta)")
+                            .accessibilityHint("Mở bài cẩm nang")
+                    }
+                }
+                .padding(.horizontal, 18)
+                .scrollTargetLayout()
+            }
+            .scrollTargetBehavior(.viewAligned)
+            .padding(.horizontal, -18)
+        }
+    }
+
+    private func card(_ a: GuideLibrary.Article) -> some View {
+        HStack(spacing: 10) {
+            Group {
+                if a.hasCover {
+                    CoverImage(articleId: a.id)
+                } else {
+                    Image(systemName: a.icon).font(.rq(size: 18)).foregroundStyle(a.tint)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(a.tint.opacity(0.14))
+                }
+            }
+            .frame(width: 44, height: 44)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(a.title).font(.rq(size: 14, weight: .medium)).foregroundStyle(p.text).lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                Label(a.hasFigure ? "\(a.steps.count) bước · có hình" : "\(a.steps.count) bước",
+                      systemImage: a.hasFigure ? "photo" : "list.number")
+                    .font(.rq(size: 12)).foregroundStyle(p.text3)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(8).padding(.trailing, 6)
+        .frame(width: 236, alignment: .leading)
+        .surface(p, radius: 16)
+    }
+}
+
 // MARK: - Assistant turn
 
 /// Shimmering "reading" label (CSS .shimmer).
@@ -360,15 +469,25 @@ public struct AssistantTurnView: View {
                      ? "AI đang tắt (chế độ chỉ tra cứu hoặc pin quá yếu). Thẻ và các nguồn liên quan ở bên dưới."
                      : "Cẩm nang trên máy chưa có hướng dẫn đủ sát cho câu này, nên ResQ không tự trả lời. Hãy hỏi cụ thể hơn: bạn đang ở đâu, có những đồ gì.")
                     .font(ResQFont.lead).foregroundStyle(p.text).lineSpacing(4)
+                if !turn.guideArticles.isEmpty {
+                    RelatedGuides(title: "Bài gần nhất trong cẩm nang", articles: turn.guideArticles)
+                }
             }
             if let a = turn.answer {
                 header(turn.status?.tag ?? Tag("Đang viết", icon: "ellipsis", tone: .muted))
                 if !a.summary.isEmpty {
                     ItemText(item: AnswerItem(text: a.summary, citations: a.summaryCitations), font: ResQFont.lead)
                 }
+                if let v = turn.visualArticle {
+                    GuideVisual(article: v).transition(.opacity.combined(with: .scale(scale: 0.98, anchor: .top)))
+                }
                 if !a.immediateActions.isEmpty { AnswerSectionView(kind: .doIt, items: a.immediateActions) }
                 if !a.doNot.isEmpty { AnswerSectionView(kind: .doNot, items: a.doNot) }
                 if let e = a.escalation { AnswerSectionView(kind: .escalate, items: [e]) }
+                let more = turn.guideArticles.filter { $0.id != turn.visualArticle?.id }
+                if !turn.isStreaming && !more.isEmpty {
+                    RelatedGuides(title: "Đọc thêm trong cẩm nang", articles: more)
+                }
             }
             if turn.failed {
                 Tag("Lỗi khi tạo câu trả lời. Thẻ và nguồn vẫn dùng được", icon: "exclamationmark.triangle", tone: .warn)
@@ -450,6 +569,34 @@ struct ActionRow: View {
 }
 
 extension AssistantTurn {
+    /// Guide articles behind the evidence, most-cited in the answer first, then by retrieval rank.
+    var guideArticles: [GuideLibrary.Article] {
+        var cites: [String: Int] = [:]
+        if let a = answer {
+            let items = a.immediateActions + a.doNot + (a.escalation.map { [$0] } ?? [])
+            for label in a.summaryCitations + items.flatMap(\.citations) { cites[label, default: 0] += 1 }
+        }
+        var counts: [String: Int] = [:], order: [String] = []
+        for e in evidence where GuideLibrary.article(e.block.articleId) != nil {
+            if counts[e.block.articleId] == nil { order.append(e.block.articleId) }
+            counts[e.block.articleId, default: 0] += cites[e.label, default: 0]
+        }
+        return order.enumerated()
+            .sorted { (counts[$0.element]!, -$0.offset) > (counts[$1.element]!, -$1.offset) }
+            .compactMap { GuideLibrary.article($0.element) }
+    }
+
+    /// Article whose picture goes inline under the summary: among those the summary cites, one with a
+    /// figure first, else one with a cover. The summary is committed as a whole line, so this never
+    /// flips mid-stream.
+    var visualArticle: GuideLibrary.Article? {
+        guard let a = answer else { return nil }
+        let cited = a.summaryCitations.compactMap { label in
+            evidence.first { $0.label == label }.flatMap { GuideLibrary.article($0.block.articleId) }
+        }
+        return cited.first(where: \.hasFigure) ?? cited.first(where: \.hasCover)
+    }
+
     /// Answer as plain text (copy, save, read aloud). Citation labels are dropped.
     var plainText: String {
         var lines: [String] = []

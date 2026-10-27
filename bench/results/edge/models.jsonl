@@ -1,0 +1,1 @@
+{"model": "gemma4:e4b-it-qat", "prompt": "v0", "cold_total": 18.62102895899443, "cold_ttft": 7.293244666994724, "cold_load_s": 5.880841458, "peak_rss": 6909902848, "peak_footprint": 2301384752, "ps": [{"name": "gemma4:e4b-it-qat", "size": 5393098996, "size_vram": 5393098996, "context_length": 4096}]}

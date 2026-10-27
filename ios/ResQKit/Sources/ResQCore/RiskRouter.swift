@@ -63,6 +63,14 @@ public struct RiskRouter: Sendable {
              phrases: ["rắn cắn", "rắn độc", "cắn rắn"]),
         Rule(intent: "drowning", risk: .emergency, category: "first_aid",
              phrases: ["đuối nước", "chết đuối", "sặc nước"]),
+        // After the rules above so "rắn cắn, khó thở" still opens the snake card.
+        Rule(intent: "anaphylaxis", risk: .emergency, category: "first_aid",
+             phrases: ["sốc phản vệ", "khó thở", "thở khò khè", "khò khè", "thở rít",
+                       "sưng môi", "sưng lưỡi", "sưng họng", "sưng mặt"]),
+        // Never bare "bỏng": unaccented "bong" is also "bóng" (shadow, as in "bóng que"). Same for bare
+        // "phản vệ" above: unaccented "phan ve" is also "phần về".
+        Rule(intent: "burn", risk: .emergency, category: "first_aid",
+             phrases: ["bị bỏng", "vết bỏng", "bỏng nước", "bỏng lửa", "bỏng nặng", "bỏng rộng", "bỏng hóa chất", "bỏng điện", "phỏng nước"]),
         Rule(intent: "hypothermia", risk: .emergency, category: "first_aid",
              phrases: ["hạ thân nhiệt", "run cầm cập", "lạnh cóng người"]),
         Rule(intent: "heat_stroke", risk: .emergency, category: "first_aid",

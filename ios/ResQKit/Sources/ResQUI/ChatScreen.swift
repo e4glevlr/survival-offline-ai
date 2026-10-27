@@ -276,20 +276,28 @@ public struct ChatScreen: View {
                             .transition(.opacity.combined(with: .offset(y: 12)))
                     }
                     ForEach(model.messages) { m in
-                        switch m.role {
-                        case .user(let text): UserBubble(text: text, image: m.image).transition(.opacity.combined(with: .offset(y: 10)))
-                        case .assistant(let turn): AssistantTurnView(turn: turn)
+                        Group {
+                            switch m.role {
+                            case .user(let text): UserBubble(text: text, image: m.image).transition(.opacity.combined(with: .offset(y: 10)))
+                            case .assistant(let turn): AssistantTurnView(turn: turn)
+                            }
                         }
+                        .id(m.id)
                     }
-                    Color.clear.frame(height: 1).id("bottom")
                 }
                 .padding(.horizontal, 18).padding(.top, 66)
             }
             .scrollIndicators(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .onScrolledPast(8) { scrolled = $0 }
-            .onChange(of: model.messages) { withAnimation(ResQMotion.ease) { proxy.scrollTo("bottom", anchor: .bottom) } }
+            // A new question scrolls to the top (just under the header) and the answer fills in below it,
+            // so the summary and the guide picture stay in view instead of being pushed up while streaming.
+            .onChange(of: model.messages.count) {
+                guard let q = model.messages.last(where: { if case .user = $0.role { true } else { false } }) else { return }
+                withAnimation(ResQMotion.ease) { proxy.scrollTo(q.id, anchor: UnitPoint(x: 0.5, y: 0.08)) }
+            }
             .background(p.bg.opacity(0.001))
+            .environment(\.openArticle, OpenArticleAction { sheet = .article($0) })
         }
     }
 }

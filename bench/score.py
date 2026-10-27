@@ -5,13 +5,15 @@ Parsing and grounding go through the app's own Swift code (bench/Scorer → Answ
 replaying the recorded stream deltas. Everything is judged on what the user would see (validated answer).
 
     python3 bench/score.py            # prints tables, writes bench/results/summary.json
+    BENCH_CASES=bench/data/edge_cases.json BENCH_RESULTS=bench/results/edge python3 bench/score.py
 """
-import json, re, statistics, subprocess, unicodedata
+import json, os, re, statistics, subprocess, unicodedata
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-RES = ROOT / "results"
+RES = Path(os.environ.get("BENCH_RESULTS", ROOT / "results"))
+CASES = Path(os.environ.get("BENCH_CASES", ROOT / "data/cases.json"))
 NEG = re.compile(r"\b(khong|dung|chua|tranh|cam|chang|chu khong|tuyet doi khong)\b")
 NEG_AFTER = re.compile(r"\b(la sai|bi cam|la cam|cam doan|la dieu cam|khong nen|khong duoc|nguy hiem|khong an toan)\b")
 EXAMPLE_LEAK = re.compile(r"chuot rut|co cung|duoi nhe co")
@@ -32,11 +34,11 @@ def p95(xs):
     return xs[min(len(xs) - 1, int(round(0.95 * (len(xs) - 1))))] if xs else None
 
 
-def swift_parse(rows):
+def swift_parse(rows, cases):
     exe = ROOT / "Scorer/.build/release/Scorer"
-    if not exe.exists():
-        subprocess.run(["swift", "build", "-c", "release"], cwd=ROOT / "Scorer", check=True)
-    stdin = "\n".join(json.dumps(dict(key=str(i), critical=r["critical"], labels=r["labels"],
+    # Always rebuild (a no-op when nothing changed): a stale binary would score against old app code.
+    subprocess.run(["swift", "build", "-c", "release"], cwd=ROOT / "Scorer", check=True, capture_output=True)
+    stdin = "\n".join(json.dumps(dict(key=str(i), critical=r["critical"], labels=r["labels"], q=cases[r["case"]]["q"],
                                       deltas=[d[1] for d in r["deltas"]])) for i, r in enumerate(rows))
     out = subprocess.run([str(exe)], input=stdin, capture_output=True, text=True, check=True).stdout
     return {o["key"]: o for o in map(json.loads, out.splitlines())}
@@ -152,10 +154,10 @@ def score_row(r, parsed, case, evidence):
 
 
 def main():
-    cases = {c["id"]: c for c in json.loads((ROOT / "data/cases.json").read_text())}
+    cases = {c["id"]: c for c in json.loads(CASES.read_text())}
     evidence = json.loads((ROOT / "data/evidence.json").read_text())
     rows = [json.loads(l) for p in sorted(RES.glob("raw_*.jsonl")) for l in p.read_text().splitlines() if l.strip()]
-    parsed = swift_parse(rows)
+    parsed = swift_parse(rows, cases)
     meta = {}
     for p in RES.glob("models.jsonl"):
         for l in p.read_text().splitlines():

@@ -1,9 +1,9 @@
 import Foundation
 import ResQCore
 
-// stdin: one JSON object per line {key, critical, labels, deltas}
+// stdin: one JSON object per line {key, critical, labels, deltas, q}
 // stdout: one JSON object per line with the raw parse and the validated answer.
-struct Input: Decodable { let key: String; let critical: Bool; let labels: [String]; let deltas: [String] }
+struct Input: Decodable { let key: String; let critical: Bool; let labels: [String]; let deltas: [String]; let q: String? }
 
 func encode(_ i: AnswerItem?) -> Any {
     guard let i else { return NSNull() }
@@ -25,7 +25,10 @@ while let line = readLine(strippingNewline: true) {
         EvidenceBlock(label: $0, block: ParentBlock(parentId: $0, articleId: $0, sourceLabel: "", headingPath: "",
                                                    text: "", tokens: 0, trust: .a), score: 1)
     }
-    let v = GroundingValidator().validate(raw, evidence: evidence, route: Route(risk: input.critical ? .critical : .normal))
+    // Category comes from the app's router, as in production; the case's `critical` flag can only raise the risk.
+    let routed = RiskRouter().route(QueryNormalizer().normalize(input.q ?? ""))
+    let route = Route(risk: max(routed.risk, input.critical ? .critical : .normal), category: routed.category)
+    let v = GroundingValidator().validate(raw, evidence: evidence, route: route)
     let out: [String: Any] = ["key": input.key, "raw": encode(raw), "validated": encode(v.answer),
                               "validatedStatus": v.status.rawValue, "dropped": v.droppedItems]
     print(String(decoding: try JSONSerialization.data(withJSONObject: out, options: [.sortedKeys]), as: UTF8.self))

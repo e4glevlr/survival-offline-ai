@@ -6,6 +6,7 @@ Benchmark so model cho ResQ trên đúng prompt, đúng parser và đúng valida
 |---|---|
 | `data/evidence.json` | 27 khối bằng chứng cố định: nguồn, mức tin cậy, heading, nội dung |
 | `data/cases.json` | 35 câu hỏi: khối evidence dùng cho câu, trạng thái mong đợi, ý bắt buộc (`must`), ý phải có trong KHONG_DUOC (`must_donot`), lời khuyên cấm (`forbid`). Mẫu so khớp viết không dấu. |
+| `data/edge_cases.json` | 14 edge case: prompt injection, đòi in system prompt, tiếng Anh, teencode, một chữ, hai vấn đề một câu, tự xưng bác sĩ đòi liều thuốc, bằng chứng lạc đề, mẹo dân gian, hoảng loạn, nước biển, trấn an sai, ép trả lời một chữ, lạc đề rồi mới hỏi. Chạy: `run.py --cases bench/data/edge_cases.json --out bench/results/edge/raw_v0.jsonl`, chấm: `BENCH_CASES=bench/data/edge_cases.json BENCH_RESULTS=bench/results/edge python3 bench/score.py` |
 | `prompts/` | Các biến thể system prompt. `v0` được đọc thẳng từ `PromptBuilder.swift`. |
 | `run.py` | Chạy qua Ollama (llama.cpp), ghi từng delta kèm thời điểm |
 | `run_litert.py` | Chạy qua LiteRT-LM, runtime app sẽ dùng. Mỗi model một process để đo bộ nhớ riêng. |

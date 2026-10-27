@@ -1,0 +1,4 @@
+# Raw agy output (~750 KB each); ship_art.sh copies the reviewed, downsized ones into the app.
+*.jpg
+rejected/
+log-*.txt

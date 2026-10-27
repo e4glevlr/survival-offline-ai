@@ -110,9 +110,10 @@ def main():
     ap.add_argument("--runs", type=int, default=3)
     ap.add_argument("--prompt", default="v0")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--cases", default=str(ROOT / "data/cases.json"))
     args = ap.parse_args()
 
-    cases = json.loads((ROOT / "data/cases.json").read_text())
+    cases = json.loads(Path(args.cases).read_text())
     evidence = json.loads((ROOT / "data/evidence.json").read_text())
     system = system_contract(args.prompt)
     out = Path(args.out or ROOT / f"results/raw_{args.prompt}.jsonl"); out.parent.mkdir(parents=True, exist_ok=True)

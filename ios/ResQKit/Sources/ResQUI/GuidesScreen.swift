@@ -195,7 +195,7 @@ struct PillarTile: View {
 
 // MARK: - Article sheet
 
-/// One guide article: steps as a checklist, then warnings. The water-filter article also gets its diagram.
+/// One guide article: picture (with numbered pins when it has a figure), steps as a checklist, then warnings.
 struct ArticleSheet: View {
     let article: GuideLibrary.Article
     let onAsk: () -> Void
@@ -229,6 +229,15 @@ struct ArticleSheet: View {
                     .buttonStyle(.plain).accessibilityLabel("Đọc to")
                 }
                 .padding(.top, -8)
+                if article.hasFigure {
+                    GuideFigureView(articleId: article.id, imageRadius: 20)
+                        .padding(.top, 4).padding(.bottom, 12)
+                } else if article.hasCover {
+                    CoverImage(articleId: article.id, contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .accessibilityHidden(true)
+                        .padding(.top, 4).padding(.bottom, 10)
+                }
                 Text(article.title).font(.rq(size: 24, weight: .bold)).tracking(-0.8).foregroundStyle(p.text)
                     .padding(.top, 4)
                 HStack(spacing: 6) {
@@ -240,14 +249,7 @@ struct ArticleSheet: View {
                 .padding(.top, 10)
 
                 Text(article.summary).font(.rq(size: 15)).foregroundStyle(p.text2)
-                    .padding(.top, 12).padding(.bottom, article.id == "water-bottle-filter" ? 0 : 12)
-
-                if article.id == "water-bottle-filter" {
-                    FilterDiagram()
-                        .padding(14)
-                        .surface(p, fill: p.surface2)
-                        .padding(.top, 14).padding(.bottom, 12)
-                }
+                    .padding(.top, 12).padding(.bottom, 12)
 
                 HStack(spacing: 10) {
                     Text("Tiến độ").font(.rq(size: 13)).foregroundStyle(p.text3)
@@ -312,43 +314,6 @@ struct ArticleSheet: View {
             .padding(.horizontal, 18).padding(.top, 24).padding(.bottom, 26)
         }
         .scrollIndicators(.hidden)
-    }
-}
-
-/// Layered bottle filter diagram (the prototype's inline SVG).
-struct FilterDiagram: View {
-    @Environment(\.palette) private var p
-    static let layers: [(String, Color)] = [
-        ("Sỏi to", Color(hex: 0x8A837C)), ("Sỏi nhỏ", Color(hex: 0xA9A29A)), ("Cát mịn", Color(hex: 0xD8C9A2)),
-        ("Than củi", Color(hex: 0x3F4148)), ("Vải", Color(hex: 0xC9CED8)),
-    ]
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            VStack(spacing: 4) {
-                Text("NƯỚC ĐỤC").font(ResQFont.number(10.5, .medium)).foregroundStyle(p.text2)
-                Image(systemName: "arrow.down").font(.rq(size: 13, weight: .bold)).foregroundStyle(p.blue)
-                VStack(spacing: 3) {
-                    ForEach(Self.layers, id: \.0) { l in
-                        RoundedRectangle(cornerRadius: 5, style: .continuous).fill(l.1).frame(height: 24)
-                    }
-                }
-                .padding(5)
-                .overlay(UnevenRoundedRectangle(bottomLeadingRadius: 30, bottomTrailingRadius: 30, style: .continuous).strokeBorder(p.hair2, lineWidth: 1.5))
-                Image(systemName: "arrow.down").font(.rq(size: 13, weight: .bold)).foregroundStyle(p.blue)
-            }
-            .frame(width: 128)
-            VStack(alignment: .leading, spacing: 3) {
-                Color.clear.frame(height: 36)
-                ForEach(Self.layers, id: \.0) { l in
-                    Text(l.0).font(.rq(size: 12.5)).foregroundStyle(p.text2).frame(height: 24, alignment: .leading)
-                }
-                Spacer(minLength: 8)
-                Text("Lọc xong vẫn\nphải đun sôi").font(.rq(size: 11.5, weight: .medium)).foregroundStyle(p.amber)
-            }
-            Spacer(minLength: 0)
-        }
-        .frame(maxWidth: .infinity)
     }
 }
 

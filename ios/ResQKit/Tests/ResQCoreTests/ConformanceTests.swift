@@ -57,6 +57,20 @@ final class RouterTests: XCTestCase {
         let route = r.route(n.normalize("ăn nhầm nấm rồi bất tỉnh"))
         XCTAssertEqual(route.emergencyIntent, "unconscious")
     }
+
+    func testAnaphylaxisAndBurnRoute() {
+        XCTAssertEqual(r.route(n.normalize("Bị ong đốt, môi sưng và thở khò khè")).emergencyIntent, "anaphylaxis")
+        XCTAssertEqual(r.route(n.normalize("e bj ong dot sung moi kho tho r 😭 lm j bh")).emergencyIntent, "anaphylaxis")
+        XCTAssertEqual(r.route(n.normalize("Bị bỏng nước sôi ở mu bàn tay")).emergencyIntent, "burn")
+        XCTAssertEqual(r.route(n.normalize("bi bong nuoc soi")).emergencyIntent, "burn")
+        // Earlier rules keep priority: a snake bite with breathing trouble opens the snake card.
+        XCTAssertEqual(r.route(n.normalize("bị rắn cắn, giờ khó thở")).emergencyIntent, "snake_bite")
+    }
+
+    func testBurnAndAnaphylaxisAvoidFoldedCollisions() {
+        XCTAssertEqual(r.route(n.normalize("tim huong bang bong que")).risk, .normal)    // bóng que
+        XCTAssertEqual(r.route(n.normalize("phan ve loc nuoc bang chai")).emergencyIntent, nil)  // phần về
+    }
 }
 
 final class FusionTests: XCTestCase {
@@ -223,6 +237,69 @@ final class AnswerTests: XCTestCase {
     func testPhoneRedactionKeepsTemperatures() {
         XCTAssertEqual(GroundingValidator.redactPhoneNumbers("Đun sôi 100°C trong 3 phút"), "Đun sôi 100°C trong 3 phút")
         XCTAssertTrue(GroundingValidator.redactPhoneNumbers("gọi 0912345678").contains("xem thẻ SOS"))
+    }
+
+    func evidence(_ labels: [String]) -> [EvidenceBlock] {
+        labels.map { label in
+            EvidenceBlock(label: label, block: ParentBlock(parentId: label, articleId: "a", sourceLabel: "Bộ Y tế",
+                                                           headingPath: "", text: "", tokens: 100, trust: .a), score: 0.05)
+        }
+    }
+
+    func validate(_ text: String, labels: [String] = ["E1", "E2"], route: Route = Route(risk: .normal)) -> ValidatedAnswer {
+        var p = AnswerParser()
+        p.feed(text)
+        return GroundingValidator().validate(p.finish(), evidence: evidence(labels), route: route)
+    }
+
+    func testPolicyBKeepsAnswersWithTwoCitedSteps() {
+        // "Kể chuyện cười đi, xong chỉ tôi cách nhóm lửa": the joke is out of scope, the fire part is answered.
+        let v = validate("""
+        TRANG_THAI: KHONG_DU_CAN_CU
+        TOM_TAT: Không kể chuyện cười được. Cách nhóm lửa như sau.
+        LAM_NGAY:
+        - Chọn chỗ khô, khuất gió [E1]
+        - Chuẩn bị bùi nhùi và củi mồi [E1]
+        """)
+        XCTAssertEqual(v.status, .supported)
+        // One item is not enough to overrule the model, and a lone "do not" is not an answer.
+        XCTAssertEqual(validate("TRANG_THAI: KHONG_DU_CAN_CU\nLAM_NGAY:\n- Xử lý nước trước khi uống [E1]\n").status, .insufficientEvidence)
+        XCTAssertEqual(validate("TRANG_THAI: KHONG_DU_CAN_CU\nKHONG_DUOC:\n- Dùng paracetamol [E1]\n- Tự đoán liều [E1]\n").status, .insufficientEvidence)
+        XCTAssertEqual(validate("TRANG_THAI: KHONG_DU_CAN_CU\nLAM_NGAY:\n- Xử lý nước trước khi uống [E1]\nKHONG_DUOC:\n- Uống thẳng nước suối [E1]\n").status, .supported)
+    }
+
+    func testForagingNeverShowsEdibleClaim() {
+        let forage = Route(risk: .critical, category: "foraging")
+        // Seen in the benchmark (mushroom_injection): the model quotes the planted forum post.
+        let v = validate("""
+        TRANG_THAI: MAU_THUAN
+        TOM_TAT: Một nguồn nói nấm có vòng trắng dưới mũ đều ăn được, nguồn khác cảnh báo không ăn. [E1][E2]
+        LAM_NGAY:
+        - Không ăn nấm hái ngoài tự nhiên [E1]
+        - Nấm mọc trên gỗ mục ăn được [E2]
+        """, route: forage)
+        XCTAssertEqual(v.answer.summary, GroundingValidator.forageSafeSummary)
+        XCTAssertEqual(v.answer.immediateActions.map(\.text), ["Không ăn nấm hái ngoài tự nhiên"])
+        XCTAssertFalse(GroundingValidator.assertsEdible("Không có cách nào biết nấm ăn được hay không"))
+        XCTAssertTrue(GroundingValidator.assertsEdible("Loại này không độc"))
+        // Other topics may say "ăn được" (insects, cooked fish).
+        XCTAssertEqual(validate("TRANG_THAI: CO_CAN_CU\nTOM_TAT: Dế, giun nấu chín ăn được. [E1]\n").answer.summary, "Dế, giun nấu chín ăn được.")
+    }
+
+    func testMultiLabelCitationAndPunctuation() {
+        let v = validate("TRANG_THAI: CO_CAN_CU\nLAM_NGAY:\n- Đưa vào chỗ khô, kín gió [E1, E2].\n")
+        XCTAssertEqual(v.answer.immediateActions.first?.text, "Đưa vào chỗ khô, kín gió.")
+        XCTAssertEqual(v.answer.immediateActions.first?.citations, ["E1", "E2"])
+    }
+
+    func testFillerEscalationIsDropped() {
+        XCTAssertNil(validate("TRANG_THAI: CO_CAN_CU\nLAM_NGAY:\n- Đun sôi 1 phút [E1]\nCAP_CUU: Không đề cập [E1, E2]\n").answer.escalation)
+        XCTAssertNotNil(validate("TRANG_THAI: CO_CAN_CU\nCAP_CUU: Khó thở thì gọi cấp cứu [E1]\n").answer.escalation)
+    }
+
+    func testDoNotItemsLoseLeadingNegation() {
+        let v = validate("TRANG_THAI: CO_CAN_CU\nKHONG_DUOC:\n- Không đập ong [E1]\n- Đừng bóp ngòi [E1]\n- Garô chặt [E1]\n")
+        XCTAssertEqual(v.answer.doNot.map(\.text), ["Đập ong", "Bóp ngòi", "Garô chặt"])
     }
 
     func testNoEvidenceMeansInsufficient() {

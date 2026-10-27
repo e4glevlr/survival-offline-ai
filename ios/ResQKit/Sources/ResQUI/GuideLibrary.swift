@@ -31,6 +31,11 @@ public enum GuideLibrary {
              ["Không nhảy xuống nếu không được huấn luyện. Ném phao, dây, cành cây.", "Đưa lên bờ, kiểm tra thở.",
               "Không thở: thổi 5 hơi rồi ép tim.", "Giữ ấm, theo dõi đến khi có cứu hộ."],
              ["dốc ngược nạn nhân để \"xóc nước\""]),
+        card("ec-anaphylaxis", "Sốc phản vệ",
+             ["Khó thở, sưng môi lưỡi họng, nổi mẩn khắp người sau ong đốt, ăn hay uống thuốc: gọi cấp cứu ngay.",
+              "Có bút tiêm adrenaline thì giúp tiêm vào mặt ngoài đùi. Không đỡ sau 5–15 phút, tiêm liều thứ hai nếu có.",
+              "Khó thở thì cho ngồi. Choáng, tái thì nằm, kê cao chân.", "Ngừng thở: ép tim ngay."],
+             ["để nạn nhân tự đứng dậy đi lại", "chờ xem có tự đỡ không"]),
         card("ec-burn", "Bỏng",
              ["Tách khỏi nguồn nhiệt, dập lửa trên quần áo.", "Xả nước mát sạch lên vết bỏng ít nhất 20 phút.",
               "Tháo nhẫn, đồng hồ, đồ chật trước khi sưng.", "Che lỏng bằng màng bọc thực phẩm hoặc gạc sạch. Bỏng rộng, bỏng mặt: đi viện."],
@@ -54,6 +59,7 @@ public enum GuideLibrary {
         case "ec-heat": "thermometer.sun.fill"
         case "ec-drown": "figure.pool.swim"
         case "ec-burn": "flame.fill"
+        case "ec-anaphylaxis": "allergens"
         case "ec-choke": "lungs.fill"
         case "ec-fracture": "bandage.fill"
         default: "cross.case.fill"
@@ -95,6 +101,7 @@ public enum GuideLibrary {
         let url = Bundle.module.url(forResource: "guides", withExtension: "json")!
         return try! JSONDecoder().decode(Pack.self, from: Data(contentsOf: url)).articles
     }()
+    static func article(_ id: String) -> Article? { articles.first { $0.id == id } }
     static var summary: String { "Nội dung mẫu · \(cards.count) thẻ khẩn cấp · \(articles.count) bài" }
 
     enum Hit: Identifiable {
