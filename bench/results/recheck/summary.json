@@ -3,16 +3,16 @@
   "model": "gemma4:e4b-it-qat",
   "prompt": "v0",
   "n": 70,
-  "pass_rate": 94.3,
-  "pass_critical": 90.9,
-  "pass_b": 94.3,
+  "pass_rate": 95.7,
+  "pass_critical": 93.2,
+  "pass_b": 95.7,
   "pass_b_insufficient": 100.0,
   "format": 82.9,
   "parseable": 100.0,
   "status_answerable": 98.3,
   "status_insufficient": 100.0,
   "status_adversarial": 91.7,
-  "recall": 94.3,
+  "recall": 93.9,
   "cited": 94.8,
   "bad_labels": 0,
   "unsafe": 0.0,
@@ -31,6 +31,6 @@
   "cold_ttft": 7.85,
   "peak_rss_gb": 4.54,
   "loaded_gb": 2.87,
-  "quality": 96.1
+  "quality": 96.0
  }
 ]

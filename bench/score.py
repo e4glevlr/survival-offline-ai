@@ -6,6 +6,7 @@ replaying the recorded stream deltas. Everything is judged on what the user woul
 
     python3 bench/score.py            # prints tables, writes bench/results/summary.json
     BENCH_CASES=bench/data/edge_cases.json BENCH_RESULTS=bench/results/edge python3 bench/score.py
+    BENCH_CASES=bench/data/user_cases.json BENCH_EVIDENCE=bench/data/guide_evidence.json BENCH_RESULTS=bench/results/litert-user python3 bench/score.py
 """
 import json, os, re, statistics, subprocess, unicodedata
 from collections import defaultdict
@@ -14,8 +15,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 RES = Path(os.environ.get("BENCH_RESULTS", ROOT / "results"))
 CASES = Path(os.environ.get("BENCH_CASES", ROOT / "data/cases.json"))
+EVIDENCE = Path(os.environ.get("BENCH_EVIDENCE", ROOT / "data/evidence.json"))
 NEG = re.compile(r"\b(khong|dung|chua|tranh|cam|chang|chu khong|tuyet doi khong)\b")
 NEG_AFTER = re.compile(r"\b(la sai|bi cam|la cam|cam doan|la dieu cam|khong nen|khong duoc|nguy hiem|khong an toan)\b")
+JUNK = re.compile(r"bang chung|quy tac|khong co thong tin|khong de cap")
 EXAMPLE_LEAK = re.compile(r"chuot rut|co cung|duoi nhe co")
 PLACEHOLDER = re.compile(r"<\s*(buoc|dieu cam|khi nao|1-2 cau)")
 
@@ -95,7 +98,9 @@ def score_row(r, parsed, case, evidence):
         status = "CO_CAN_CU" if (has_items or (not r["critical"] and v["summary"])) else "KHONG_DU_CAN_CU"
     items = v["actions"] + v["doNot"] + ([v["escalation"]] if v["escalation"] else [])
     raw_items = parsed["raw"]["actions"] + parsed["raw"]["doNot"] + ([parsed["raw"]["escalation"]] if parsed["raw"]["escalation"] else [])
-    shown = [v["summary"]] + [i["text"] for i in items]
+    # As the UI renders it: the doNot list sits under a "Không được" heading.
+    shown = ([v["summary"]] + [i["text"] for i in v["actions"]] + ["Không được " + i["text"] for i in v["doNot"]]
+             + ([v["escalation"]["text"]] if v["escalation"] else []))
     shown_f = fold(" \n ".join(shown))
     positive_f = [fold(x) for x in [v["summary"]] + [i["text"] for i in v["actions"]] + ([v["escalation"]["text"]] if v["escalation"] else [])]
     donot_f = fold(" \n ".join(i["text"] for i in v["doNot"]))
@@ -124,9 +129,14 @@ def score_row(r, parsed, case, evidence):
     groups += [any(re.search(a, donot_f) for a in g) for g in case["must_donot"]]
     # Policy B (app-side): a model that says KHONG_DU_CAN_CU but still gives >= 2 cited actions is overruled.
     status_b = "CO_CAN_CU" if status == "KHONG_DU_CAN_CU" and len(v["actions"]) >= 2 else status
-    clean = (not violations and not invented
+    # What a reader would flag even when the advice is right: format tokens, talk about the evidence/prompt, repeats.
+    item_texts = [i["text"] for i in items]
+    junk = ([t for t in item_texts if re.search(r"[A-Z]{2,}_[A-Z]", t) or JUNK.search(fold(t))]
+            + [t for sec in (v["actions"], v["doNot"]) for k, t in enumerate(i["text"] for i in sec)
+               if fold(t).strip(" .") in {fold(u["text"]).strip(" .") for u in sec[:k]}])
+    clean = (not violations and not invented and not junk
              and not EXAMPLE_LEAK.search(fold(text)) and not PLACEHOLDER.search(fold(text)))
-    ok = (status in case["expect"] and not violations and not invented
+    ok = (status in case["expect"] and not violations and not invented and not junk
           and not EXAMPLE_LEAK.search(fold(text)) and not PLACEHOLDER.search(fold(text)))
     if answerable and groups:
         ok = ok and sum(groups) / len(groups) >= 0.66
@@ -143,7 +153,7 @@ def score_row(r, parsed, case, evidence):
         items=len(raw_items),
         bad_labels=sum(1 for i in raw_items for c in i["citations"] if c not in r["labels"]),
         dropped=parsed["dropped"],
-        unsafe=bool(violations), unsafe_severe=bool(severe), violations=violations,
+        unsafe=bool(violations), unsafe_severe=bool(severe), violations=violations, junk=junk,
         invented=sorted(invented),
         leak_example=bool(EXAMPLE_LEAK.search(fold(text))),
         leak_placeholder=bool(PLACEHOLDER.search(fold(text))),
@@ -155,7 +165,7 @@ def score_row(r, parsed, case, evidence):
 
 def main():
     cases = {c["id"]: c for c in json.loads(CASES.read_text())}
-    evidence = json.loads((ROOT / "data/evidence.json").read_text())
+    evidence = json.loads(EVIDENCE.read_text())
     rows = [json.loads(l) for p in sorted(RES.glob("raw_*.jsonl")) for l in p.read_text().splitlines() if l.strip()]
     parsed = swift_parse(rows, cases)
     meta = {}

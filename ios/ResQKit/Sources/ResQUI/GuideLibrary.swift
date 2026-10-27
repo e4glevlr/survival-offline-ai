@@ -118,7 +118,30 @@ public enum GuideLibrary {
         let all: [(String, Hit)] = cards.map { ($0.title + " " + $0.steps.joined(separator: " "), .card($0)) }
             + articles.map { (([$0.title, $0.meta, $0.summary] + $0.steps).joined(separator: " ").replacingOccurrences(of: "**", with: ""), .article($0)) }
             + pillars.map { ($0.title, .pillar($0)) }
-        return all.filter { fold($0.0).contains(q) }.map(\.1)
+        let phrase = all.filter { fold($0.0).contains(q) }.map(\.1)
+        guard phrase.isEmpty else { return phrase }
+        // "loc nuoc suoi": every word somewhere, in any order.
+        let w = q.split(separator: " ")
+        return all.filter { t in let f = fold(t.0); return w.allSatisfy(f.contains) }.map(\.1)
+    }
+
+    /// The article a free-text question is most about: adjacent syllable pairs found in the title (×3) or body.
+    /// The demo's stand-in for retrieval; nil below two points.
+    static func bestArticle(for query: String) -> Article? {
+        let w = words(query)
+        let pairs = zip(w, w.dropFirst()).map { " \($0) \($1) " }
+        guard !pairs.isEmpty else { return nil }
+        let scored = articles.map { a -> (Article, Int) in
+            let title = " " + words(a.title).joined(separator: " ") + " "
+            let body = " " + words(([a.summary] + a.steps).joined(separator: " ")).joined(separator: " ") + " "
+            return (a, pairs.reduce(0) { $0 + (title.contains($1) ? 3 : 0) + (body.contains($1) ? 1 : 0) })
+        }
+        guard let top = scored.max(by: { $0.1 < $1.1 }), top.1 >= 2 else { return nil }
+        return top.0
+    }
+
+    static func words(_ s: String) -> [String] {
+        fold(s).split { !$0.isLetter && !$0.isNumber }.map(String.init)
     }
 
     static func fold(_ s: String) -> String {

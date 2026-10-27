@@ -9,12 +9,16 @@ public struct RiskRouter: Sendable {
         public let category: String
         /// Accented, lowercase phrases; any match triggers the rule.
         public let phrases: [String]
+        /// Matched only when the user typed accents: folded, "hóc" is "học", "ngất" is "ngạt"/"ngắt",
+        /// "còn thở" is "con thỏ", "xỉu" is "xíu".
+        public let accentedPhrases: [String]
 
-        public init(intent: String, risk: RiskLevel, category: String, phrases: [String]) {
+        public init(intent: String, risk: RiskLevel, category: String, phrases: [String], accentedPhrases: [String] = []) {
             self.intent = intent
             self.risk = risk
             self.category = category
             self.phrases = phrases
+            self.accentedPhrases = accentedPhrases
         }
     }
 
@@ -37,7 +41,7 @@ public struct RiskRouter: Sendable {
         }
 
         var best: Rule?
-        for rule in rules where rule.phrases.contains(where: matches) {
+        for rule in rules where rule.phrases.contains(where: matches) || (accented && rule.accentedPhrases.contains(where: matches)) {
             // Highest risk wins; ties keep the first rule (rule order = priority).
             if best == nil || rule.risk > best!.risk { best = rule }
         }
@@ -54,11 +58,17 @@ public struct RiskRouter: Sendable {
 
     public static let defaultRules: [Rule] = [
         Rule(intent: "severe_bleeding", risk: .emergency, category: "first_aid",
-             phrases: ["chảy máu nhiều", "máu chảy không cầm", "đứt động mạch", "mất nhiều máu"]),
-        Rule(intent: "unconscious", risk: .emergency, category: "first_aid",
-             phrases: ["bất tỉnh", "ngừng thở", "không thở", "ngất xỉu", "ép tim", "cpr"]),
+             phrases: ["chảy máu nhiều", "máu chảy nhiều", "chảy nhiều máu", "máu chảy không cầm", "máu phun",
+                       "vết cắt sâu", "đứt động mạch", "mất nhiều máu"]),
+        // Before "unconscious": "bé hóc hạt nhãn không thở được" needs the choking card, not CPR.
         Rule(intent: "choking", risk: .emergency, category: "first_aid",
-             phrases: ["hóc dị vật", "nghẹn thở", "mắc nghẹn"]),
+             phrases: ["hóc dị vật", "nghẹn thở", "mắc nghẹn", "bị nghẹn", "bị hóc", "hóc xương", "hóc hạt", "hóc kẹo"],
+             accentedPhrases: ["hóc", "nghẹn"]),
+        Rule(intent: "unconscious", risk: .emergency, category: "first_aid",
+             phrases: ["bất tỉnh", "ngừng thở", "không thở", "ko thở", "ngất xỉu", "bị ngất", "ngất đi", "bị xỉu",
+                       "không tỉnh", "ép tim", "cpr"],
+             // Not bare "ngất": "sắp ngất" in heat stroke is not a CPR case.
+             accentedPhrases: ["ngất nằm", "ngất rồi", "ngất lịm", "đang ngất", "xỉu", "còn thở"]),
         Rule(intent: "snake_bite", risk: .emergency, category: "first_aid",
              phrases: ["rắn cắn", "rắn độc", "cắn rắn"]),
         Rule(intent: "drowning", risk: .emergency, category: "first_aid",
@@ -74,7 +84,7 @@ public struct RiskRouter: Sendable {
         Rule(intent: "hypothermia", risk: .emergency, category: "first_aid",
              phrases: ["hạ thân nhiệt", "run cầm cập", "lạnh cóng người"]),
         Rule(intent: "heat_stroke", risk: .emergency, category: "first_aid",
-             phrases: ["sốc nhiệt", "say nắng nặng", "trúng nắng"]),
+             phrases: ["sốc nhiệt", "say nắng", "cảm nắng", "trúng nắng"]),
         Rule(intent: "poisoning", risk: .critical, category: "foraging",
              phrases: ["ngộ độc", "ăn nhầm", "trúng độc", "nấm độc", "lá độc", "quả độc"]),
         Rule(intent: "fracture", risk: .critical, category: "first_aid",

@@ -47,6 +47,8 @@ public struct AssistantTurn: Equatable, Sendable {
     public var noAnswer: NoAnswerReason?
     public var isStreaming = true
     public var failed = false
+    /// The user pressed stop: keep what was written, drop the "writing" state.
+    public var stopped = false
 
     public init() {}
 
@@ -119,6 +121,9 @@ public final class ChatViewModel {
     public func cancel() {
         task?.cancel()
         isBusy = false
+        if let last = messages.last, case .assistant(let turn) = last.role, turn.isStreaming {
+            update(last.id) { $0.isStreaming = false; $0.stopped = true }
+        }
     }
 
     public func newConversation() {

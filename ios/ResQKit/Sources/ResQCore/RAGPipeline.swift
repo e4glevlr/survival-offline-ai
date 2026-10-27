@@ -41,6 +41,8 @@ public enum PipelineEvent: Sendable, Equatable {
 
 public enum NoAnswerReason: String, Sendable, Equatable {
     case insufficientEvidence, llmDisabled
+    /// Small talk (`SmallTalk`): a friendly line, no warning.
+    case greeting, thanks
 }
 
 // MARK: - Pipeline
@@ -93,6 +95,8 @@ public struct RAGPipeline: Sendable {
         // Stage A: routing (rules, < 1 ms)
         let query = normalizer.normalize(text)
         let route = router.route(query, statedRegion: state.environment)
+
+        if route.emergencyIntent == nil, let reason = SmallTalk.reason(for: query) { emit(.noAnswer(reason: reason)); return }
 
         // Emergency bypass: reviewed card first, never blocked by model loading.
         if let intent = route.emergencyIntent, let card = try await store.emergencyCard(intent: intent) {

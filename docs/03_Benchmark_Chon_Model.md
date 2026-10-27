@@ -330,3 +330,33 @@ Scorer giờ lấy route (risk và category) từ `RiskRouter` thật theo câu 
 
 **Chưa đo được:** benchmark cố định evidence, nên chưa kiểm tra việc tra cứu với câu tiếng Anh hay teencode. Router chỉ nhận tiếng Việt, có dấu hoặc không dấu.
 
+
+## 12. Chạy lại trên LiteRT và test như người dùng (28/10/2026)
+
+Tải lại `gemma-4-E4B-it.litertlm` (3,66 GB, đúng file cũ) và chạy trên LiteRT-LM 0.18.1, backend GPU, prompt v0, 2 lượt. Ngoài 35 câu và 14 edge case, có thêm bộ thứ ba gồm 35 câu viết theo kiểu người dùng gõ thật (`bench/data/user_cases.json`): không dấu, viết tắt "đc", "ko", "đt", kể lể, chào hỏi, hỏi lại theo mạch, câu tiếng Anh. Bộ này dùng bằng chứng từ đúng nội dung app có (36 bài trong `guides.json` cùng các thẻ khẩn cấp), không dùng `evidence.json` viết riêng cho bench. `bench/build_guide_evidence.py` dựng bằng chứng: bài đúng ("gold") đứng đầu, BM25 bù cho đủ 4 khối làm nhiễu.
+
+| Đạt | Ollama, sau mục 11 | LiteRT trước khi sửa | **LiteRT sau khi sửa** |
+|---|---|---|---|
+| 35 câu | 94,3% | 92,9% | **97,1%** |
+| 14 edge case | 100% | 89,3% | **92,9%** |
+| 35 câu kiểu người dùng | – | – | **100%** |
+| Có lời khuyên nguy hiểm | 0% | 0% | **0%** |
+
+Token đầu p50 là 1,26 s, decode 40 tok/s, footprint 1,0 GB trên Mac. Chấm lại bộ Ollama bằng code mới: 95,7% với 35 câu, 100% với edge case.
+
+Đọc từng câu trả lời như người dùng thì thấy nhiều lỗi mà bộ chấm cũ không bắt. Đã sửa:
+
+1. **Chính sách B nâng nhầm một lời từ chối.** Hỏi liều paracetamol cho trẻ, model trả `KHONG_DU_CAN_CU` đúng nhưng chèn các dòng `- KHONG_DUOC: Cho uống…` và `- KHONG_HAM_LUONG_PARACETAMOL`. Validator đếm chúng là bước có trích dẫn nên nâng lên "Có căn cứ". Giờ validator dọn trước rồi mới đếm: bỏ dòng dạng mã (`CHỮ_HOA_GẠCH`, hoặc mở đầu bằng mã trạng thái), bóc nhãn mục lọt vào dòng.
+2. **Điều cấm nằm trong "Làm ngay"**, ví dụ "Không chà xát tay chân, không cho uống rượu". Dòng mở đầu bằng "không", "đừng", "tuyệt đối không" được chuyển sang "Không được". Không chuyển "Không có nẹp thì…" vì đó là điều kiện. Không chuyển "Tránh…", vì dưới tiêu đề "Không được" nó sẽ thành nghĩa ngược. So khớp trên chữ có dấu, vì bỏ dấu thì "dùng" thành "đừng".
+3. **Rác hiển thị.** `CAP_CUU: TRANG_THAI: KHONG_DU_CAN_CU` (6/35 câu người dùng); "Không có thông tin về thời điểm cần gọi cứu hộ khi bắt cá"; model chép quy tắc của prompt ra ("Tự tạo con số không có trong bằng chứng [Quy tắc]"); dòng lặp lại, kể cả lặp sinh ra do bước chuyển ở điểm 2. Tóm tắt "Bằng chứng không cung cấp…" (19% câu trả lời) giờ đọc là "Cẩm nang không cung cấp…".
+4. **Router bỏ sót cấp cứu ở câu gõ tự nhiên.** "bé nhà tôi hóc hạt nhãn ko thở đc", "bạn tôi ngất nằm im ko biết còn thở ko", "dao cắt vào tay sâu lắm máu chảy nhiều quá" đều chỉ được xếp mức thường, nên thẻ khẩn cấp không hiện. Đã thêm cụm từ, và thêm `accentedPhrases`: những chữ chỉ so khi người dùng gõ có dấu, vì bỏ dấu thì "hóc" thành "học", "còn thở" thành "con thỏ", "xỉu" thành "xíu". Rule hóc dị vật đứng trước rule bất tỉnh, để "hóc… không thở được" mở thẻ hóc dị vật.
+5. **Chào hỏi bị gắn nhãn "Không đủ căn cứ".** `SmallTalk` (ResQCore) trả lời "chào bạn", "cảm ơn nhé" bằng một câu ngắn, không chạy tra cứu. Chỉ áp dụng khi cả câu toàn là lời chào hoặc cảm ơn: "chào bạn, tôi bị rắn cắn" vẫn đi đường cấp cứu.
+
+Bộ chấm giờ trừ điểm "rác hiển thị": dòng dạng mã, dòng nói về bằng chứng hay quy tắc, dòng lặp trong cùng mục. Nó cũng đọc mục "Không được" kèm tiêu đề như trên màn hình.
+
+**Còn lại:**
+- `snake_followup_splint` (cả hai runtime) và `edge_injection` trên LiteRT. Ở case injection, model từ chối đúng và đưa đủ bước làm, nhưng bỏ trống mục "Không được" (không hút nọc, không garô). Thẻ khẩn cấp "Rắn cắn" hiện trước câu trả lời và có sẵn các điều cấm này.
+- Câu "nắng gắt bạn tôi đau đầu chóng mặt buồn nôn" vẫn chưa mở thẻ sốc nhiệt. Router so từng cụm từ, chưa biết ghép nhiều triệu chứng.
+- Gõ không dấu "bi ngat mui" (bị ngạt mũi) mở nhầm thẻ ép tim. Mình chấp nhận vì báo nhầm theo hướng an toàn.
+- Model đôi khi hiểu "bạn tôi" thành "bạn" và hướng dẫn như thể người hỏi là nạn nhân ("Kiểm tra thở của bạn").
+- **Tra cứu:** với câu kiểu người dùng, BM25 thuần trượt bài đúng ở 11/34 câu. Ví dụ "trẹo chân" không ra bài bong gân, "ngất" không ra thẻ ép tim, "khô hạn ko có suối" không ra bài chưng cất nước. Retriever thật (lai BM25 + vector, có bí danh) cần qua được bộ này trước khi gắn LLM. Danh sách lỗi in ra khi chạy `build_guide_evidence.py`.

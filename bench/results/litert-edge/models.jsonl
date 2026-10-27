@@ -1,0 +1,1 @@
+{"model": "litert/gemma4-e4b", "prompt": "v0", "init_s": 1.186701541999355, "cold_total": 7.964930166999693, "cold_ttft": 1.5125359170051524, "peak_rss": 1137217304, "peak_footprint": 1137217304, "file_gb": 3.65953024}

@@ -12,6 +12,7 @@
 		BD9C6ECF893F22EB637F19B6 /* ResQUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2D5F6197526A9F47AF196803 /* ResQUI */; };
 		D4615DE25987703A963509B1 /* ScreenTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FBC26D8A7CAA0255E2A8561 /* ScreenTour.swift */; };
 		D757AC1264A1C670788A7362 /* ResQApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0826F2AA55D66447BCC14F5 /* ResQApp.swift */; };
+		DE300027DF8C5F6C66898E1D /* UserJourney.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD7A8B6652B3739E7E325FA /* UserJourney.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 		064694E566DA0AACDFD31674 /* ResQApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ResQApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FBC26D8A7CAA0255E2A8561 /* ScreenTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTour.swift; sourceTree = "<group>"; };
 		73BA34BD1F702E883A9A4F45 /* ResQAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ResQAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BD7A8B6652B3739E7E325FA /* UserJourney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserJourney.swift; sourceTree = "<group>"; };
 		7F3DDB7D900906EBEE745280 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		87CF7AA0BF783FC2F28D1179 /* ResQKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ResQKit; path = ../ResQKit; sourceTree = SOURCE_ROOT; };
 		A0826F2AA55D66447BCC14F5 /* ResQApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResQApp.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				6FBC26D8A7CAA0255E2A8561 /* ScreenTour.swift */,
+				7BD7A8B6652B3739E7E325FA /* UserJourney.swift */,
 			);
 			path = ResQAppUITests;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4615DE25987703A963509B1 /* ScreenTour.swift in Sources */,
+				DE300027DF8C5F6C66898E1D /* UserJourney.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

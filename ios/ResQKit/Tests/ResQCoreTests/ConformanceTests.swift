@@ -58,6 +58,33 @@ final class RouterTests: XCTestCase {
         XCTAssertEqual(route.emergencyIntent, "unconscious")
     }
 
+    func testEverydayWordingStillOpensTheCard() {
+        // Missed before: how people actually type it (bench/data/user_cases.json).
+        XCTAssertEqual(r.route(n.normalize("bé nhà tôi hóc hạt nhãn ko thở đc")).emergencyIntent, "choking")
+        XCTAssertEqual(r.route(n.normalize("be nha toi hoc hat nhan ko tho dc")).emergencyIntent, "choking")
+        XCTAssertEqual(r.route(n.normalize("bạn tôi ngất nằm im ko biết còn thở ko")).emergencyIntent, "unconscious")
+        XCTAssertEqual(r.route(n.normalize("ban toi bi ngat roi")).emergencyIntent, "unconscious")
+        XCTAssertEqual(r.route(n.normalize("dao cắt vào tay sâu lắm máu chảy nhiều quá")).emergencyIntent, "severe_bleeding")
+        XCTAssertEqual(r.route(n.normalize("bị say nắng chóng mặt")).emergencyIntent, "heat_stroke")
+        // Folded collisions the accented-only phrases avoid.
+        XCTAssertNil(r.route(n.normalize("hoc cach nhom lua")).emergencyIntent)        // học
+        XCTAssertNil(r.route(n.normalize("lam bay bat con tho")).emergencyIntent)      // con thỏ
+        XCTAssertNil(r.route(n.normalize("cho xiu nhe")).emergencyIntent)              // chờ xíu
+        // Known, accepted: unaccented "bi ngat mui" (bị ngạt mũi) reads as "bị ngất" and opens the CPR card.
+        XCTAssertNil(r.route(n.normalize("học cách nhóm lửa")).emergencyIntent)
+        XCTAssertNotEqual(r.route(n.normalize("Đi bộ giữa trưa, bạn tôi da nóng ran, nói lảm nhảm, sắp ngất")).emergencyIntent, "unconscious")
+    }
+
+    func testSmallTalkOnlyWhenNothingElseIsAsked() {
+        XCTAssertEqual(SmallTalk.reason(for: n.normalize("chào bạn")), .greeting)
+        XCTAssertEqual(SmallTalk.reason(for: n.normalize("Hello ResQ!")), .greeting)
+        XCTAssertEqual(SmallTalk.reason(for: n.normalize("cảm ơn nhé")), .thanks)
+        XCTAssertEqual(SmallTalk.reason(for: n.normalize("ok thanks")), .thanks)
+        XCTAssertNil(SmallTalk.reason(for: n.normalize("chào bạn, tôi bị rắn cắn")))
+        XCTAssertNil(SmallTalk.reason(for: n.normalize("ok")))
+        XCTAssertNil(SmallTalk.reason(for: n.normalize("cam on tren cay an duoc ko")))
+    }
+
     func testAnaphylaxisAndBurnRoute() {
         XCTAssertEqual(r.route(n.normalize("Bị ong đốt, môi sưng và thở khò khè")).emergencyIntent, "anaphylaxis")
         XCTAssertEqual(r.route(n.normalize("e bj ong dot sung moi kho tho r 😭 lm j bh")).emergencyIntent, "anaphylaxis")
@@ -279,7 +306,8 @@ final class AnswerTests: XCTestCase {
         - Nấm mọc trên gỗ mục ăn được [E2]
         """, route: forage)
         XCTAssertEqual(v.answer.summary, GroundingValidator.forageSafeSummary)
-        XCTAssertEqual(v.answer.immediateActions.map(\.text), ["Không ăn nấm hái ngoài tự nhiên"])
+        XCTAssertTrue(v.answer.immediateActions.isEmpty)
+        XCTAssertEqual(v.answer.doNot.map(\.text), ["Ăn nấm hái ngoài tự nhiên"])
         XCTAssertFalse(GroundingValidator.assertsEdible("Không có cách nào biết nấm ăn được hay không"))
         XCTAssertTrue(GroundingValidator.assertsEdible("Loại này không độc"))
         // Other topics may say "ăn được" (insects, cooked fish).
@@ -300,6 +328,65 @@ final class AnswerTests: XCTestCase {
     func testDoNotItemsLoseLeadingNegation() {
         let v = validate("TRANG_THAI: CO_CAN_CU\nKHONG_DUOC:\n- Không đập ong [E1]\n- Đừng bóp ngòi [E1]\n- Garô chặt [E1]\n")
         XCTAssertEqual(v.answer.doNot.map(\.text), ["Đập ong", "Bóp ngòi", "Garô chặt"])
+    }
+
+    func testFormatLeaksAreTidiedBeforePolicyB() {
+        // LiteRT E4B on "liều paracetamol cho trẻ 3 tuổi": a correct refusal padded with format fragments.
+        let v = validate("""
+        TRANG_THAI: KHONG_DU_CAN_CU
+        TOM_TAT: Bằng chứng không cung cấp liều lượng paracetamol cho trẻ em.
+        LAM_NGAY:
+        - KHONG_DUOC: Cho uống paracetamol khi bị sốc nhiệt [E1]
+        - KHONG_HAM_LUONG_PARACETAMOL [E1]
+        KHONG_DUOC:
+        - KHONG_DUOC: Cho uống thuốc hạ sốt khi bị sốc nhiệt [E1]
+        CAP_CUU: KHONG_DUOC_XAC_DINH_CAN_CUU_HO [E1]
+        """)
+        XCTAssertEqual(v.status, .insufficientEvidence)
+        XCTAssertEqual(v.answer.summary, "Cẩm nang không cung cấp liều lượng paracetamol cho trẻ em.")
+        XCTAssertTrue(v.answer.immediateActions.isEmpty)
+        XCTAssertEqual(v.answer.doNot.map(\.text), ["Cho uống paracetamol khi bị sốc nhiệt", "Cho uống thuốc hạ sốt khi bị sốc nhiệt"])
+        XCTAssertNil(v.answer.escalation)
+    }
+
+    func testMetaTalkDuplicatesAndStatusInEscalationAreDropped() {
+        // LiteRT E4B on user-style questions (bench/data/user_cases.json).
+        let v = validate("""
+        TRANG_THAI: CO_CAN_CU
+        TOM_TAT: Không ăn nấm dại. [E1]
+        LAM_NGAY:
+        - Dừng lại, ngồi xuống, uống nước [E1]
+        KHONG_DUOC:
+        - Ăn nấm dại [E1]
+        - Ăn nấm dại. [E1]
+        - Tự tạo con số không có trong bằng chứng [E1]
+        - Không có thông tin cụ thể về việc xếp gì dưới đất [E1]
+        - KHONG_DU_CAN_CU (về việc có cần đến cơ sở y tế hay không) [E1]
+        CAP_CUU: TRANG_THAI: KHONG_DU_CAN_CU
+        """)
+        XCTAssertEqual(v.answer.doNot.map(\.text), ["Ăn nấm dại"])
+        XCTAssertNil(v.answer.escalation)
+        XCTAssertNil(validate("TRANG_THAI: CO_CAN_CU\nLAM_NGAY:\n- Ép chặt [E1]\nCAP_CUU: Không có thông tin về thời điểm cần gọi cứu hộ khi bắt cá. [E1]\n").answer.escalation)
+    }
+
+    func testProhibitionsFiledUnderActionsMoveToDoNot() {
+        let v = validate("""
+        TRANG_THAI: CO_CAN_CU
+        LAM_NGAY:
+        - Thay quần áo ướt bằng đồ khô [E1]
+        - Không chà xát tay chân, không cho uống rượu [E1]
+        - Dùng vải sạch ép lên vết thương [E1]
+        - Cầm máu bằng cách ép chặt [E1]
+        - Không có nẹp thì dùng cành cây thẳng [E1]
+        - Tránh nấm lạ [E1]
+        """)
+        XCTAssertEqual(v.answer.immediateActions.map(\.text), ["Thay quần áo ướt bằng đồ khô", "Dùng vải sạch ép lên vết thương",
+                                                              "Cầm máu bằng cách ép chặt", "Không có nẹp thì dùng cành cây thẳng",
+                                                              "Tránh nấm lạ"])
+        XCTAssertEqual(v.answer.doNot.map(\.text), ["Chà xát tay chân, không cho uống rượu"])
+        // Ollama E4B on lost_night: the moved item repeats the KHONG_DUOC one.
+        let lost = validate("TRANG_THAI: CO_CAN_CU\nLAM_NGAY:\n- Dừng lại [E1]\n- Không di chuyển trong đêm [E1]\nKHONG_DUOC:\n- Di chuyển trong đêm [E1]\n")
+        XCTAssertEqual(lost.answer.doNot.map(\.text), ["Di chuyển trong đêm"])
     }
 
     func testNoEvidenceMeansInsufficient() {

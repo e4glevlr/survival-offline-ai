@@ -131,13 +131,24 @@ public struct DemoResponder: AnswerResponder {
         return Topic(sources: [src("Sơ cứu › \(c.title)", "Nội dung mẫu", .a, c.steps.joined(separator: " "))], script: script)
     }
 
+    /// No written script either: answer from the guide article the question is most about.
+    static func topic(from a: GuideLibrary.Article) -> Topic {
+        let donts = a.warnings.filter { $0.hasPrefix("Không ") }
+        let script = (["TRANG_THAI: CO_CAN_CU", "TOM_TAT: \(a.summary) [E1]", "LAM_NGAY:"]
+            + a.steps.prefix(5).map { "- \($0.replacingOccurrences(of: "**", with: "")) [E1]" }
+            + (donts.isEmpty ? [] : ["KHONG_DUOC:"] + donts.map { "- \($0) [E1]" })).joined(separator: "\n")
+        return Topic(sources: [src("\(a.pillar) › \(a.title)", a.source, TrustTier(rawValue: a.trust) ?? .c, a.summary, article: a.id)],
+                     script: script)
+    }
+
     /// `words` is the folded query as space-padded tokens, e.g. " bat ca suoi ".
     static func pick(words q: String, route: Route, hasImage: Bool, card: EmergencyCard?) -> Topic? {
         if route.emergencyIntent == "snake_bite" { return snake }
         if let card { return topic(from: card) }
         if hasImage || route.category == "foraging" || q.contains(" nam ") { return mushroom }
         if q.contains(" ca ") && [" bat ", " bay ", " cau "].contains(where: q.contains) { return fish }
-        if route.category == "water" || q.contains(" nuoc ") { return water }
+        // Not any " nuoc ": "còn một chai nước, bị lạc" is about being lost.
+        if route.category == "water" { return water }
         if q.contains(" lua ") || q.contains(" cui ") { return fire }
         return nil
     }
@@ -157,12 +168,15 @@ public struct DemoResponder: AnswerResponder {
         let plan = DevicePolicy().plan(installed: request.installed, device: request.device, route: route)
         let card = route.emergencyIntent.flatMap { Self.cardForIntent[$0] }.flatMap { id in GuideLibrary.cards.first { $0.id == id } }
         let words = " " + query.terms.joined(separator: " ") + " "
+        let small = route.emergencyIntent == nil ? SmallTalk.reason(for: query) : nil
         let topic = Self.pick(words: words, route: route, hasImage: request.imageJPEG != nil, card: card)
+            ?? GuideLibrary.bestArticle(for: request.text).map(Self.topic(from:))
         let evidence = Self.evidence(topic?.sources ?? Self.nearest)
 
         return AsyncThrowingStream { c in
             let task = Task {
                 try? await Task.sleep(for: .milliseconds(120))
+                if let small { c.yield(.noAnswer(reason: small)); return c.finish() }
                 if let card { c.yield(.emergencyCard(card)) }
                 try? await Task.sleep(for: .milliseconds(150))
                 c.yield(.evidence(evidence))

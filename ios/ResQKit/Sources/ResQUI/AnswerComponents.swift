@@ -463,7 +463,12 @@ public struct AssistantTurnView: View {
             if turn.isStreaming && turn.answer == nil {
                 ReadingLabel(text: turn.evidence.isEmpty ? "Đang tìm trong cẩm nang…" : "Đang đọc \(turn.evidence.count) nguồn trong cẩm nang…")
             }
-            if let reason = turn.noAnswer {
+            if let reason = turn.noAnswer, reason == .greeting || reason == .thanks {
+                Text(reason == .thanks
+                     ? "Không có gì. Cần gì cứ hỏi tiếp, ResQ chạy ngay trên máy, không cần sóng."
+                     : "Chào bạn. Mình là ResQ, trả lời về sinh tồn và sơ cứu bằng cẩm nang trên máy. Bạn đang gặp chuyện gì, ở đâu, có những đồ gì?")
+                    .font(ResQFont.lead).foregroundStyle(p.text).lineSpacing(4)
+            } else if let reason = turn.noAnswer {
                 header(Tag(reason == .llmDisabled ? "Chỉ tra cứu" : "Không đủ căn cứ", icon: "questionmark.circle", tone: .warn))
                 Text(reason == .llmDisabled
                      ? "AI đang tắt (chế độ chỉ tra cứu hoặc pin quá yếu). Thẻ và các nguồn liên quan ở bên dưới."
@@ -474,7 +479,8 @@ public struct AssistantTurnView: View {
                 }
             }
             if let a = turn.answer {
-                header(turn.status?.tag ?? Tag("Đang viết", icon: "ellipsis", tone: .muted))
+                header(turn.status?.tag ?? (turn.stopped ? Tag("Đã dừng", icon: "stop.circle", tone: .muted)
+                                                          : Tag("Đang viết", icon: "ellipsis", tone: .muted)))
                 if !a.summary.isEmpty {
                     ItemText(item: AnswerItem(text: a.summary, citations: a.summaryCitations), font: ResQFont.lead)
                 }
@@ -493,7 +499,7 @@ public struct AssistantTurnView: View {
                 Tag("Lỗi khi tạo câu trả lời. Thẻ và nguồn vẫn dùng được", icon: "exclamationmark.triangle", tone: .warn)
             }
             if !turn.evidence.isEmpty { SourcesStrip(evidence: turn.evidence) }
-            if !turn.isStreaming { ActionRow(turn: turn) }
+            if !turn.isStreaming && turn.noAnswer != .greeting && turn.noAnswer != .thanks { ActionRow(turn: turn) }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .animation(ResQMotion.ease, value: turn)

@@ -22,8 +22,27 @@ public struct GroundingValidator: Sendable {
             return AnswerItem(text: text, citations: cites)
         }
 
+        // Small models leak the format into items ("- KHONG_DUOC: Cho uống…", "- KHONG_HAM_LUONG_X"), echo the
+        // prompt's rules ("- Tự tạo con số không có trong bằng chứng"), repeat items and file prohibitions under
+        // LAM_NGAY ("- Không chà xát tay chân"). Tidy before anything is counted.
+        var actions: [AnswerItem] = [], doNot: [AnswerItem] = [], seen: Set<String> = []
+        for (item, fromDoNot) in raw.immediateActions.map({ ($0, false) }) + raw.doNot.map({ ($0, true) }) {
+            let (label, text) = Self.splittingSectionLabel(item.text)
+            if Self.isFormatToken(text) || Self.isMeta(text) { dropped += 1; continue }
+            let tidy = AnswerItem(text: text, citations: item.citations)
+            let isDoNot = fromDoNot || label == "KHONG_DUOC" || Self.isProhibition(text)
+            // Compared as shown: "Không di chuyển trong đêm" moved from LAM_NGAY repeats KHONG_DUOC's "Di chuyển trong đêm".
+            let shown = isDoNot ? Self.droppingLeadingNegation(tidy).text : text
+            let key = (isDoNot ? "x " : "o ") + QueryNormalizer.fold(shown.lowercased())
+                .trimmingCharacters(in: .punctuationCharacters.union(.whitespaces))
+            if !seen.insert(key).inserted { dropped += 1; continue }
+            if isDoNot { doNot.append(tidy) } else { actions.append(tidy) }
+        }
+
         var a = raw
+        // The prompt calls the sources "bằng chứng"; the user knows them as the guide.
         a.summary = Self.redactPhoneNumbers(a.summary)
+            .replacingOccurrences(of: "Bằng chứng", with: "Cẩm nang").replacingOccurrences(of: "bằng chứng", with: "cẩm nang")
         // Foraging: the model must never say a wild plant or mushroom is edible, not even when quoting a
         // source it disagrees with ("một nguồn nói nấm này ăn được…"). Enforced here, not trusted to the prompt.
         if route.category == "foraging" && Self.assertsEdible(a.summary) {
@@ -31,10 +50,14 @@ public struct GroundingValidator: Sendable {
             a.summaryCitations = []
         }
         a.summaryCitations = raw.summaryCitations.filter(valid.contains)
-        a.immediateActions = raw.immediateActions.compactMap(clean)
+        a.immediateActions = actions.compactMap(clean)
             .filter { route.category != "foraging" || !Self.assertsEdible($0.text) }
-        a.doNot = raw.doNot.compactMap(clean).map(Self.droppingLeadingNegation)
-        a.escalation = raw.escalation.flatMap(clean).flatMap { Self.isFiller($0.text) ? nil : $0 }
+        a.doNot = doNot.compactMap(clean).map(Self.droppingLeadingNegation)
+        // "CAP_CUU: TRANG_THAI: KHONG_DU_CAN_CU": nothing to say, so the model wrote a status.
+        a.escalation = raw.escalation.flatMap(clean).flatMap {
+            let text = Self.splittingSectionLabel($0.text).1
+            return Self.isFiller(text) || Self.isFormatToken(text) || Self.isMeta(text) ? nil : $0
+        }
 
         var status = raw.status ?? .insufficientEvidence
         // Policy B (docs/03): the model often says KHONG_DU_CAN_CU when only part of the question is out of
@@ -77,6 +100,36 @@ public struct GroundingValidator: Sendable {
         let rest = item.text.dropFirst(lead.count)
         guard let first = rest.first else { return item }
         return AnswerItem(text: first.uppercased() + rest.dropFirst(), citations: item.citations)
+    }
+
+    /// "KHONG_DUOC: Cho uống…" → ("KHONG_DUOC", "Cho uống…").
+    static func splittingSectionLabel(_ text: String) -> (String?, String) {
+        for label in ["TRANG_THAI", "TOM_TAT", "LAM_NGAY", "KHONG_DUOC", "CAP_CUU"] where text.hasPrefix(label + ":") {
+            return (label, text.dropFirst(label.count + 1).trimmingCharacters(in: .whitespaces))
+        }
+        return (nil, text)
+    }
+
+    /// "KHONG_HAM_LUONG_PARACETAMOL", "KHONG_DU_CAN_CU (về việc…)": an identifier or a status, not a sentence.
+    static func isFormatToken(_ text: String) -> Bool {
+        (text.contains("_") && !text.contains(" ")) || ["CO_CAN_CU", "KHONG_DU_CAN_CU", "MAU_THUAN"].contains(where: text.hasPrefix)
+    }
+
+    /// An item that tells the user what not to do. "Không có nẹp thì…" is a condition, not a prohibition.
+    /// Only the leads `droppingLeadingNegation` strips: "Tránh nấm" moved under "Không được" would mean the opposite.
+    /// Matched with diacritics: folded, "dùng" would read as "đừng".
+    static func isProhibition(_ text: String) -> Bool {
+        let t = text.lowercased()
+        guard ["không ", "đừng ", "tuyệt đối không "].contains(where: t.hasPrefix) else { return false }
+        return !["không có ", "không thể ", "không còn ", "không thấy ", "không tìm "].contains(where: t.hasPrefix)
+            && !t.contains(" thì ")
+    }
+
+    /// Talk about the evidence or the prompt, not advice: "Không có thông tin về thời điểm cần gọi cứu hộ",
+    /// "Tự tạo con số không có trong bằng chứng [Quy tắc]".
+    static func isMeta(_ text: String) -> Bool {
+        let t = QueryNormalizer.fold(text.lowercased())
+        return ["bang chung", "quy tac", "khong co thong tin", "co thong tin cu the", "khong de cap"].contains(where: t.contains)
     }
 
     /// "CAP_CUU: Không đề cập [E1]": the model filling a slot it has nothing for.

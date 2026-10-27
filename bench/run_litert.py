@@ -40,14 +40,17 @@ def main():
     ap.add_argument("--merge-system", action="store_true",
                     help="put the contract at the top of the user turn instead of the system turn (what the Android CLI does)")
     ap.add_argument("--only", nargs="*", help="case ids (smoke test); results go to results/smoke_*.jsonl")
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--cases", default=str(ROOT / "data/cases.json"))
+    ap.add_argument("--evidence", default=str(ROOT / "data/evidence.json"))
     args = ap.parse_args()
 
-    cases = json.loads((ROOT / "data/cases.json").read_text())
-    evidence = json.loads((ROOT / "data/evidence.json").read_text())
+    cases = json.loads(Path(args.cases).read_text())
+    evidence = json.loads(Path(args.evidence).read_text())
     system = system_contract(args.prompt)
     if args.only: cases = [c for c in cases if c["id"] in args.only]
     tag = args.prompt + ("+cd" if args.constrained else "") + ("+merged" if args.merge_system else "")
-    out = ROOT / f"results/{'smoke' if args.only else 'raw'}_{tag}.jsonl"; out.parent.mkdir(parents=True, exist_ok=True)
+    out = Path(args.out or ROOT / f"results/{'smoke' if args.only else 'raw'}_{tag}.jsonl"); out.parent.mkdir(parents=True, exist_ok=True)
     model = f"litert/{args.name}"
 
     t0 = time.perf_counter()
@@ -102,7 +105,7 @@ def main():
                   f"tok={r['gen_tokens']}", flush=True)
     peak = phys_footprint(os.getpid())[1]
     if args.only: print(f"init {init_s:.1f}s peak footprint {peak / 2**30:.2f} GiB"); return
-    with (ROOT / "results/models.jsonl").open("a") as f:
+    with out.with_name("models.jsonl").open("a") as f:
         f.write(json.dumps(dict(model=model, prompt=tag, init_s=init_s, cold_total=cold["total"],
                                 cold_ttft=cold["ttft"], peak_rss=peak, peak_footprint=peak,
                                 file_gb=os.path.getsize(os.path.expanduser(args.model)) / 1e9)) + "\n")
