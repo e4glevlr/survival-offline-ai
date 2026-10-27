@@ -7,3 +7,6 @@ DerivedData/
 
 __pycache__/
 bench/images/files/
+
+# Generated design concepts (local only)
+design/gen/*.png
