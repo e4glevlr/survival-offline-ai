@@ -478,3 +478,45 @@ final class SunTests: XCTestCase {
         XCTAssertNil(SunCalculator.times(on: Date(timeIntervalSince1970: 1_797_829_200), latitude: 80, longitude: 0))
     }
 }
+
+final class PipelineStreamTests: XCTestCase {
+    struct OneHit: LexicalRetriever, QueryEmbedder, KnowledgeStore {
+        func search(_ query: NormalizedQuery, route: Route, limit: Int) async throws -> [LexicalHit] { [LexicalHit(chunkId: "c")] }
+        func embed(_ text: String) async throws -> [Float] { [1, 0] }
+        func chunkMeta(ids: [String]) async throws -> [String: ChunkMeta] {
+            ["c": ChunkMeta(chunkId: "c", parentId: "p", articleId: "a", category: "fire", chunkType: .procedure,
+                            trust: .a, region: nil, reviewExpired: false)]
+        }
+        func parents(ids: [String]) async throws -> [String: ParentBlock] {
+            ["p": ParentBlock(parentId: "p", articleId: "a", sourceLabel: "Cẩm nang", headingPath: "Lửa",
+                              text: "Dựng củi hình chóp nón quanh bùi nhùi.", tokens: 20, trust: .a)]
+        }
+        func emergencyCard(intent: String) async throws -> EmergencyCard? { nil }
+    }
+
+    /// Streams the answer one character at a time, like a fast decoder.
+    struct CharByChar: LocalLanguageModel {
+        let text: String
+        func generate(_ prompt: Prompt, maxTokens: Int) -> AsyncThrowingStream<String, Error> {
+            AsyncThrowingStream { c in
+                for ch in text { c.yield(String(ch)) }
+                c.finish()
+            }
+        }
+    }
+
+    func testPartialOnlyWhenALineLands() async throws {
+        let answer = "TRANG_THAI: CO_CAN_CU\nTOM_TAT: Dựng chóp nón [E1]\nLAM_NGAY:\n- Dựng củi hình chóp nón [E1]\n- Châm lửa từ dưới [E1]\n"
+        let q = DenseIndex.quantize([[1, 0]])
+        let pipeline = RAGPipeline(normalizer: QueryNormalizer(), router: RiskRouter(), lexical: OneHit(), embedder: OneHit(),
+                                   dense: DenseIndex(dim: 2, ids: ["c"], vectors: q.data, scales: q.scales), store: OneHit(),
+                                   llm: CharByChar(text: answer), installedTier: .large)
+        var partials: [StructuredAnswer] = []
+        for try await e in pipeline.answer("nhóm lửa thế nào", state: ConversationState(), device: DeviceSnapshot(physicalMemoryBytes: 8 << 30)) {
+            if case .partial(let a) = e { partials.append(a) }
+        }
+        // One event per line that changes the answer (4 of 5: "LAM_NGAY:" only opens a section), not one per character.
+        XCTAssertEqual(partials.count, 4)
+        XCTAssertEqual(partials.last?.immediateActions.count, 2)
+    }
+}

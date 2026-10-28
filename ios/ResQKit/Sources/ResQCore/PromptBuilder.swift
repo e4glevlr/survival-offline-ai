@@ -4,6 +4,11 @@ public struct Prompt: Sendable, Equatable {
     /// Fixed across requests → the runtime can keep its KV cache (prefix caching).
     public let system: String
     public let user: String
+
+    public init(system: String, user: String) {
+        self.system = system
+        self.user = user
+    }
 }
 
 /// Compact prompt. The model never sees URLs, licenses, internal ids or checksums:

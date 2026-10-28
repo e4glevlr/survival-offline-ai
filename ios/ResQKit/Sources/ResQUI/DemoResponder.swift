@@ -191,10 +191,13 @@ public struct DemoResponder: AnswerResponder {
                 // Battery saver: shorter answer (DevicePolicy cut the token budget).
                 let lines = topic.script.split(separator: "\n", omittingEmptySubsequences: false)
                 let script = plan.maxOutputTokens < 300 ? Self.shorten(lines) : topic.script
+                // Like RAGPipeline: an event only when a whole line lands, not on every token.
                 var parser = AnswerParser()
+                var shown = StructuredAnswer()
                 for word in script.split(separator: " ", omittingEmptySubsequences: false) {
                     if Task.isCancelled { break }
-                    c.yield(.partial(parser.feed(word + " ")))
+                    let answer = parser.feed(word + " ")
+                    if answer != shown { shown = answer; c.yield(.partial(answer)) }
                     try? await Task.sleep(for: .milliseconds(30))
                 }
                 c.yield(.final(GroundingValidator().validate(parser.finish(), evidence: evidence, route: route)))

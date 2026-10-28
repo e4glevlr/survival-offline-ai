@@ -1,0 +1,3 @@
+{"model": "litert/gemma4-e4b", "prompt": "v0", "init_s": 0.6123734159918968, "cold_total": 11.160193957999581, "cold_ttft": 1.6385249169979943, "peak_rss": 1095471112, "peak_footprint": 1095471112, "file_gb": 3.65953024}
+{"model": "litert/gemma4-e4b", "prompt": "v0+spec+kv3072", "init_s": 6.76451254200947, "cold_total": 5.228252542001428, "cold_ttft": 1.9537457920087036, "peak_rss": 1075007784, "peak_footprint": 1075007784, "file_gb": 3.65953024}
+{"model": "litert/gemma4-e4b", "prompt": "v0+spec", "init_s": 0.4916301249904791, "cold_total": 5.134439083005418, "cold_ttft": 1.7815594170097029, "peak_rss": 1141510080, "peak_footprint": 1141510080, "file_gb": 3.65953024}

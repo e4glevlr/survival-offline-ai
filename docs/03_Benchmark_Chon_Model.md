@@ -185,6 +185,8 @@ python3 bench/run.py --models gemma4:e4b-it-qat --runs 2 --prompt v0
 # LiteRT-LM (runtime của app), Python 3.10+
 pip install litert-lm
 python bench/run_litert.py --model ~/models/litert/gemma-4-E4B-it.litertlm --name gemma4-e4b --prompt v0 --runs 2
+# Cấu hình app dùng (mục 13): thêm --speculative. Có macmon thì ghi kèm điện năng mỗi câu.
+python bench/run_litert.py --model ~/models/litert/gemma-4-E4B-it.litertlm --name gemma4-e4b --speculative --out bench/results/litert-0.18/raw_v0+spec.jsonl
 
 # Chấm điểm: gọi Swift scorer (bench/Scorer) rồi in bảng
 python3 bench/score.py
@@ -360,3 +362,52 @@ Bộ chấm giờ trừ điểm "rác hiển thị": dòng dạng mã, dòng nó
 - Gõ không dấu "bi ngat mui" (bị ngạt mũi) mở nhầm thẻ ép tim. Mình chấp nhận vì báo nhầm theo hướng an toàn.
 - Model đôi khi hiểu "bạn tôi" thành "bạn" và hướng dẫn như thể người hỏi là nạn nhân ("Kiểm tra thở của bạn").
 - **Tra cứu:** với câu kiểu người dùng, BM25 thuần trượt bài đúng ở 11/34 câu. Ví dụ "trẹo chân" không ra bài bong gân, "ngất" không ra thẻ ép tim, "khô hạn ko có suối" không ra bài chưng cất nước. Retriever thật (lai BM25 + vector, có bí danh) cần qua được bộ này trước khi gắn LLM. Danh sách lỗi in ra khi chạy `build_guide_evidence.py`.
+
+## 13. Tối ưu suy luận, tốc độ và điện năng cho iOS (28/10/2026)
+
+Cả ba iPhone đều không cắm máy, nên mọi số đo trong mục này lấy trên Mac M3 Pro, LiteRT-LM 0.18.1, backend GPU. Điện năng là tổng CPU + GPU + ANE, đọc từ IOReport bằng `macmon` mỗi 200 ms rồi nhân với thời gian trả lời. Power Profiler của Instruments chỉ chạy trên iPhone/iPad, macOS không hỗ trợ.
+
+### Chọn runtime
+
+| Runtime | Gemma 4 E4B trên iPhone 17 Pro | Kết luận |
+|---|---|---|
+| **LiteRT-LM (Metal)** | Decode 22–25 tok/s theo số Google công bố, chưa tính speculative decoding | **Giữ.** Đây là file đã qua cả ba bộ bench. Android dùng chung file này. |
+| Core AI (mới trên iOS 27, thay Core ML) | Bản chuyển đổi của coreai-model-zoo decode 15,1 tok/s trên GPU. Không có bản E4B chạy ANE; E2B chạy ANE chỉ được 6 tok/s | Không chọn: chậm hơn khoảng 40%, lại là file khác nên phải chạy lại toàn bộ bench. Đây là số của cộng đồng, đo trên bản beta OS 27. |
+| Core ML | Apple đã thay bằng Core AI | Không chọn. |
+| Apple Foundation Models | Model khác (của Apple), có hỗ trợ tiếng Việt, không phải tải 3,66 GB | Chưa đo được: trên Mac này model báo `modelNotReady`. Đáng thử cho máy dưới 6,5 GiB RAM, hiện chỉ có tìm kiếm. Muốn dùng phải qua đủ ba bộ bench. |
+
+### Cấu hình LiteRT-LM
+
+Mỗi bộ chạy 2 lượt. Tỷ lệ đạt, chấm bằng `score.py`:
+
+| | Gốc (KV 4096) | **Speculative (KV 4096)** | Speculative + KV 3072 |
+|---|---|---|---|
+| 35 câu | 97,1% | **97,1%** | 97,1% |
+| 35 câu kiểu người dùng | 100% | **100%** | 88,6% |
+| 14 edge case | 92,9% | **92,9%** | 92,9% |
+| Lời khuyên nguy hiểm | 0% | **0%** | 0% |
+| Decode (35 câu) | 42 tok/s | **99 tok/s** | 100 tok/s |
+| Dòng hành động đầu, p50 (35 câu / người dùng / edge) | 2,83 / 3,67 / 3,01 s | **1,84 / 2,56 / 1,81 s** | 1,82 / 2,51 / 1,78 s |
+| Điện năng mỗi câu (35 câu) | 99,7 J | **59,1 J (−41%)** | 62,9 J |
+
+Phát hiện:
+
+1. **Speculative decoding là cải thiện lớn nhất.** Gemma 4 có sẵn bộ đoán nhiều token (MTP drafter), LiteRT-LM 0.18 bật được nó cho từng conversation. Decode nhanh gấp khoảng 2,3 lần, nên GPU chạy ít thời gian hơn và mỗi câu tốn ít điện hơn. Tỷ lệ đạt giữ nguyên trên cả ba bộ.
+2. **Bật speculative thì câu trả lời là tất định.** Đổi seed vẫn ra đúng một câu trả lời. Recall trên 35 câu giảm từ 96,1 xuống 94,4 vì hai câu diễn đạt khác đi ("Đun sôi nước" thay cho "sôi sùng sục"; dòng CAP_CUU không còn chữ "cấp cứu"). Không mất ý an toàn nào. Chạy lại 5 seed cho hai câu đó cũng ra đúng kết quả này.
+3. **KV cache nhỏ hơn 4096 làm hỏng câu trả lời cho prompt dài.** Prompt của bộ người dùng có trung vị 1.444 token. Ở KV 3072, câu "rắn cắn hút nọc được không" bị trả "không đủ căn cứ" và mục "Làm ngay" bỏ trống; câu "uống nước tiểu" bị trả "mâu thuẫn". Chỉ bật speculative, giữ KV 4096, thì đạt cả hai câu. Trên Mac, ngay cả KV 2048 cũng chỉ giảm footprint khoảng 0,15 GB (1,06 → 0,91 GiB), không đáng đổi lấy chất lượng, nên giữ 4096.
+4. **Nạp model.** Lần đầu, LiteRT-LM biên dịch GPU program và ghi bộ nhớ đệm trọng số 2,2 GB. Nạp mất 7,6 s, câu hỏi đầu tiên mất 4,2 s mới ra token đầu. Từ lần sau, nạp mất 0,5 s và token đầu mất 1,1 s. Vì vậy app nên gọi `prewarm()` ngay sau khi tải model, trong bước đo hiệu năng của `ModelSpeed`. Bộ đệm nằm trong `Caches/`, nên khi máy hết dung lượng iOS được phép xoá nó.
+5. **Instruments trên adapter Swift.** Mình ghi Time Profiler cùng Points of Interest khi chạy `bench/LiteRTSwift` trên 18 câu. Prefill có trung vị 1,09 s, decode 1,81 s mỗi câu. CPU chỉ dùng khoảng 16% một nhân, phần lớn là luồng LiteRT đẩy lệnh cho GPU.
+6. **UI nhận một sự kiện cho mỗi token.** Parser chỉ ghi nhận khi đủ một dòng, nhưng pipeline vẫn phát `.partial` ở mọi token, và mỗi sự kiện lại vẽ lại câu trả lời. Giờ `RAGPipeline` (cùng `DemoResponder`) chỉ phát khi câu trả lời đổi. Test `PipelineStreamTests` xác nhận: stream từng ký tự còn 4 sự kiện, thay vì hơn 100. Time Profiler trên simulator (bản Debug, demo stream 33 từ/giây, ghi 2 lần mỗi phía) cho thấy main thread giảm khoảng 12% ngoài phần khởi động (1,89 → 1,67 s trong 20 s). Thời gian trong `ChatViewModel` giảm khoảng một nửa, Core Animation commit giảm 13%.
+
+### Code
+
+- `ios/ResQLLM`: package mới, `LiteRTModel` triển khai `LocalLanguageModel`. Nó dùng GPU, bật speculative decoding và lấy sampler giống bench. Bộ đệm nằm trong `Caches/`. Model chỉ nạp khi cần và có `prewarm()`. Khi app vào nền hoặc iOS cảnh báo thiếu bộ nhớ, adapter tự giải phóng model. Bấm dừng thì GPU dừng ngay (`conversation.cancel()`). Signpost load / prefill / decode giúp Instruments trên iPhone hiện từng giai đoạn cạnh Power Profiler. Package build được cho iOS và macOS.
+  Package này tách khỏi `ResQKit` để app và test chưa phải tải 124 MB binary LiteRT-LM cho tới khi pipeline thật được nối vào. Repo LiteRT-LM dùng Git LFS, nên máy build cần `git-lfs`.
+- `bench/run_litert.py`: thêm `--speculative`, `--max-num-tokens`, `--dump-prompts`. Nếu máy có `macmon` thì ghi thêm `energy_j` cho mỗi câu. `score.py` có thêm cột `j_per_answer`.
+- `bench/LiteRTSwift`: chạy prompt của bench qua đúng adapter Swift trên Mac.
+
+### Chưa làm
+
+- Chưa đo trên iPhone thật. Khi cắm máy, cần ghi Power Profiler cùng Metal System Trace với cấu hình này, và đo nhiệt sau 30 phút (RG-18).
+- App vẫn chạy `DemoResponder`. Retriever, embedder và store chưa có bản cho iOS, nên `PipelineResponder` chưa nối với `LiteRTModel`.
+- Apple Foundation Models chưa đo.

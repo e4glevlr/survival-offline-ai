@@ -126,10 +126,14 @@ public struct RAGPipeline: Sendable {
 
         // Stage D: constrained generation, streamed
         let prompt = prompts.build(query: query, state: state, evidence: evidence)
+        // The parser commits whole lines, so most tokens change nothing on screen. Emit only when the
+        // answer changes: every event re-renders the answer, and tokens arrive 25–100 times a second.
         var parser = AnswerParser()
+        var shown = StructuredAnswer()
         for try await delta in llm.generate(prompt, maxTokens: plan.maxOutputTokens) {
             try Task.checkCancellation()
-            emit(.partial(parser.feed(delta)))
+            let answer = parser.feed(delta)
+            if answer != shown { shown = answer; emit(.partial(answer)) }
         }
         emit(.final(validator.validate(parser.finish(), evidence: evidence, route: route)))
     }

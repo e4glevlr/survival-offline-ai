@@ -10,7 +10,8 @@ Benchmark so model cho ResQ trên đúng prompt, đúng parser và đúng valida
 | `data/user_cases.json`, `data/guide_evidence.json` | 35 câu kiểu người dùng gõ (không dấu, viết tắt, kể lể, chào hỏi, hỏi lại), bằng chứng lấy từ nội dung thật của app. `build_guide_evidence.py` dựng lại bằng chứng, chọn khối cho từng câu và in những câu BM25 trượt bài đúng. Chạy: `run_litert.py --cases bench/data/user_cases.json --evidence bench/data/guide_evidence.json --out bench/results/litert-user/raw_v0.jsonl`, chấm: `BENCH_CASES=bench/data/user_cases.json BENCH_EVIDENCE=bench/data/guide_evidence.json BENCH_RESULTS=bench/results/litert-user python3 bench/score.py` |
 | `prompts/` | Các biến thể system prompt. `v0` được đọc thẳng từ `PromptBuilder.swift`. |
 | `run.py` | Chạy qua Ollama (llama.cpp), ghi từng delta kèm thời điểm |
-| `run_litert.py` | Chạy qua LiteRT-LM, runtime app sẽ dùng. Mỗi model một process để đo bộ nhớ riêng. |
+| `run_litert.py` | Chạy qua LiteRT-LM, runtime app sẽ dùng. Mỗi model một process để đo bộ nhớ riêng. `--speculative` là cấu hình app dùng. Có `macmon` (`brew install macmon`) thì ghi thêm điện năng mỗi câu (J, CPU+GPU+ANE). |
+| `LiteRTSwift/` | Chạy prompt bench qua đúng adapter Swift của app (`ios/ResQLLM`) trên Mac: thời gian và kết quả parse. Ghi kèm Instruments để xem signpost load / prefill / decode. |
 | `Scorer/` | Executable Swift phát lại stream qua `AnswerParser` + `GroundingValidator` |
 | `score.py` | Tính tỷ lệ đạt, tốc độ, bộ nhớ. `--compare v0` in khoảng tin cậy bootstrap. |
 | `images/` | Bộ 20 ảnh: `manifest.json` (đáp án, câu hỏi, tác giả, giấy phép), `fetch.py` tải ảnh từ Wikimedia Commons về `images/files/` (không commit) |

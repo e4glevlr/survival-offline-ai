@@ -181,7 +181,8 @@ def main():
                  ttft=r["ttft"], first_action=first_action_time(r["deltas"]), total=r["total"],
                  prompt_tokens=r["prompt_tokens"], gen_tokens=r["gen_tokens"],
                  prefill_tps=r["prompt_tokens"] / (r["prompt_ns"] / 1e9) if r["prompt_ns"] else None,
-                 decode_tps=r["gen_tokens"] / (r["gen_ns"] / 1e9) if r["gen_ns"] else None)
+                 decode_tps=r["gen_tokens"] / (r["gen_ns"] / 1e9) if r["gen_ns"] else None,
+                 energy_j=r.get("energy_j"))
         groups[(r["model"], r["prompt"])].append(s)
 
     summary = []
@@ -217,6 +218,7 @@ def main():
             first_action_p50=round(statistics.median([s["first_action"] for s in ss if s["first_action"]] or [0]), 2),
             prefill_tps=round(statistics.median(s["prefill_tps"] for s in ss if s["prefill_tps"])),
             decode_tps=round(statistics.median(s["decode_tps"] for s in ss if s["decode_tps"]), 1),
+            j_per_answer=round(statistics.median(e), 1) if (e := [s["energy_j"] for s in ss if s["energy_j"]]) else None,
         )
         m = meta.get(model, {})
         row.update(cold_ttft=round(m.get("cold_ttft") or 0, 2), peak_rss_gb=round(m.get("peak_rss", 0) / 2**30, 2),
@@ -236,7 +238,7 @@ def main():
 
     cols = ["model", "prompt", "pass_rate", "pass_critical", "pass_b", "pass_b_insufficient", "quality", "format", "parseable", "status_answerable", "status_insufficient", "status_adversarial",
             "recall", "cited", "unsafe", "unsafe_severe", "invented_numbers", "leak", "prompt_tokens", "gen_tokens",
-            "ttft_p50", "ttft_p95", "first_action_p50", "prefill_tps", "decode_tps", "peak_rss_gb", "loaded_gb"]
+            "ttft_p50", "ttft_p95", "first_action_p50", "prefill_tps", "decode_tps", "j_per_answer", "peak_rss_gb", "loaded_gb"]
     print("| " + " | ".join(cols) + " |\n|" + "---|" * len(cols))
     for r in summary:
         print("| " + " | ".join(str(r[c]) for c in cols) + " |")
